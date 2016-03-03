@@ -47,7 +47,7 @@ namespace WebApplication
                 "~/Content/Layout.css",
                 "~/Content/Site-Bootstrap.css"));
 
-            bundles.Add(new StyleBundle("~/Content/themes/css")
+            bundles.Add(new StyleBundle("~/Content/themes/base/css")
                 .Include("~/Content/themes/base/all.css"));
                         
 

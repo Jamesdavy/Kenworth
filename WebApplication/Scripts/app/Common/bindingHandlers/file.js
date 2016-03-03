@@ -10,6 +10,40 @@ define(['knockout'], function(ko) {
                     valueAccessor()(file);
                 }
             });
+
+            $(element).on(
+                'dragover',
+                function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            );
+            $(element).on(
+                'dragenter',
+                function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            );
+
+            $(element).on(
+                'drop',
+                function(e) {
+                    if (e.originalEvent.dataTransfer) {
+                        if (e.originalEvent.dataTransfer.files.length) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            /*UPLOAD FILES HERE*/
+                            //upload(e.originalEvent.dataTransfer.files);
+                            var file = e.originalEvent.dataTransfer.files[0];
+                            if (ko.isObservable(valueAccessor())) {
+                                valueAccessor()(file);
+                            }
+                        }
+                    }
+                }
+            );
+
         },
 
         update: function(element, valueAccessor, allBindingsAccessor) {

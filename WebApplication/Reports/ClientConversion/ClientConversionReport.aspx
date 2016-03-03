@@ -10,7 +10,7 @@
 </head>
 <body>
     <%:Styles.Render("~/Content/css") %>
-    <%:Styles.Render("~/Content/themes/css") %>
+    <%:Styles.Render("~/Content/themes/base/css") %>
     <form id="form1" runat="server">
         <div class="panel panel-default">
             <div class="panel-body">
