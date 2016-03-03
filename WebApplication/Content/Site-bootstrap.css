@@ -1,0 +1,8 @@
+﻿h1, h2, h3, h4, h5 {
+    color: #ff5a00 !important;
+    font-weight: bold !important;
+}
+
+.bootstrap-dialog.type-default .bootstrap-dialog-title {
+    color: #ff5a00 !important;
+}

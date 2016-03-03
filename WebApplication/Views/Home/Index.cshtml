@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    @*<h1>Kenworth Engineering</h1>*@
+    <img src="/Content/images/kenworthlogo.png">
+    @*<p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Quick Links</h2>
+        <p><a href="@Url.Action("Create", "Job")">New Quote</a></p>
+        <p><a href="@Url.Action("Create", "Timesheet")">New Timesheet</a></p>
+        <p><a href="@Url.Action("Create", "BillOfMaterials")">New BOM</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Reports</h2>
+        @*<a href="#" onclick="window.open('/Reports/DeliveryNote/DeliveryNoteReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Delivery Note</a>
+        <a href="#" onclick="window.open('/Reports/Quote/QuoteReport.aspx?id=25', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Quote</a>*@
+        <p><a href="#" onclick="window.open('/Reports/Quotes/QuotesReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Quotes</a></p>
+        <p><a href="#" onclick="window.open('/Reports/Jobs/JobsReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Jobs</a></p>
+        <p><a href="#" onclick="window.open('/Reports/ClientConversion/ClientConversionReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Client Conversion</a></p>
+        <p><a href="#" onclick="window.open('/Reports/Timesheet/TimesheetReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Timesheet</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Maintenance</h2>
+        Make all Quotes older than 2 Months Dead
+        <p><button id="Archive" class="btn btn-default">Archive Quotes</button>
+    </div>
+</div>
+
+<script src="/scripts/require.js"></script>
+<script>
+    @*//var model = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));*@
+
+    requirejs(
+        ['../../scripts/app/common'],
+        function(common) {
+            requirejs(['knockout', 'app/Common/AjaxHelper', 'app/Common/UIBlocker', 'app/Common/Notification', 'knockout-postbox'],
+                function (ko, ajaxHelper, uiBlocker, notification) {
+                    var notifier = new notification();
+                    var blocker = new uiBlocker();
+
+                    $("#Archive").on("click", function() {
+                        blocker.Show();
+                        
+                        new ajaxHelper.Post({}, '/Job/_ArchiveQuotes').done(function (response, textStatus, jqXHR) {
+                            notifier.Notify('Jobs Archived');
+                        }).always(function () {
+                            blocker.Hide();
+                        });
+                    });
+
+                    ko.postbox.subscribe("AddValidationError", function(errors) {
+                        var retry = false;
+                        $.each(errors, function(index, error) {
+                            notifier.ErrorFlash(error.Value);
+                        });
+                    });
+                });
+        });
+</script>

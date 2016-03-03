@@ -1,0 +1,72 @@
+﻿@model WebApplication.Controllers.ViewModels.Contact.EditModel
+
+<div id="ContactEdit">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Forename </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Forename, css: { 'has-success': Forename.isModified() && Forename.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Forename" class="form-control" data-bind="value: Forename" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Forename"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Surname </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Surname, css: { 'has-success': Surname.isModified() && Surname.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Surname" class="form-control" data-bind="value: Surname" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Surname"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Position </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="Position" class="form-control" data-bind="value: Position" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Phone </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="Phone" class="form-control" data-bind="value: Phone" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Email </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="Email" class="form-control" data-bind="value: Email" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Status </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="checkbox" id="Status" data-bind="checked: Status" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var editContactModel;
+    var editContactDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+    requirejs(['knockout',
+        'app/Contact/Edit/ViewModel',
+        'knockout.validation'], function (ko, vm) {
+            editContactModel = new vm(editContactDetail);
+            editContactModel.errors = ko.validation.group(editContactModel, { deep: true });
+            ko.applyBindingsWithValidation(editContactModel, document.getElementById("ContactEdit"));
+            editContactModel.errors.showAllMessages();
+    });
+
+
+</script>

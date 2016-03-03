@@ -1,0 +1,66 @@
+﻿@using Kendo.Mvc.UI
+@using WebApplication.Controllers.ViewModels.Accounts
+
+@section head
+{
+    @Styles.Render("~/Content/kendo/css")
+    @Scripts.Render("~/bundles/kendo")
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            Account <a href="Account/Register" class="btn btn-default">Create</a>
+        </h2>
+    </div>
+    <div class="panel-body">
+
+        @*@Html.ActionLink("Create", "Create", )*@
+
+        @(Html.Kendo().Grid<ListModel>().Name("Grid")
+              .TableHtmlAttributes(new { @class = "table" })
+              .HtmlAttributes(new { @class = "table-responsive" })
+              .DataSource(dataSource => dataSource
+                  .Ajax()
+                  .Read(read => read.Action("_Index", "Account"))
+                  .Sort(sort =>
+                  {
+                      sort.Add(o => o.Email).Descending();
+                      sort.Add(o => o.LockedOut);
+                  })
+              )
+              .Columns(columns =>
+              {
+                  columns.Bound(o => o.Id).Visible(false);
+                  columns.Bound(o => o.Email).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
+                  columns.Bound(o => o.LockedOut).Filterable(false);
+              })
+              .Sortable(sorting => sorting.SortMode(Kendo.Mvc.UI.GridSortMode.MultipleColumn)
+              )
+              .Pageable()
+              .EnableCustomBinding(true)
+              .Resizable(resizing => resizing.Columns(true))
+              .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+              .Selectable()
+              .Events(events =>
+              {
+                  events.Change("RowSelected");
+                  events.DataBound("DataBound");
+              }))
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function DataBound(e) {
+        //persistanceHelper.Save();
+    }
+
+    function RowSelected(e) {
+        e.preventDefault();
+        var grid = $("#Grid").data("kendoGrid");
+        var selectedItem = grid.dataItem(grid.select());
+        var newloc = "@Url.Action("Edit")/";
+        document.location.href = newloc + selectedItem.Id;
+    }
+</script>

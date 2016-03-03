@@ -1,0 +1,57 @@
+﻿@using Infrastructure.Helpers.General
+@using Infrastructure.Helpers.HTMLHelpers
+@{
+    // ASP.Net MVC template functionality tracks models that have been displayed to prevent
+    // endless loops due to circular references within the model graph.
+
+
+    // However, the nested call is valid here - we call Html.Editor to display the input
+    // elements within the surrounding HTML - so we need to remove the current model from the
+    // list of tracked objects.
+    TemplateHelper.RemoveModelFromVisitedObjects(ViewData);
+    var editorParams = ViewData["TemplateParams"] as TemplateParams ?? new TemplateParams();
+
+    var helpClass = "";
+    var helpText = "";
+
+    var alertText = "";
+    bool alert = false;
+    bool help = false;
+
+    object helpValue = null;
+    object alertValue = false;
+
+    if ((bool)ViewData.ModelMetadata.AdditionalValues.TryGetValue("Help", out helpValue))
+    {
+        if ((bool)helpValue)
+        {
+            help = true;
+            helpClass = (string)ViewData.ModelMetadata.AdditionalValues["HelpMode"];
+            helpText = (string)ViewData.ModelMetadata.AdditionalValues["HelpText"];
+        }
+    }
+
+    if ((bool)ViewData.ModelMetadata.AdditionalValues.TryGetValue("Alert", out alertValue))
+    {
+        if ((bool)alertValue)
+        {
+            alert = true;
+            alertText = (string)ViewData.ModelMetadata.AdditionalValues["AlertText"];
+        }
+    }
+
+}
+
+<div class="form-group">
+    @Html.Label("", new { @class = "col-sm-4 control-label" })
+    <div class="col-sm-8 form-control-static">
+        @Html.Display("", editorParams.AdditionalViewData)
+        @if (alert)
+        {
+            <div class="alert alert-warning form-alert alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                @Html.Raw(alertText)
+            </div>
+        }
+    </div>
+</div>

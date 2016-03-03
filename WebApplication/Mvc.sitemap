@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+    <mvcSiteMapNode title="Home" controller="Home" action="Index">
+        <!--<mvcSiteMapNode title="App Log" area="" controller="Home" action="LiveLog" />
+        <mvcSiteMapNode title="Error Log" url="~/elmah" roles="CanViewErrorLogs" />-->
+        <!--<mvcSiteMapNode title="Quick Links" controller="Information" action="QuickLinks">
+            <mvcSiteMapNode title="New Job" controller="Job" action="Create" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="New BOM" controller="BillOfMaterials" action="Create" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="New Timesheet" controller="Timesheet" action="Create" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+        </mvcSiteMapNode>-->
+        <mvcSiteMapNode title="Jobs" controller="Job" action="Quotes">
+            <mvcSiteMapNode title="Quotes" controller="Job" action="Quotes" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="Jobs" controller="Job" action="Jobs" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="Archive" controller="Job" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Lines" controller="Line" action="Quotes">
+            <mvcSiteMapNode title="Quotes" controller="Line" action="Quotes" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="Jobs" controller="Line" action="Jobs" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="Archive" controller="Line" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Reports" controller="Information" action="Reports"> </mvcSiteMapNode>
+        <mvcSiteMapNode title="Administration" controller="Information" action="Administration">
+            <mvcSiteMapNode title="Accounts" controller="Account" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="Clients" controller="Client" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="Operative" controller="Operative" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+            <mvcSiteMapNode title="Contacts" controller="Contact" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+        </mvcSiteMapNode>
+    </mvcSiteMapNode>
+</mvcSiteMap>

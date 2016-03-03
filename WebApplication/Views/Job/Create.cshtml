@@ -1,0 +1,400 @@
+﻿@model WebApplication.Controllers.ViewModels.Job.ViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@section head {
+    @Styles.Render("~/Content/kendo/css")
+    @Styles.Render("~/Content/JqueryAutocomplete/css")
+    @Styles.Render("~/Content/bootstrap-dialog")
+    @Styles.Render("~/Content/Notifications/css")
+    @Styles.Render("~/Content/themes/css")
+
+}
+
+<style>
+    .btn-group-vertical {
+        width: 90%;
+        margin-left: 10px;
+    }
+</style>
+
+<div id="JobDetails">
+    
+    @section SubMenu
+    {
+
+    <div style="margin-left:10px;">
+        Quoted £<span data-bind="text: Total"></span><br />
+        Timesheets £<span data-bind="text: TimesheetTotal"></span><br />
+        BOM £<span data-bind="text: BOMTotal"></span><br />
+        Profit/Loss £<span data-bind="text: ProfitLoss"></span>
+    </div>        
+        <div class="btn-group-vertical" role="group" aria-label="...">
+            <button type="button" data-bind="click: PrintQuote" class="btn btn-default navbar-btn">
+                <span class="glyphicon glyphicon-print"></span>
+                <span class="hidden-xs">Print Quote</span>
+            </button>
+            <button type="button" data-bind="click: EmailQuote" class="btn btn-default navbar-btn">
+                <span class="glyphicon glyphicon-send"></span>
+                <span class="hidden-xs">Email Quote</span>
+            </button>
+            <button type="button" data-bind="click: DeliveryNote" class="btn btn-default navbar-btn">
+                <span class="glyphicon glyphicon-print"></span>
+                <span class="hidden-xs">Delivery Note</span>
+            </button>
+            <button type="button" data-bind="click: JobCard" class="btn btn-default navbar-btn">
+                <span class="glyphicon glyphicon-print"></span>
+                <span class="hidden-xs">Job Card</span>
+            </button>
+
+            <button type="button" data-bind="click: CopyJob" class="btn btn-default navbar-btn">
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+                <span class="hidden-xs">Copy Job</span>
+            </button>
+
+            <button type="button" data-bind="click: Save" class="btn btn-success navbar-btn">
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+                <span class="hidden-xs">Save</span>
+            </button>
+
+            <button type="button" data-bind="click: DeleteJob" class="btn btn-danger navbar-btn">
+                <span class="glyphicon glyphicon-trash"></span>
+                <span class="hidden-xs">Delete</span>
+            </button>
+        </div>
+
+
+
+}
+
+<div class="form-horizontal">
+    <div class="row container-fluid">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">
+                        Job:
+                        <span data-bind="text: Id"></span>
+                        <span data-bind="text: _Status"></span>
+                    </h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-md-4 col-sm-5 control-label">Client </label>
+                        <div class="col-md-8 col-sm-7">
+                            <div data-bind="validationElement: Client, css: { 'has-success': Client.isModified() && Client.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                                <div class="input-group">
+                                    <input type="text" id="Client" class="form-control" data-bind="value: Client, selectOnFocus: true" />
+                                    <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                        <span class="glyphicon glyphicon-ok" data-bind="validationElement: Client"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-sm-5 control-label">Contact </label>
+                        <div class="col-md-8 col-sm-7">
+                            <div data-bind="validationElement: Contact, css: { 'has-success': Contact.isModified() && Contact.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                                <div class="input-group" data-bind="fadeDisable: Client.isValid()">
+                                    <input type="text" id="Contact" class="form-control" data-bind="value: Contact, selectOnFocus: true" />
+                                    <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                        <span class="glyphicon glyphicon-ok" data-bind="validationElement: Contact"></span>
+                                    </span>
+                                </div>
+                                <div class="pull-right">
+                                    <span data-bind="fadeDisable: Client.isValid()">
+                                        <button type="button" data-bind="click: $root.AddContact, fadeDisable: Client.isValid()" class="btn btn-default navbar-btn">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                    <span data-bind="fadeDisable: Client.isValid()">
+                                        <button type="button" data-bind="click: $root.ListContacts, fadeDisable: Client.isValid()" class="btn btn-default navbar-btn">
+                                            <span class="glyphicon glyphicon-list-alt"></span>
+                                        </button>
+                                    </span>
+                                    <span data-bind="fadeDisable: Contact.isValid()">
+                                        <button type="button" data-bind="click: $root.EditContact, fadeDisable: Contact.isValid()" class="btn btn-default navbar-btn">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-sm-5 control-label">Description </label>
+                        <div class="col-md-8 col-sm-7">
+                            <div data-bind="validationElement: Description, css: { 'has-success': Description.isModified() && Description.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                                <div class="input-group">
+                                    <input type="text" id="Description" class="form-control" data-bind="value: Description" />
+                                    <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                        <span class="glyphicon glyphicon-ok" data-bind="validationElement: Description"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-sm-5 control-label">Customer Order No </label>
+                        <div class="col-md-8 col-sm-7">
+                            @*<div data-bind="validationElement: CustomerOrderNo, css: { 'has-success': CustomerOrderNo.isModified() && CustomerOrderNo.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">*@
+                            @*<div class="input-group">*@
+                            <input type="text" id="CustomerRef" class="form-control" data-bind="value: CustomerRef" />
+                            @*<span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">*@
+                            @*<span class="glyphicon glyphicon-ok" data-bind="validationElement: CustomerOrderNo"></span>*@
+                            @*</span>*@
+                            @*</div>*@
+                            @*</div>*@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-sm-5 control-label">Exp Delivery Date </label>
+                        <div class="col-md-8 col-sm-7">
+                            <input type="text" id="ExpectedJobDeliveryDate" class="form-control" data-bind='jqueryui: { widget: "datepicker", options: { onSelect: function(dateText) { setDate(dateText); }, showButtonPanel: true, showOn: "focus", changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy" } }, value: ExpectedDeliveryDate' />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">
+                        Financials
+                    </h2>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-condensed table-striped">
+                        <tbody>
+                            <tr>
+                                <td><strong>Quoted</strong></td>
+                                <td>£<span data-bind="text: Total"></span></td>
+                            </tr>
+                            <tr class="warning">
+                                <td><strong>Quote</strong></td>
+                                <td>£<span data-bind="text: QuoteTotal"></span></td>
+                            </tr>
+                            <tr class="info">
+                                <td><strong>WIP</strong></td>
+                                <td>£<span data-bind="text: JobTotal"></span></td>
+                            </tr>
+                            <tr class="success">
+                                <td><strong>Complete</strong></td>
+                                <td>£<span data-bind="text: CompleteTotal"></span></td>
+                            </tr>
+                            <tr class="danger">
+                                <td><strong>Dead</strong></td>
+                                <td>£<span data-bind="text: DeadTotal"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Costs</strong></td>
+                                <td>£<span data-bind="text: Costs"></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-md-offset-1"><strong>Timesheets</strong></span></td>
+                                <td>£<span data-bind="text: TimesheetTotal"></span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="col-md-offset-1"><strong>BOM</strong></span></td>
+                                <td>£<span data-bind="text: BOMTotal"></span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Profit / Loss</strong></td>
+                                <td>£<span data-bind="text: ProfitLoss"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class=""><label class="control-label">Notes</label></div>
+        <div class="">
+            <textarea type="text" id="Comments" class="form-control" data-bind="value: Comments" rows="3"></textarea>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                Lines
+                <button type="button" data-bind="click: AddLine" class="btn btn-default navbar-btn">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs">AddLine</span>
+                </button>
+            </h2>
+        </div>
+        <div class="panel-body">
+            <div class="list-group">
+                <!-- ko foreach: _Lines -->
+                <div class="list-group-item list-group-item-warning" data-bind="css: { 'list-group-item-warning' : _Status() == 'Quote', 'list-group-item-danger' : _Status() == 'Dead', 'list-group-item-info' : _Status() == 'Job', 'list-group-item-success' : _Status() == 'Complete' }">
+                    <div class="row">
+                        <span class="pull-left">
+                            <button type="button" data-bind="click: $root.EditLine" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button type="button" data-bind="click: $root.AddBOM" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon-shopping-cart"></span>
+                                <span class="hidden-xs"></span>
+                            </button>
+                            <button type="button" data-bind="click: $root.AddTimesheet" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                <span class="hidden-xs"></span>
+                            </button>
+                            <button type="button" data-bind="click: $root.DeleteLine" class="btn btn-danger navbar-btn">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </span>
+                        <span style="display: inline-block; margin-left:20px;">
+                            <span data-bind="text: $parent.Id"></span>/<span data-bind="text: JobLineID"></span>
+                            (<strong><span data-bind="text: _Status"></span></strong>)
+                            <strong>Exp Delivery Date:</strong><span data-bind="text: ExpectedDeliveryDate"></span>
+                            <br/>
+                            <span data-bind="text: Description"></span>
+                            <br />
+                            <strong>Qty:</strong><span data-bind="text: Quantity"></span>
+                            <strong>Unit Price:</strong> £<span data-bind="text: UnitPrice"></span>
+                            <strong>Total:</strong> £<span data-bind="text: LineTotal"></span>
+                            <br />
+                            <span data-bind="visible: ShowFile()">
+                                <a data-bind="attr: { href: FilePath, title: DrawingNumber }">
+                                    <span data-bind="text: DrawingNumber"></span>
+                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                </a>
+                            </span>
+                        </span>
+                        <span class="pull-right">
+                            <button type="button" data-bind="click: $root.Quote" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon-gbp"></span>
+                                <span class="hidden-xs">Quote</span>
+                            </button>
+
+                            <button type="button" data-bind="click: $root.Job" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon-wrench"></span>
+                                <span class="hidden-xs">WIP</span>
+                            </button>
+
+                            <button type="button" data-bind="click: $root.Complete" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon glyphicon-ok"></span>
+                                <span class="hidden-xs"></span>
+                            </button>
+
+                            <button type="button" data-bind="click: $root.Dead" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon glyphicon-remove"></span>
+                                <span class="hidden-xs"></span>
+                            </button>
+                        </span>
+
+                        @*<div class="clearfix"></div>*@
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                Bill Of Material
+            </h2>
+        </div>
+        <div class="panel-body">
+            <!-- ko foreach: _Lines -->
+            <div>
+                <!-- ko foreach: _BillOfMaterials -->
+                <div class="row">
+                    <span class="pull-left">
+                        <button type="button" data-bind="click: $root.EditBOM" class="btn btn-default navbar-btn">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="hidden-xs"></span>
+                        </button>
+                        <button type="button" data-bind="click: $parent.DeleteBOM" class="btn btn-danger navbar-btn">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            <span class="hidden-xs"></span>
+                        </button>
+                    </span>                    
+                    <span style="display: inline-block; margin-left:20px;">
+                        <span data-bind="text: UniqueId"></span>
+                        @*<span data-bind="text: BillOfMaterialsID"></span>*@
+                        <span data-bind="text: Description"></span>
+                        <span data-bind="text: SupplierRef"></span>
+                        <span data-bind="text: PurchaseOrderDate"></span>
+                        <br/>
+                        <strong>Quantity:</strong> <span data-bind="text: Quantity"></span>
+                        <strong>Cost:</strong> £<span data-bind="text: Cost"></span>
+                        <strong>Total:</strong> £<span data-bind="text: Total"></span>
+                    </span>
+                </div>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                Timesheets
+            </h2>
+        </div>
+        <div class="panel-body">
+            <!-- ko foreach: _Lines -->
+            <div>
+                <!-- ko foreach: _Timesheets -->
+                <div class="row">
+                    <span class="pull-left">
+                        <button type="button" data-bind="click: $root.EditTimesheet" class="btn btn-default navbar-btn">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="hidden-xs"></span>
+                        </button>
+                        <button type="button" data-bind="click: $parent.DeleteTimesheet" class="btn btn-danger navbar-btn">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            <span class="hidden-xs"></span>
+                        </button>
+                    </span>
+                    <span style="display: inline-block; margin-left:20px;">
+                        <span data-bind="text: UniqueId"></span>
+                        @*<span data-bind="text: TimesheetID"></span>*@
+                        <span data-bind="text: OperativeName"></span>
+                        <span data-bind="text: Comments"></span>
+                        <span data-bind="text: TimesheetDate"></span>
+                        <br/>
+                        <strong>Hours:</strong> <span data-bind="text: Hours"></span>
+                        <strong>Rate:</strong> £<span data-bind="text: HourlyRate"></span>
+                        <strong>Total:</strong> £<span data-bind="text: Total"></span>
+                    </span>
+                </div>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+
+        <script src="/scripts/require.js"></script>
+        <script>
+            var model = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+            requirejs(['../../scripts/app/common'], function (common) {
+                requirejs(['app/job-main',
+                'app/Common/BindingHandlers/jqueryUI',
+                'jquery-ui',
+                'app/Common/BindingHandlers/selectOnFocus',
+                'app/Common/BindingHandlers/fadeDisable' ], function (main) {
+                    var view = new main();
+                    view.Initialise(model);
+                });
+            });
+        </script>

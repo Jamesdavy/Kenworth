@@ -1,0 +1,249 @@
+﻿@model WebApplication.Controllers.ViewModels.Line.EditViewModel
+
+<div id="EditLineDetail">
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">ID </label>
+                    <div class="col-md-8 col-sm-7 form-control-static">
+                        <span data-bind="text: UniqueId" ></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Description </label>
+                    <div class="col-md-8 col-sm-7">
+                        <div data-bind="validationElement: Description, css: { 'has-success': Description.isModified() && Description.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                            <div class="input-group">
+                                <input type="text" id="Description" class="form-control" data-bind="value: Description" />
+                                <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                    <span class="glyphicon glyphicon-ok" data-bind="validationElement: Description"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Customer Ref </label>
+                    <div class="col-md-8 col-sm-7">
+                        <input type="text" id="customerRef" class="form-control" data-bind="value: CustomerRef" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Quantity </label>
+                    <div class="col-md-8 col-sm-7">
+                        <div data-bind="validationElement: Quantity, css: { 'has-success': Quantity.isModified() && Quantity.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                            <div class="input-group">
+                                <input type="text" id="Description" class="form-control" data-bind="value: Quantity" />
+                                <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                    <span class="glyphicon glyphicon-ok" data-bind="validationElement: Quantity"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Unit Price </label>
+                    <div class="col-md-8 col-sm-7">
+                        <div data-bind="validationElement: UnitPrice, css: { 'has-success': UnitPrice.isModified() && UnitPrice.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                            <div class="input-group">
+                                <input type="text" id="UnitPrice" class="form-control" data-bind="value: UnitPrice" />
+                                <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                    <span class="glyphicon glyphicon-ok" data-bind="validationElement: UnitPrice"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Estimated Hours </label>
+                    <div class="col-md-8 col-sm-7">
+                        <div data-bind="validationElement: EstimatedHours, css: { 'has-success': EstimatedHours.isModified() && EstimatedHours.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                            <div class="input-group">
+                                <input type="text" id="EstimatedHours" class="form-control" data-bind="value: EstimatedHours" />
+                                <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                    <span class="glyphicon glyphicon-ok" data-bind="validationElement: EstimatedHours"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Exp Delivery Date </label>
+                    <div class="col-md-8 col-sm-7">
+                        @*<div data-bind="validationElement: ExpectedDeliveryDate, css: { 'has-success': ExpectedDeliveryDate.isModified() && ExpectedDeliveryDate.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                        <div class="input-group">*@
+                        <input type="text" id="ExpectedDeliveryDate" class="form-control" data-bind='jqueryui: { widget: "datepicker", options: { onSelect: function(dateText) { setDate(dateText); }, showButtonPanel: true, showOn: "focus", changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy" } }, value: ExpectedDeliveryDate' />
+                        @*<span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                    <span class="glyphicon glyphicon-ok" data-bind="validationElement: ExpectedDeliveryDate"></span>
+                                </span>
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Delivery Comments </label>
+                    <div class="col-md-8 col-sm-7">
+                        <input type="text" id="DeliveryComments" class="form-control" data-bind="value: DeliveryComments" />
+                    </div>
+                </div>
+                <div class="well">
+                    <div class="form-group">
+                        <label class="col-md-4 col-sm-5 control-label">Drawing Number </label>
+                        <div class="col-md-8 col-sm-7">
+                            <input type="text" id="DrawingNumber" class="form-control" data-bind="value: DrawingNumber" />
+                        </div>
+                    </div>
+                    <div data-bind="visible: !ShowFile()">
+                        <input type="file" accept="image/*" data-bind="file: File, fileObjectURL: FileObjectURL, fileBinaryData: FileBinary, fileType: FileType" />
+                        <div>Size: <span data-bind="text: FileSize"></span>&nbsp;bytes</div>
+                    </div>
+
+                    <div  data-bind="visible: ShowFile()" >
+                        @*FileName: <span data-bind="text: FileName"></span>*@
+                        <button type="button" data-bind="click: DeleteDrawing" class="btn btn-default navbar-btn pull-right">
+                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                            <span class="hidden-xs">Remove Drawing</span>
+                        </button>
+                        <a class="btn btn-default navbar-btn pull-right" data-bind="attr: { href: FilePath, title: DrawingNumber }"><span class="glyphicon glyphicon-download-alt"></span> <span data-bind="text: DrawingNumber"></span></a>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            Bill Of Material 
+                            <button type="button" data-bind="click: AddBOM" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                                <span class="hidden-xs">Add BOM</span>
+                            </button>
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <!-- ko foreach: _BillOfMaterials -->
+                            <div>
+                                <span class="pull-left">
+                                    <button type="button" data-bind="click: $root.EditBOM" class="btn btn-default navbar-btn">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                        <span class="hidden-xs"></span>
+                                    </button>
+                                    <button type="button" data-bind="click: $parent.DeleteBOM" class="btn btn-danger navbar-btn">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        <span class="hidden-xs"></span>
+                                    </button>
+                                </span>
+                                <span style="display: inline-block; margin-left:20px;">
+                                    @*<span data-bind="text: BillOfMaterialsID"></span>*@
+                                    <span data-bind="text: Description"></span>
+                                    <br/>
+                                    <span data-bind="text: SupplierRef"></span> <span data-bind="text: PurchaseOrderDate"></span>
+                                    <br />
+                                    <strong>Quantity:</strong> <span data-bind="text: Quantity"></span>
+                                    <strong>Cost:</strong> £<span data-bind="text: Cost"></span>
+                                    <strong>Total:</strong> £<span data-bind="text: Total"></span>
+                                </span>
+                                <hr/>
+                            </div>
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            Timesheets
+                            <button type="button" data-bind="click: AddTimesheet" class="btn btn-default navbar-btn">
+                                <span class="glyphicon glyphicon-floppy-disk"></span>
+                                <span class="hidden-xs">Add Timesheet</span>
+                            </button>
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                            <!-- ko foreach: _Timesheets -->
+                            <div>
+                                <span class="pull-left">
+                                    <button type="button" data-bind="click: $root.EditTimesheet" class="btn btn-default navbar-btn">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                        <span class="hidden-xs"></span>
+                                    </button>
+                                    <button type="button" data-bind="click: $parent.DeleteTimesheet" class="btn btn-danger navbar-btn">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                        <span class="hidden-xs"></span>
+                                    </button>
+                                </span>
+                                <span style="display: inline-block; margin-left:20px;">
+                                    @*<span data-bind="text: TimesheetID"></span>*@
+                                    <span data-bind="text: OperativeName"></span>
+                                    <span data-bind="text: Comments"></span>
+                                    <br/>
+                                    <span data-bind="text: TimesheetDate"></span>
+                                    <br />
+                                    <strong>Hours:</strong> <span data-bind="text: Hours"></span>
+                                    <strong>Rate:</strong> £<span data-bind="text: HourlyRate"></span>
+                                    <strong>Total:</strong> £<span data-bind="text: Total"></span>
+                                </span>
+                                <hr/>
+                            </div>
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+                
+                <strong>Status: </strong><span data-bind="text: _Status"></span><br/>
+
+                <span>
+                    <button type="button" data-bind="click: Quote" class="btn btn-default navbar-btn">
+                        <span class="glyphicon glyphicon-gbp"></span>
+                        <span class="hidden-xs">Quote</span>
+                    </button>
+                    <button type="button" data-bind="click: Job" class="btn btn-default navbar-btn">
+                        <span class="glyphicon glyphicon-wrench"></span>
+                        <span class="hidden-xs">Job</span>
+                    </button>
+                    <button type="button" data-bind="click: Complete" class="btn btn-default navbar-btn">
+                        <span class="glyphicon glyphicon-ok"></span>
+                        <span class="hidden-xs"></span>
+                    </button>
+                    <button type="button" data-bind="click: Dead" class="btn btn-default navbar-btn">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <span class="hidden-xs"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var editLineModel;
+    var lineDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+    function setDate(date) {
+        editLineModel.ExpectedDeliveryDate(date);
+    }
+
+    requirejs(['knockout',
+        'app/Common/AjaxHelper',
+        'app/Line/Edit/ViewModel',
+        'knockout.validation',
+        'app/Common/BindingHandlers/jqueryUI',
+        'jquery-ui',
+        'kendo',
+        'app/Common/bindingHandlers/file',
+        'app/Common/bindingHandlers/fadeDisable',
+        'knockout-kendo'], function (ko, ajaxHelper, vm) {
+            ko.bindingHandlers.kendoUpload.options.multiple = false;
+            editLineModel = new vm(lineDetail);
+            editLineModel.errors = ko.validation.group(editLineModel, { deep: true });
+            ko.applyBindingsWithValidation(editLineModel, document.getElementById("EditLineDetail"));
+            editLineModel.errors.showAllMessages();
+    });
+
+    
+</script>

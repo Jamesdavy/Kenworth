@@ -1,0 +1,75 @@
+﻿@using Kendo.Mvc.UI
+@using WebApplication.Controllers.ViewModels.Job
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section head
+{
+    @Styles.Render("~/Content/kendo/css")
+    @Scripts.Render("~/bundles/kendo")
+}
+
+
+
+<h2>Active Jobs</h2>
+
+@(Html.Kendo().Grid<JobsModel>().Name("Grid")
+                .TableHtmlAttributes(new { @class = "table" })
+                                .HtmlAttributes(new { @class = "table-responsive" })
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("_Jobs", "Job"))
+          .Sort(sort =>
+          {
+              sort.Add(o => o.JobID).Descending();
+          })
+      )
+      .Columns(columns =>
+      {
+          columns.Bound(o => o.JobID).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true).Template("IntegerFilter")));
+          columns.Bound(o => o.Description).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
+          columns.Bound(o => o.tblClientClientCompanyName).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
+          columns.Bound(o => o.QuoteDate).ClientTemplate("#: data.QuoteDateString #").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));
+          columns.Bound(o => o.ExpectedDeliveryDate).ClientTemplate("#: data.ExpectedDeliveryDateString #").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));
+          columns.Bound(o => o.QuotedValue).Format("{0:C}").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));
+          columns.Bound(o => o.JobValue).Format("{0:C}").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));
+          columns.Bound(o => o.CompletedValue).Format("{0:C}").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));          
+      })
+      .Sortable(sorting => sorting.SortMode(Kendo.Mvc.UI.GridSortMode.MultipleColumn)
+      )
+      .Pageable()
+      .EnableCustomBinding(true)
+      .Resizable(resizing => resizing.Columns(true))
+      .Filterable(ftb => ftb.Mode(GridFilterMode.Row))
+      .Selectable()
+      .Events(events =>
+      {
+          events.Change("RowSelected");
+          events.DataBound("DataBound");
+      }))
+
+<script src="@Url.Content("~/Scripts/kendo/cultures/kendo.culture.en-gb.min.js")"></script>
+<script type="text/javascript">
+    kendo.culture("en-GB");
+
+    function IntegerFilter(args) {
+        args.element.kendoNumericTextBox({ format: "#", decimals: 0, spinners: false });
+    }
+
+    function DataBound(e) {
+        //persistanceHelper.Save();
+    }
+
+    function RowSelected(e) {
+        e.preventDefault();
+        var grid = $("#Grid").data("kendoGrid");
+        var selectedItem = grid.dataItem(grid.select());
+        var newloc = "@Url.Action("Edit")/";
+        document.location.href = newloc + selectedItem.JobID;
+    }
+</script>
+
+
+

@@ -1,0 +1,74 @@
+﻿@model MvcSiteMapProvider.Web.Html.Models.MenuHelperModel
+@using System.Web.Mvc.Html
+@using MvcSiteMapProvider.Web.Html.Models
+
+<ul class="nav hidden-xs" id="lg-menu">
+    @foreach (var node in Model.Nodes)
+    {
+        if (node.IsInCurrentPath)
+        {
+            <li><h3>@node.Title</h3></li>
+            if (node.Children.Any())
+            {
+                foreach (var child in node.Children)
+                {
+                    if (child.IsInCurrentPath)
+                    {
+                        <li><a href="@child.Url"><i class="glyphicon @child.Attributes["glyphicon"].ToString()"></i> @child.Title</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@child.Url"><i class="glyphicon @child.Attributes["glyphicon"].ToString()"></i> @child.Title</a></li>
+                    }
+                }
+            }
+
+        }
+    }
+</ul>
+
+<ul class="list-unstyled hidden-xs" id="sidebar-footer">
+    <li>
+        @*<a href="http://www.bootply.com"><h3>Bootstrap</h3> <i class="glyphicon glyphicon-heart-empty"></i> Bootply</a>*@
+    </li>
+</ul>
+
+<ul class="nav visible-xs" id="xs-menu">
+    @foreach (var node in Model.Nodes)
+    {
+        if (node.IsInCurrentPath)
+        {
+            if (node.Children.Any())
+            {
+                foreach (var child in node.Children)
+                {
+                    if (child.IsInCurrentPath)
+                    {
+    <li><a class="text-center" href="@child.Url"><i class="glyphicon @child.Attributes["glyphicon"].ToString()"></i></a></li>
+                    }
+                    else
+                    {
+    <li><a class="text-center" href="@child.Url"><i class="glyphicon @child.Attributes["glyphicon"].ToString()"></i></a></li>
+                    }
+                }
+            }
+
+        }
+    }
+</ul>
+
+<!-- tiny only nav-->
+@*<ul class="nav visible-xs" id="xs-menu">
+    <li><a href="#featured" class="text-center"><i class="glyphicon glyphicon-list-alt"></i></a></li>
+    <li><a href="#stories" class="text-center"><i class="glyphicon glyphicon-list"></i></a></li>
+    <li><a href="#" class="text-center"><i class="glyphicon glyphicon-paperclip"></i></a></li>
+    <li><a href="#" class="text-center"><i class="glyphicon glyphicon-refresh"></i></a></li>
+</ul>*@
+
+
+@*<ul>
+    <li class="active"><a href="#featured"><i class="glyphicon glyphicon-list-alt"></i> Featured</a></li>
+    <li><a href="#stories"><i class="glyphicon glyphicon-list"></i> Stories</a></li>
+    <li><a href="#"><i class="glyphicon glyphicon-paperclip"></i> Saved</a></li>
+    <li><a href="#"><i class="glyphicon glyphicon-refresh"></i> Refresh</a></li>
+</ul>*@

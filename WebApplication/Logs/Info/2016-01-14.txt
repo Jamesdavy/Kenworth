@@ -1,0 +1,8 @@
+2016/01/14 14:32:41.512: Starting App
+2016/01/14 14:36:42.442: Starting App
+2016/01/14 14:40:19.726: Starting App
+2016/01/14 14:45:00.759: Starting App
+2016/01/14 14:47:24.746: Hello from AddLogEntry()!
+2016/01/14 14:54:10.712: Starting App
+2016/01/14 14:56:15.029: Starting App
+2016/01/14 14:56:44.098: Starting App

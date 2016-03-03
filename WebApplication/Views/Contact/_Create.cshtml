@@ -1,0 +1,84 @@
+﻿@model WebApplication.Controllers.ViewModels.Contact.CreateModel
+
+<div id="ContactDetail">
+    <div class="form-horizontal">
+        @if (Model.ClientId == null)
+        {
+            <div class="form-group">
+                <label class="col-md-2 col-sm-5 control-label">Search </label>
+                <div class="col-md-10 col-sm-7">
+                    <input type="text" data-bind="selectOnFocus: true" id="Search" class="form-control" />
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label class="col-md-2 col-sm-5 control-label">Client </label>
+                <div class="col-md-10 col-sm-7 form-control-static">
+                    <span id="Client" data-bind="text: Client" ></span>
+                </div>
+            </div>
+        }
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Forename </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Forename, css: { 'has-success': Forename.isModified() && Forename.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Forename" class="form-control" data-bind="value: Forename" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Forename"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Surname </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Surname, css: { 'has-success': Surname.isModified() && Surname.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Surname" class="form-control" data-bind="value: Surname" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Surname"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Position </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="Quantity" class="form-control" data-bind="value: Position" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Phone </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="Phone" class="form-control" data-bind="value: Phone" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Email </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="Telephone" class="form-control" data-bind="value: Email" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var createContactModel;
+    var contactDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+    requirejs(['knockout',
+        'app/Contact/Create/ViewModel',
+        'app/Common/BindingHandlers/selectOnFocus',
+        'jquery-ui',
+        'knockout.validation'], function (ko, vm) {
+            createContactModel = new vm(contactDetail);
+            createContactModel.errors = ko.validation.group(createContactModel, { deep: true });
+            ko.applyBindingsWithValidation(createContactModel, document.getElementById("ContactDetail"));
+            createContactModel.errors.showAllMessages();
+    });
+
+
+</script>

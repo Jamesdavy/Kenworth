@@ -1,0 +1,60 @@
+﻿@model WebApplication.Controllers.ViewModels.Accounts.EditModel
+@{
+    ViewBag.Title = "Edit";
+}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            Edit
+        </h2>
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("Errors")
+                @Html.HiddenFor(x => x.Id)
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(x => x.Email)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Reset Password", "ForgotPasswordInternal", new { id = Model.Id })</li>
+                                @if (Model.LockedOut)
+                                {
+                                    <li>@Html.ActionLink("Unlock", "UnlockUser", new { id = Model.Id })</li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink("Lock", "LockoutUser", new { id = Model.Id })</li>
+                                }
+                                <li>@Html.ActionLink("Delete", "Delete", new { id = Model.Id })</li>
+                            </ul>
+                        </div>
+                        | @Html.ActionLink("Back to List", "Index")
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+        }
+

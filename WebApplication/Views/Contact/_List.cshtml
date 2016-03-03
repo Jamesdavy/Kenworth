@@ -1,0 +1,38 @@
+﻿@using Kendo.Mvc.UI
+@using WebApplication.Controllers.ViewModels.Client
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section head
+{
+    @Styles.Render("~/Content/kendo/css")
+    @Scripts.Render("~/bundles/kendo")
+}
+<div id="ContactList">
+    <ul class="list-group">
+        <!-- ko foreach: _Contacts -->
+        <li class="list-group-item">
+            <span data-bind="text: Forename"></span> <span data-bind="text: Surname"></span>
+        </li>
+        <!-- /ko -->
+    </ul>
+</div>
+
+
+<script type="text/javascript">
+    var listContactsModel;
+    var listContactsDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+    requirejs(['knockout',
+        'app/Contact/List/ViewModel'
+        ], function (ko, vm) {
+            listContactsModel = new vm(listContactsDetail);
+            ko.applyBindings(listContactsModel, document.getElementById("ContactList"));
+        });
+</script>
+
+
+
+

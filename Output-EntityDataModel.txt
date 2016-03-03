@@ -1,0 +1,18 @@
+﻿Generated model file: ApplicationContext.edmx.
+Loading metadata from the database took 00:00:04.5443035.
+Generating the model took 00:00:12.1682621.
+Generated model file: ApplicationContext.edmx.
+Loading metadata from the database took 00:00:01.0349175.
+Generating the model took 00:00:04.0558294.
+Generated model file: ApplicationContext.edmx.
+Loading metadata from the database took 00:00:00.8549739.
+Generating the model took 00:00:03.7372229.
+Generated model file: ApplicationContext.edmx.
+Loading metadata from the database took 00:00:00.8260208.
+Generating the model took 00:00:02.6696552.
+Generated model file: ApplicationContext.edmx.
+Loading metadata from the database took 00:00:00.8958693.
+Generating the model took 00:00:02.8385257.
+Generated model file: ApplicationContext.edmx.
+Loading metadata from the database took 00:00:00.8675317.
+Generating the model took 00:00:02.7607835.

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a998ae43e6bb41fe945300603d811518" Name="Diagram1" ZoomLevel="75">
+        <EntityTypeShape EntityType="ApplicationModel.tblContact" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApplicationModel.tblDeliveryNote" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApplicationModel.tblJob" Width="1.5" PointX="5.25" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApplicationModel.tblUpload" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApplicationModel.tblUploadType" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <AssociationConnector Association="ApplicationModel.FK_tblJobs_tblContacts" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ApplicationModel.tblStatus" Width="1.5" PointX="5.375" PointY="9.875" />
+        <AssociationConnector Association="ApplicationModel.FK_tblJobs_tblStatuses" />
+        <EntityTypeShape EntityType="ApplicationModel.AspNetUser" Width="1.5" PointX="0.75" PointY="10.75" />
+        <EntityTypeShape EntityType="ApplicationModel.tblUser" Width="1.5" PointX="7.375" PointY="10" />
+        <EntityTypeShape EntityType="ApplicationModel.tblClient" Width="1.5" PointX="0.75" PointY="1.75" />
+        <AssociationConnector Association="ApplicationModel.FK_tblContacts_tblClients" />
+        <AssociationConnector Association="ApplicationModel.FK_tblJobs_tblClients" />
+        <EntityTypeShape EntityType="ApplicationModel.tblFile" Width="1.5" PointX="11.875" PointY="11.125" />
+        <EntityTypeShape EntityType="ApplicationModel.tblLine" Width="1.5" PointX="9.625" PointY="3.875" />
+        <EntityTypeShape EntityType="ApplicationModel.tblPurchaseOrder" Width="1.5" PointX="11.875" PointY="7.625" />
+        <EntityTypeShape EntityType="ApplicationModel.tblTimesheet" Width="1.5" PointX="11.875" PointY="3.75" />
+        <AssociationConnector Association="ApplicationModel.FK_tblFiles_tblLines" />
+        <AssociationConnector Association="ApplicationModel.FK_tblLines_tblJobs" />
+        <AssociationConnector Association="ApplicationModel.FK_tblLines_tblStatuses" />
+        <AssociationConnector Association="ApplicationModel.FK_tblPurchaseOrders_tblLines" />
+        <AssociationConnector Association="ApplicationModel.FK_tblTimesheets_tblLines" />
+        <AssociationConnector Association="ApplicationModel.FK_tblTimesheets_tblUsers" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

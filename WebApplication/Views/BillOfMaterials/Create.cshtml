@@ -1,0 +1,159 @@
+﻿@*@model WebApplication.Controllers.ViewModels.BillOfMaterials.ViewModel*@
+@{
+    ViewBag.Title = "Create";
+}
+
+@section head {
+    @Styles.Render("~/Content/kendo/css")
+    @Styles.Render("~/Content/JqueryAutocomplete/css")
+    @Styles.Render("~/Content/bootstrap-dialog")
+    @Styles.Render("~/Content/Notifications/css")
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            Create BOM
+        </h2>
+    </div>
+    <div class="panel-body">
+        <div id="PartialView"></div>
+    </div>
+    <div class="panel-footer">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="button" id="Save" class="btn btn-default navbar-btn">
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                    <span class="hidden-xs">Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+        
+
+
+
+
+        <script src="/scripts/require.js"></script>
+        <script>
+    @*//var model = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));*@
+
+            requirejs(
+                ['../../scripts/app/common'],
+                function (common) {
+                    requirejs(['knockout', 'app/Common/AjaxHelper', 'app/Common/Notification', 'knockout-postbox'],
+                        function (ko, ajaxHelper, notification) {
+                            //var view = new main();
+                            //view.Initialise(model);
+                            var notifier = new notification();
+
+                            getBOMDetail().done(function (data, textStatus, jqXHR) {
+                                getBOMDetailDone(data, textStatus, jqXHR);
+                            });
+
+                            function getBOMDetail() {
+                                return ajaxHelper.GetPartialView({}, '/BillOfMaterials/_Create');
+                            }
+
+                            function getBOMDetailDone(data, textStatus, jqXHR) {
+                                $("#PartialView").html(data); //dialogRef.setMessage(data);
+                                $("#Search").focus();
+                            }
+
+                            $("#Save").on("click", function () {
+                                ko.postbox.publish("AddBOM");
+                            });
+
+                            ko.postbox.subscribe("AddValidationError", function (errors) {
+                                var retry = false;
+                                $.each(errors, function (index, error) {
+                                    //if (error.CustomState) {
+                                    //    var arrayOfStrings = error.CustomState.split('-');
+                                    //    var action = arrayOfStrings[0];
+                                    //    var id = arrayOfStrings[1];
+
+                                    //    switch (action) {
+                                    //        case 'ServiceDate':
+                                    //            var checkItem = getCheckItem(id);
+                                    //            var notification = notifier.Error(error.Value);
+
+                                    //            notification.append('<div>' + notifications.serviceDateMessage + '</div>');
+
+                                    //            var buttonGroup = $('<div class="row clear_both pull-right btn-toolbar">');
+                                    //            buttonGroup.append(CreateButton(common.remove, self.checkItemNotPresent, checkItem, notification, { icon: 'glyphicon-remove', buttonStyle: 'btn-danger' }));
+                                    //            buttonGroup.append(CreateButton(common.adddate, changeServiceDate, checkItem, notification, { icon: 'glyphicon-calendar', buttonStyle: 'btn-default' }));
+
+                                    //            notification.append(buttonGroup);
+
+                                    //            retry = true;
+                                    //            break;
+                                    //        case 'ExpiryDate':
+                                    //            var checkItem = getCheckItem(id);
+                                    //            var notification = notifier.Error(error.Value);
+
+                                    //            notification.append('<div>' + notifications.expiryDateMessage + '</div>');
+
+                                    //            var buttonGroup = $('<div class="row clear_both pull-right btn-toolbar">');
+
+                                    //            buttonGroup.append(CreateButton(common.remove, self.checkItemNotPresent, checkItem, notification, { icon: 'glyphicon-remove', buttonStyle: 'btn-danger' }));
+                                    //            buttonGroup.append(CreateButton(common.adddate, changeExpiryDate, checkItem, notification, { icon: 'glyphicon-calendar', buttonStyle: 'btn-default' }));
+                                    //            notification.append(buttonGroup);
+
+                                    //            retry = true;
+                                    //            break;
+                                    //        case 'VehicleDetail':
+                                    //            var notification = notifier.Error(error.Value);
+
+                                    //            var buttonGroup = $('<div class="row clear_both pull-right">');
+                                    //            buttonGroup.append(CreateButton(common.update, editVehicle, {}, notification, { icon: 'glyphicon-save', buttonStyle: 'btn-default' }));
+                                    //            notification.append(buttonGroup);
+
+                                    //            retry = true;
+                                    //            break;
+                                    //        case 'EVHCDetail':
+                                    //            var notification = notifier.Error(error.Value);
+
+                                    //            break;
+                                    //        case 'CustomerDetail':
+                                    //            var notification = notifier.Error(error.Value);
+                                    //            break;
+
+
+                                    //    }
+                                    //} else {
+                                    notifier.ErrorFlash(error.Value);
+                                    //}
+                                });
+
+                                //if (retry) {
+                                //    var notification = notifier.Retry();
+
+                                //    var buttonGroup = $('<div class="row clear_both pull-right btn-toolbar">');
+                                //    buttonGroup.append(CreateButton(common.submit, self.Process, {}, notification, { icon: 'glyphicon-ok', buttonStyle: 'btn-success' }));
+
+                                //    if (self._CanCost) {
+                                //        buttonGroup.append(CreateButton(common.cost, self.Cost, {}, notification, { icon: 'glyphicon-share-alt', buttonStyle: 'btn-warning' }));
+                                //    }
+                                //    notification.append(buttonGroup);
+                                //}
+                            });
+
+                            //function HandleErrorClick(func, params, notifier) {
+                            //    func(params);
+                            //    notifier.close();
+                            //}
+
+                            //var contextWrapper = function (func, params, notifier) {
+                            //    var getEventHandler = function () {
+                            //        HandleErrorClick(func, params, notifier);
+                            //    };
+
+                            //    return getEventHandler;
+                            //};
+
+
+                        });
+                });
+        </script>

@@ -1,0 +1,168 @@
+﻿@model WebApplication.Controllers.ViewModels.Client.EditModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title">
+            Edit Client
+        </h2>
+    </div>
+    <div class="panel-body">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary("Errors")
+            @Html.HiddenFor(x=>x.ClientID)
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientCompanyName, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientCompanyName, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientCompanyName)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientAddress1, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientAddress1, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientAddress1)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientAddress2, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientAddress2, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientAddress2)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientTown, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientTown, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientTown)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientCounty, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientCounty, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientCounty)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientPostCode, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientPostCode, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientPostCode)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientTelephone, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientTelephone, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientTelephone)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientEmail, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientEmail, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientEmail)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientFax, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientFax, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientFax)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.ClientWWW, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.ClientWWW, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.ClientWWW)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.AccountsEmail, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                                    @Html.TextBoxFor(x => x.AccountsEmail, new { @class = "form-control" })
+                                </div>
+                                @Html.ValidationMessageFor(x => x.AccountsEmail)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.CopyToAccounts, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                @Html.CheckBoxFor(x => x.CopyToAccounts)
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Status, new { @class = "col-md-4 control-label" })
+                            <div class="col-md-8">
+                                @Html.CheckBoxFor(x => x.Status)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                            | @Html.ActionLink("Back to List", "Index")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        
+    </div>
+</div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+

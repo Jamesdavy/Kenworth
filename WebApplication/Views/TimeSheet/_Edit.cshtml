@@ -1,0 +1,117 @@
+﻿@model WebApplication.Controllers.ViewModels.Timesheet.EditModel
+
+
+<div id="TimesheetEdit">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Id </label>
+            <div class="col-md-10 col-sm-7 form-control-static">
+                <span data-bind="text: TimesheetId"></span>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">JobLineDescription </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: JobLineDescription, css: { 'has-success': JobLineDescription.isModified() && JobLineDescription.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <span id="JobLineDescription" class="form-control" data-bind="text: JobLineDescription" ></span>
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: JobLineDescription"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        
+        @*<div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Operative Search </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="OperativeSearch" class="form-control" />
+            </div>
+        </div>*@
+        @*<div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Id </label>
+            <div class="col-md-10 col-sm-7 form-control-static">
+                <span data-bind="text: UserId"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Name </label>
+            <div class="col-md-10 col-sm-7 form-control-static">
+                <span data-bind="text: UserName"></span>
+            </div>
+        </div>*@
+
+
+
+        
+        
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Hours </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Hours, css: { 'has-success': Hours.isModified() && Hours.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Hours" class="form-control" data-bind="value: Hours" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Hours"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Hourly Rate </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: HourlyRate, css: { 'has-success': HourlyRate.isModified() && HourlyRate.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="HourlyRate" class="form-control" data-bind="value: HourlyRate" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: HourlyRate"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Comments </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="Comments" class="form-control" data-bind="value: Comments" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Date </label>
+            <div class="col-md-10 col-sm-7">
+                @*<div data-bind="validationElement: PurchaseOrderDate, css: { 'has-success': PurchaseOrderDate.isModified() && PurchaseOrderDate.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                <div class="input-group">*@
+                <input type="text" id="TimesheetDate" class="form-control" data-bind='jqueryui: { widget: "datepicker", options: { onSelect: function(dateText) { setDate(dateText); }, showButtonPanel: true, showOn: "focus", changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy" } }, value: TimesheetDate' />
+                @*<span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: PurchaseOrderDate"></span>
+                        </span>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var editTimesheetModel;
+    var editTimesheetDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+    function setDate(date) {
+        editTimesheetModel.TimesheetDate(date);
+    }
+
+    requirejs(['knockout',
+        'app/Timesheet/Edit/ViewModel',
+        'app/Common/BindingHandlers/jqueryUI',
+        'jquery-ui',
+        'knockout.validation'], function (ko, vm) {
+            editTimesheetModel = new vm(editTimesheetDetail);
+            editTimesheetModel.errors = ko.validation.group(editTimesheetModel, { deep: true });
+            ko.applyBindingsWithValidation(editTimesheetModel, document.getElementById("TimesheetEdit"));
+            editTimesheetModel.errors.showAllMessages();
+    });
+</script>

@@ -1,0 +1,120 @@
+﻿@model WebApplication.Controllers.ViewModels.BillOfMaterials.EditModel
+
+
+
+<div id="BOMEdit">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">BOM ID </label>
+            <div class="col-md-10 col-sm-7 form-control-static">
+                <span data-bind="text: PurchaseOrderID"></span>
+            </div>
+        </div>
+        @*<div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">JobLineDescription </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: JobLineDescription, css: { 'has-success': JobLineDescription.isModified() && JobLineDescription.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <span id="JobLineDescription" class="form-control" data-bind="text: JobLineDescription" ></span>
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: JobLineDescription"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Description </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Description, css: { 'has-success': Description.isModified() && Description.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Description" class="form-control" data-bind="value: Description" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Description"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Supplier Ref </label>
+            <div class="col-md-10 col-sm-7">
+                <input type="text" id="SupplierRef" class="form-control" data-bind="value: SupplierRef" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Cost </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Cost, css: { 'has-success': Cost.isModified() && Cost.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Cost" class="form-control" data-bind="value: Cost" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Cost"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Quantity </label>
+            <div class="col-md-10 col-sm-7">
+                <div data-bind="validationElement: Quantity, css: { 'has-success': Quantity.isModified() && Quantity.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Quantity" class="form-control" data-bind="value: Quantity" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Quantity"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Comments </label>
+            <div class="col-md-10 col-sm-7">
+                @*<div data-bind="validationElement: Comments, css: { 'has-success': Comments.isModified() && Comments.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                <div class="input-group">*@
+                <input type="text" id="Comments" class="form-control" data-bind="value: Comments" />
+                @*<span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Comments"></span>
+                        </span>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 col-sm-5 control-label">Date </label>
+            <div class="col-md-10 col-sm-7">
+                @*<div data-bind="validationElement: PurchaseOrderDate, css: { 'has-success': PurchaseOrderDate.isModified() && PurchaseOrderDate.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                <div class="input-group">*@
+                <input type="text" id="PurchaseOrderDate" class="form-control" data-bind='jqueryui: { widget: "datepicker", options: { onSelect: function(dateText) { setDate(dateText); }, showButtonPanel: true, showOn: "focus", changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy" } }, value: PurchaseOrderDate' />
+                @*<span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: PurchaseOrderDate"></span>
+                        </span>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var editBOMModel;
+    var editBOMDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+    function setDate(date) {
+        editBOMModel.PurchaseOrderDate(date);
+    }
+
+    requirejs(['knockout',
+        'app/BillOfMaterials/Edit/ViewModel',
+        'app/Common/BindingHandlers/jqueryUI',
+        'jquery-ui',
+        'knockout.validation'], function (ko, vm) {
+            editBOMModel = new vm(editBOMDetail);
+            editBOMModel.errors = ko.validation.group(editBOMModel, { deep: true });
+            ko.applyBindingsWithValidation(editBOMModel, document.getElementById("BOMEdit"));
+            editBOMModel.errors.showAllMessages();
+    });
+
+
+</script>

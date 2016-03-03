@@ -1,0 +1,137 @@
+﻿@model WebApplication.Controllers.ViewModels.Line.CreateViewModel
+
+<div id="LineDetail">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-4 col-sm-5 control-label">Description </label>
+            <div class="col-md-8 col-sm-7">
+                <div data-bind="validationElement: Description, css: { 'has-success': Description.isModified() && Description.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="LineDescriptionSearch" class="form-control" data-bind="value: Description" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Description"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 col-sm-5 control-label">Customer Ref </label>
+            <div class="col-md-8 col-sm-7">
+                <input type="text" id="customerRef" class="form-control" data-bind="value: CustomerRef" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 col-sm-5 control-label">Quantity </label>
+            <div class="col-md-8 col-sm-7">
+                <div data-bind="validationElement: Quantity, css: { 'has-success': Quantity.isModified() && Quantity.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="Description" class="form-control" data-bind="value: Quantity" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: Quantity"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 col-sm-5 control-label">Unit Price </label>
+            <div class="col-md-8 col-sm-7">
+                <div data-bind="validationElement: UnitPrice, css: { 'has-success': UnitPrice.isModified() && UnitPrice.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="UnitPrice" class="form-control" data-bind="value: UnitPrice" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: UnitPrice"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 col-sm-5 control-label">Estimated Hours </label>
+            <div class="col-md-8 col-sm-7">
+                <div data-bind="validationElement: EstimatedHours, css: { 'has-success': EstimatedHours.isModified() && EstimatedHours.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="EstimatedHours" class="form-control" data-bind="value: EstimatedHours" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: EstimatedHours"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 col-sm-5 control-label">Exp Delivery Date </label>
+            <div class="col-md-8 col-sm-7">
+                @*<div data-bind="validationElement: ExpectedDeliveryDate, css: { 'has-success': ExpectedDeliveryDate.isModified() && ExpectedDeliveryDate.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">*@
+                <input type="text" id="ExpectedDeliveryDate" class="form-control" data-bind='jqueryui: { widget: "datepicker", options: { onSelect: function(dateText) { setDate(dateText); }, showButtonPanel: true, showOn: "focus", changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy" } }, value: ExpectedDeliveryDate' />
+                @*<span class="input-group-addon" data-bind='validationOptions: { decorateInputElement: true, errorElementClass: "glyphicon-remove" }'>
+                                <span class="glyphicon glyphicon-ok" data-bind="validationElement: ExpectedDeliveryDate"></span>
+                            </span>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 col-sm-5 control-label">Delivery Comments </label>
+            <div class="col-md-8 col-sm-7">
+                <input type="text" id="DeliveryComments" class="form-control" data-bind="value: DeliveryComments" />
+            </div>
+        </div>
+        <div class="well">
+            <div class="form-group">
+                <label class="col-md-4 col-sm-5 control-label">Drawing Number </label>
+                <div class="col-md-8 col-sm-7">
+                    <input type="text" id="DrawingNumber" class="form-control" data-bind="value: DrawingNumber" />
+                </div>
+            </div>
+            <span class="pull-right">
+                <input type="file" accept="image/*" data-bind="file: File, fileObjectURL: FileObjectURL, fileBinaryData: FileBinary, fileType: FileType" />
+                <div>Size: <span data-bind="text: FileSize"></span>&nbsp;bytes</div>
+            </span>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+
+    @*<div data-bind="if: imageObjectURL">
+            <img class="thumb" data-bind="attr: { src: imageObjectURL }" />
+        </div>*@
+    
+</div>
+
+
+@*<h2>Debug</h2>
+    <div data-bind="text: Debug()"></div>*@
+
+<script type="text/javascript">
+    var createLineModel;
+    var lineDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+    var toServerJson;
+
+    function setDate(date) {
+        createLineModel.ExpectedDeliveryDate(date);
+    }
+
+    requirejs(['knockout',
+        'app/Common/AjaxHelper',
+        'app/Line/Create/ViewModel',
+        'knockout.validation',
+        'kendo',
+        'app/Common/bindingHandlers/file',
+        'app/Common/BindingHandlers/jqueryUI',
+        'jquery-ui',
+        'knockout-kendo'], function (ko, ajaxHelper, vm) {
+            ko.bindingHandlers.kendoUpload.options.multiple = false;
+
+            createLineModel = new vm(lineDetail);
+            createLineModel.errors = ko.validation.group(createLineModel, { deep: true });
+            ko.applyBindingsWithValidation(createLineModel, document.getElementById("LineDetail"));
+            createLineModel.errors.showAllMessages();
+    });
+
+    
+</script>

@@ -1,0 +1,1007 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="KenworthbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblClients">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientCompanyName" Type="nvarchar(max)" />
+          <Property Name="ClientAddress1" Type="nvarchar(max)" />
+          <Property Name="ClientAddress2" Type="nvarchar(max)" />
+          <Property Name="ClientTown" Type="nvarchar(max)" />
+          <Property Name="ClientCounty" Type="nvarchar(max)" />
+          <Property Name="ClientPostCode" Type="nvarchar(max)" />
+          <Property Name="ClientTelephone" Type="nvarchar(max)" />
+          <Property Name="ClientEmail" Type="nvarchar(max)" />
+          <Property Name="ClientFax" Type="nvarchar(max)" />
+          <Property Name="ClientWWW" Type="nvarchar(max)" />
+          <Property Name="AccountsEmail" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CopyToAccounts" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblContacts">
+          <Key>
+            <PropertyRef Name="ContactID" />
+          </Key>
+          <Property Name="ContactID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="bigint" />
+          <Property Name="Forename" Type="nvarchar(max)" />
+          <Property Name="Surname" Type="nvarchar(max)" />
+          <Property Name="Position" Type="nvarchar(max)" />
+          <Property Name="Phone" Type="nvarchar(max)" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblDeliveryNotes">
+          <Key>
+            <PropertyRef Name="DeliveryNoteNoteID" />
+          </Key>
+          <Property Name="DeliveryNoteNoteID" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblFiles">
+          <Key>
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="FileID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LineID" Type="bigint" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ContentType" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tblJobs">
+          <Key>
+            <PropertyRef Name="JobID" />
+          </Key>
+          <Property Name="JobID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuoteDate" Type="smalldatetime" />
+          <Property Name="ClientID" Type="bigint" />
+          <Property Name="ContactID" Type="bigint" />
+          <Property Name="CustomerRef" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Comments" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" />
+          <Property Name="NextLineID" Type="bigint" Nullable="false" />
+          <Property Name="ExpectedDeliveryDate" Type="smalldatetime" />
+        </EntityType>
+        <EntityType Name="tblLines">
+          <Key>
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="LineID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobID" Type="bigint" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Quantity" Type="float" />
+          <Property Name="UnitPrice" Type="money" />
+          <Property Name="Comments" Type="nvarchar(max)" />
+          <Property Name="ExpectedDeliveryDate" Type="smalldatetime" />
+          <Property Name="DeliveryDate" Type="smalldatetime" />
+          <Property Name="DeliveryComments" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" />
+          <Property Name="JobLineID" Type="bigint" Nullable="false" />
+          <Property Name="DrawingNumber" Type="nvarchar(max)" />
+          <Property Name="DeliveryNoteSent" Type="bit" Nullable="false" />
+          <Property Name="DeliveryNoteSentDate" Type="datetime" />
+          <Property Name="CompletedDate" Type="datetime" />
+          <Property Name="DeadDate" Type="datetime" />
+          <Property Name="StartedDate" Type="datetime" />
+          <Property Name="DeliveryNoteId" Type="bigint" />
+          <Property Name="EstimatedHours" Type="float" Nullable="false" />
+          <Property Name="CustomerRef" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPurchaseOrders">
+          <Key>
+            <PropertyRef Name="PurchaseOrderID" />
+          </Key>
+          <Property Name="PurchaseOrderID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LineID" Type="bigint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Cost" Type="money" Nullable="false" />
+          <Property Name="Comments" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PurchaseOrderDate" Type="smalldatetime" />
+          <Property Name="Quantity" Type="bigint" Nullable="false" />
+          <Property Name="SupplierRef" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblStatuses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblTimesheets">
+          <Key>
+            <PropertyRef Name="TimesheetID" />
+          </Key>
+          <Property Name="TimesheetID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LineID" Type="bigint" Nullable="false" />
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Hours" Type="float" Nullable="false" />
+          <Property Name="Comments" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="HourlyRate" Type="money" Nullable="false" />
+          <Property Name="TimesheetDate" Type="smalldatetime" />
+        </EntityType>
+        <EntityType Name="tblUploads">
+          <Key>
+            <PropertyRef Name="UploadID" />
+          </Key>
+          <Property Name="UploadID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DirectoryGUID" Type="uniqueidentifier" />
+          <Property Name="UploadName" Type="nvarchar(max)" />
+          <Property Name="UploadTypeID" Type="bigint" />
+        </EntityType>
+        <EntityType Name="tblUploadTypes">
+          <Key>
+            <PropertyRef Name="UploadTypeID" />
+          </Key>
+          <Property Name="UploadTypeID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UploadTypeName" Type="nchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblUsers">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Forename" Type="nvarchar" MaxLength="50" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" />
+          <Property Name="Telephone" Type="nchar" MaxLength="20" />
+          <Property Name="StatusID" Type="bit" Nullable="false" />
+          <Property Name="Position" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_tblContacts_tblClients">
+          <End Role="tblClients" Type="Self.tblClients" Multiplicity="0..1" />
+          <End Role="tblContacts" Type="Self.tblContacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblClients">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="tblContacts">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblFiles_tblLines">
+          <End Role="tblLines" Type="Self.tblLines" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblFiles" Type="Self.tblFiles" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="tblLines">
+              <PropertyRef Name="LineID" />
+            </Principal>
+            <Dependent Role="tblFiles">
+              <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblJobs_tblClients">
+          <End Role="tblClients" Type="Self.tblClients" Multiplicity="0..1" />
+          <End Role="tblJobs" Type="Self.tblJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblClients">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="tblJobs">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblJobs_tblContacts">
+          <End Role="tblContacts" Type="Self.tblContacts" Multiplicity="0..1" />
+          <End Role="tblJobs" Type="Self.tblJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContacts">
+              <PropertyRef Name="ContactID" />
+            </Principal>
+            <Dependent Role="tblJobs">
+              <PropertyRef Name="ContactID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblJobs_tblStatuses">
+          <End Role="tblStatuses" Type="Self.tblStatuses" Multiplicity="0..1" />
+          <End Role="tblJobs" Type="Self.tblJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStatuses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblJobs">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblLines_tblJobs">
+          <End Role="tblJobs" Type="Self.tblJobs" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblLines" Type="Self.tblLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblJobs">
+              <PropertyRef Name="JobID" />
+            </Principal>
+            <Dependent Role="tblLines">
+              <PropertyRef Name="JobID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblLines_tblStatuses">
+          <End Role="tblStatuses" Type="Self.tblStatuses" Multiplicity="0..1" />
+          <End Role="tblLines" Type="Self.tblLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStatuses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblLines">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPurchaseOrders_tblLines">
+          <End Role="tblLines" Type="Self.tblLines" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblPurchaseOrders" Type="Self.tblPurchaseOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLines">
+              <PropertyRef Name="LineID" />
+            </Principal>
+            <Dependent Role="tblPurchaseOrders">
+              <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTimesheets_tblLines">
+          <End Role="tblLines" Type="Self.tblLines" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblTimesheets" Type="Self.tblTimesheets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLines">
+              <PropertyRef Name="LineID" />
+            </Principal>
+            <Dependent Role="tblTimesheets">
+              <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTimesheets_tblUsers">
+          <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="1" />
+          <End Role="tblTimesheets" Type="Self.tblTimesheets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsers">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tblTimesheets">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ClientConversionReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Threshhold" Type="float" Mode="In" />
+          <Parameter Name="Startdate" Type="datetime" Mode="In" />
+          <Parameter Name="Enddate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="TimesheetReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Threshhold" Type="float" Mode="In" />
+          <Parameter Name="EstimatedHourlyRate" Type="float" Mode="In" />
+          <Parameter Name="Startdate" Type="datetime" Mode="In" />
+          <Parameter Name="Enddate" Type="datetime" Mode="In" />
+        </Function>
+        <EntityContainer Name="KenworthbModelStoreContainer">
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblClients" EntityType="Self.tblClients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblContacts" EntityType="Self.tblContacts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblDeliveryNotes" EntityType="Self.tblDeliveryNotes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblFiles" EntityType="Self.tblFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblJobs" EntityType="Self.tblJobs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblLines" EntityType="Self.tblLines" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPurchaseOrders" EntityType="Self.tblPurchaseOrders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStatuses" EntityType="Self.tblStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblTimesheets" EntityType="Self.tblTimesheets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUploads" EntityType="Self.tblUploads" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUploadTypes" EntityType="Self.tblUploadTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblContacts_tblClients" Association="Self.FK_tblContacts_tblClients">
+            <End Role="tblClients" EntitySet="tblClients" />
+            <End Role="tblContacts" EntitySet="tblContacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblFiles_tblLines" Association="Self.FK_tblFiles_tblLines">
+            <End Role="tblLines" EntitySet="tblLines" />
+            <End Role="tblFiles" EntitySet="tblFiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblJobs_tblClients" Association="Self.FK_tblJobs_tblClients">
+            <End Role="tblClients" EntitySet="tblClients" />
+            <End Role="tblJobs" EntitySet="tblJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblJobs_tblContacts" Association="Self.FK_tblJobs_tblContacts">
+            <End Role="tblContacts" EntitySet="tblContacts" />
+            <End Role="tblJobs" EntitySet="tblJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblJobs_tblStatuses" Association="Self.FK_tblJobs_tblStatuses">
+            <End Role="tblStatuses" EntitySet="tblStatuses" />
+            <End Role="tblJobs" EntitySet="tblJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblLines_tblJobs" Association="Self.FK_tblLines_tblJobs">
+            <End Role="tblJobs" EntitySet="tblJobs" />
+            <End Role="tblLines" EntitySet="tblLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblLines_tblStatuses" Association="Self.FK_tblLines_tblStatuses">
+            <End Role="tblStatuses" EntitySet="tblStatuses" />
+            <End Role="tblLines" EntitySet="tblLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPurchaseOrders_tblLines" Association="Self.FK_tblPurchaseOrders_tblLines">
+            <End Role="tblLines" EntitySet="tblLines" />
+            <End Role="tblPurchaseOrders" EntitySet="tblPurchaseOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTimesheets_tblLines" Association="Self.FK_tblTimesheets_tblLines">
+            <End Role="tblLines" EntitySet="tblLines" />
+            <End Role="tblTimesheets" EntitySet="tblTimesheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTimesheets_tblUsers" Association="Self.FK_tblTimesheets_tblUsers">
+            <End Role="tblUsers" EntitySet="tblUsers" />
+            <End Role="tblTimesheets" EntitySet="tblTimesheets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ApplicationModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblContact">
+          <Key>
+            <PropertyRef Name="ContactID" />
+          </Key>
+          <Property Name="ContactID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int64" />
+          <Property Name="Forename" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblJobs" Relationship="Self.FK_tblJobs_tblContacts" FromRole="tblContacts" ToRole="tblJobs" />
+          <NavigationProperty Name="tblClient" Relationship="ApplicationModel.FK_tblContacts_tblClients" FromRole="tblContact" ToRole="tblClient" />
+        </EntityType>
+        <EntityType Name="tblDeliveryNote">
+          <Key>
+            <PropertyRef Name="DeliveryNoteNoteID" />
+          </Key>
+          <Property Name="DeliveryNoteNoteID" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblJob">
+          <Key>
+            <PropertyRef Name="JobID" />
+          </Key>
+          <Property Name="JobID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuoteDate" Type="DateTime" Precision="0" />
+          <Property Name="ClientID" Type="Int64" />
+          <Property Name="ContactID" Type="Int64" />
+          <Property Name="CustomerRef" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="NextLineID" Type="Int64" Nullable="false" />
+          <Property Name="ExpectedDeliveryDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="tblContact" Relationship="Self.FK_tblJobs_tblContacts" FromRole="tblJobs" ToRole="tblContacts" />
+          <NavigationProperty Name="tblStatus" Relationship="ApplicationModel.FK_tblJobs_tblStatuses" FromRole="tblJob" ToRole="tblStatus" />
+          <NavigationProperty Name="tblClient" Relationship="ApplicationModel.FK_tblJobs_tblClients" FromRole="tblJob" ToRole="tblClient" />
+          <NavigationProperty Name="tblLines" Relationship="ApplicationModel.FK_tblLines_tblJobs" FromRole="tblJob" ToRole="tblLine" />
+        </EntityType>
+        <EntityType Name="tblUpload">
+          <Key>
+            <PropertyRef Name="UploadID" />
+          </Key>
+          <Property Name="UploadID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DirectoryGUID" Type="Guid" />
+          <Property Name="UploadName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UploadTypeID" Type="Int64" />
+        </EntityType>
+        <EntityType Name="tblUploadType">
+          <Key>
+            <PropertyRef Name="UploadTypeID" />
+          </Key>
+          <Property Name="UploadTypeID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UploadTypeName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_tblJobs_tblContacts">
+          <End Role="tblContacts" Type="Self.tblContact" Multiplicity="0..1" />
+          <End Role="tblJobs" Type="Self.tblJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblContacts">
+              <PropertyRef Name="ContactID" />
+            </Principal>
+            <Dependent Role="tblJobs">
+              <PropertyRef Name="ContactID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ApplicationEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblContacts" EntityType="Self.tblContact" />
+          <EntitySet Name="tblDeliveryNotes" EntityType="Self.tblDeliveryNote" />
+          <EntitySet Name="tblJobs" EntityType="Self.tblJob" />
+          <EntitySet Name="tblUploads" EntityType="Self.tblUpload" />
+          <EntitySet Name="tblUploadTypes" EntityType="Self.tblUploadType" />
+          <AssociationSet Name="FK_tblJobs_tblContacts" Association="Self.FK_tblJobs_tblContacts">
+            <End Role="tblContacts" EntitySet="tblContacts" />
+            <End Role="tblJobs" EntitySet="tblJobs" />
+          </AssociationSet>
+          <EntitySet Name="tblStatuses" EntityType="ApplicationModel.tblStatus" />
+          <AssociationSet Name="FK_tblJobs_tblStatuses" Association="ApplicationModel.FK_tblJobs_tblStatuses">
+            <End Role="tblStatus" EntitySet="tblStatuses" />
+            <End Role="tblJob" EntitySet="tblJobs" />
+          </AssociationSet>
+          <EntitySet Name="AspNetUsers" EntityType="ApplicationModel.AspNetUser" />
+          <EntitySet Name="tblUsers" EntityType="ApplicationModel.tblUser" />
+          <FunctionImport Name="ClientConversionReport" ReturnType="Collection(ApplicationModel.ClientConversionReport_Result)">
+            <Parameter Name="Threshhold" Mode="In" Type="Double" />
+            <Parameter Name="Startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="Enddate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="tblClients" EntityType="ApplicationModel.tblClient" />
+          <AssociationSet Name="FK_tblContacts_tblClients" Association="ApplicationModel.FK_tblContacts_tblClients">
+            <End Role="tblClient" EntitySet="tblClients" />
+            <End Role="tblContact" EntitySet="tblContacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblJobs_tblClients" Association="ApplicationModel.FK_tblJobs_tblClients">
+            <End Role="tblClient" EntitySet="tblClients" />
+            <End Role="tblJob" EntitySet="tblJobs" />
+          </AssociationSet>
+          <FunctionImport Name="TimesheetReport" ReturnType="Collection(ApplicationModel.TimesheetReport_Result)">
+            <Parameter Name="Threshhold" Mode="In" Type="Double" />
+            <Parameter Name="EstimatedHourlyRate" Mode="In" Type="Double" />
+            <Parameter Name="Startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="Enddate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="tblFiles" EntityType="ApplicationModel.tblFile" />
+          <EntitySet Name="tblLines" EntityType="ApplicationModel.tblLine" />
+          <EntitySet Name="tblPurchaseOrders" EntityType="ApplicationModel.tblPurchaseOrder" />
+          <EntitySet Name="tblTimesheets" EntityType="ApplicationModel.tblTimesheet" />
+          <AssociationSet Name="FK_tblFiles_tblLines" Association="ApplicationModel.FK_tblFiles_tblLines">
+            <End Role="tblLine" EntitySet="tblLines" />
+            <End Role="tblFile" EntitySet="tblFiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblLines_tblJobs" Association="ApplicationModel.FK_tblLines_tblJobs">
+            <End Role="tblJob" EntitySet="tblJobs" />
+            <End Role="tblLine" EntitySet="tblLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblLines_tblStatuses" Association="ApplicationModel.FK_tblLines_tblStatuses">
+            <End Role="tblStatus" EntitySet="tblStatuses" />
+            <End Role="tblLine" EntitySet="tblLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPurchaseOrders_tblLines" Association="ApplicationModel.FK_tblPurchaseOrders_tblLines">
+            <End Role="tblLine" EntitySet="tblLines" />
+            <End Role="tblPurchaseOrder" EntitySet="tblPurchaseOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTimesheets_tblLines" Association="ApplicationModel.FK_tblTimesheets_tblLines">
+            <End Role="tblLine" EntitySet="tblLines" />
+            <End Role="tblTimesheet" EntitySet="tblTimesheets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblTimesheets_tblUsers" Association="ApplicationModel.FK_tblTimesheets_tblUsers">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblTimesheet" EntitySet="tblTimesheets" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="tblStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblJobs" Relationship="ApplicationModel.FK_tblJobs_tblStatuses" FromRole="tblStatus" ToRole="tblJob" />
+          <NavigationProperty Name="tblLines" Relationship="ApplicationModel.FK_tblLines_tblStatuses" FromRole="tblStatus" ToRole="tblLine" />
+        </EntityType>
+        <Association Name="FK_tblJobs_tblStatuses">
+          <End Type="ApplicationModel.tblStatus" Role="tblStatus" Multiplicity="0..1" />
+          <End Type="ApplicationModel.tblJob" Role="tblJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblJob">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="Forename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="StatusID" Type="Boolean" Nullable="false" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblTimesheets" Relationship="ApplicationModel.FK_tblTimesheets_tblUsers" FromRole="tblUser" ToRole="tblTimesheet" />
+        </EntityType>
+        <ComplexType Name="ClientConversionReport_Result">
+          <Property Type="String" Name="ClientCompanyName" Nullable="true" />
+          <Property Type="Double" Name="QuotedValue" Nullable="true" />
+          <Property Type="Double" Name="QuoteValue" Nullable="true" />
+          <Property Type="Double" Name="DeadValue" Nullable="true" />
+          <Property Type="Double" Name="WOPValue" Nullable="true" />
+          <Property Type="Double" Name="CompletedValue" Nullable="true" />
+          <Property Type="Double" Name="QuotePercentage" Nullable="true" />
+          <Property Type="Double" Name="CompletedPercentage" Nullable="true" />
+          <Property Type="Double" Name="WOPPercentage" Nullable="true" />
+          <Property Type="Double" Name="DeadPercentage" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="tblClient">
+          <Key>
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="ClientID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientCompanyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientAddress1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientAddress2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientTown" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientCounty" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientPostCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientTelephone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientFax" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClientWWW" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountsEmail" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CopyToAccounts" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblContacts" Relationship="ApplicationModel.FK_tblContacts_tblClients" FromRole="tblClient" ToRole="tblContact" />
+          <NavigationProperty Name="tblJobs" Relationship="ApplicationModel.FK_tblJobs_tblClients" FromRole="tblClient" ToRole="tblJob" />
+        </EntityType>
+        <Association Name="FK_tblContacts_tblClients">
+          <End Type="ApplicationModel.tblClient" Role="tblClient" Multiplicity="0..1" />
+          <End Type="ApplicationModel.tblContact" Role="tblContact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblClient">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="tblContact">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblJobs_tblClients">
+          <End Type="ApplicationModel.tblClient" Role="tblClient" Multiplicity="0..1" />
+          <End Type="ApplicationModel.tblJob" Role="tblJob" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblClient">
+              <PropertyRef Name="ClientID" />
+            </Principal>
+            <Dependent Role="tblJob">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="TimesheetReport_Result">
+          <Property Type="String" Name="clientcompanyname" Nullable="true" />
+          <Property Type="String" Name="description" Nullable="true" />
+          <Property Type="Int64" Name="jobid" Nullable="false" />
+          <Property Type="Int64" Name="joblineid" Nullable="false" />
+          <Property Type="Double" Name="hours" Nullable="true" />
+          <Property Type="Double" Name="timesheetvalue" Nullable="true" />
+          <Property Type="Double" Name="Estimatedhours" Nullable="false" />
+          <Property Type="Double" Name="estimatedvalue" Nullable="true" />
+          <Property Type="Double" Name="timediff" Nullable="true" />
+          <Property Type="Double" Name="estimatedloss" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="tblFile">
+          <Key>
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="FileID" Type="Guid" Nullable="false" />
+          <Property Name="LineID" Type="Int64" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblFile" ToRole="tblLine" />
+        </EntityType>
+        <EntityType Name="tblLine">
+          <Key>
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="LineID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobID" Type="Int64" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Double" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExpectedDeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="JobLineID" Type="Int64" Nullable="false" />
+          <Property Name="DrawingNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryNoteSent" Type="Boolean" Nullable="false" />
+          <Property Name="DeliveryNoteSentDate" Type="DateTime" Precision="3" />
+          <Property Name="CompletedDate" Type="DateTime" Precision="3" />
+          <Property Name="DeadDate" Type="DateTime" Precision="3" />
+          <Property Name="StartedDate" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryNoteId" Type="Int64" />
+          <Property Name="EstimatedHours" Type="Double" Nullable="false" />
+          <Property Name="CustomerRef" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblFile" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblLine" ToRole="tblFile" />
+          <NavigationProperty Name="tblJob" Relationship="ApplicationModel.FK_tblLines_tblJobs" FromRole="tblLine" ToRole="tblJob" />
+          <NavigationProperty Name="tblStatus" Relationship="ApplicationModel.FK_tblLines_tblStatuses" FromRole="tblLine" ToRole="tblStatus" />
+          <NavigationProperty Name="tblPurchaseOrders" Relationship="ApplicationModel.FK_tblPurchaseOrders_tblLines" FromRole="tblLine" ToRole="tblPurchaseOrder" />
+          <NavigationProperty Name="tblTimesheets" Relationship="ApplicationModel.FK_tblTimesheets_tblLines" FromRole="tblLine" ToRole="tblTimesheet" />
+        </EntityType>
+        <EntityType Name="tblPurchaseOrder">
+          <Key>
+            <PropertyRef Name="PurchaseOrderID" />
+          </Key>
+          <Property Name="PurchaseOrderID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LineID" Type="Int64" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Comments" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseOrderDate" Type="DateTime" Precision="0" />
+          <Property Name="Quantity" Type="Int64" Nullable="false" />
+          <Property Name="SupplierRef" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblPurchaseOrders_tblLines" FromRole="tblPurchaseOrder" ToRole="tblLine" />
+        </EntityType>
+        <EntityType Name="tblTimesheet">
+          <Key>
+            <PropertyRef Name="TimesheetID" />
+          </Key>
+          <Property Name="TimesheetID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LineID" Type="Int64" Nullable="false" />
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="Hours" Type="Double" Nullable="false" />
+          <Property Name="Comments" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="HourlyRate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="TimesheetDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblTimesheets_tblLines" FromRole="tblTimesheet" ToRole="tblLine" />
+          <NavigationProperty Name="tblUser" Relationship="ApplicationModel.FK_tblTimesheets_tblUsers" FromRole="tblTimesheet" ToRole="tblUser" />
+        </EntityType>
+        <Association Name="FK_tblFiles_tblLines">
+          <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ApplicationModel.tblFile" Role="tblFile" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="tblLine">
+              <PropertyRef Name="LineID" />
+            </Principal>
+            <Dependent Role="tblFile">
+              <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblLines_tblJobs">
+          <End Type="ApplicationModel.tblJob" Role="tblJob" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblJob">
+              <PropertyRef Name="JobID" />
+            </Principal>
+            <Dependent Role="tblLine">
+              <PropertyRef Name="JobID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblLines_tblStatuses">
+          <End Type="ApplicationModel.tblStatus" Role="tblStatus" Multiplicity="0..1" />
+          <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblLine">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPurchaseOrders_tblLines">
+          <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ApplicationModel.tblPurchaseOrder" Role="tblPurchaseOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLine">
+              <PropertyRef Name="LineID" />
+            </Principal>
+            <Dependent Role="tblPurchaseOrder">
+              <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTimesheets_tblLines">
+          <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ApplicationModel.tblTimesheet" Role="tblTimesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblLine">
+              <PropertyRef Name="LineID" />
+            </Principal>
+            <Dependent Role="tblTimesheet">
+              <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblTimesheets_tblUsers">
+          <End Type="ApplicationModel.tblUser" Role="tblUser" Multiplicity="1" />
+          <End Type="ApplicationModel.tblTimesheet" Role="tblTimesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tblTimesheet">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KenworthbModelStoreContainer" CdmEntityContainer="ApplicationEntities">
+          <EntitySetMapping Name="tblContacts">
+            <EntityTypeMapping TypeName="ApplicationModel.tblContact">
+              <MappingFragment StoreEntitySet="tblContacts">
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="Forename" ColumnName="Forename" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblDeliveryNotes">
+            <EntityTypeMapping TypeName="ApplicationModel.tblDeliveryNote">
+              <MappingFragment StoreEntitySet="tblDeliveryNotes">
+                <ScalarProperty Name="DeliveryNoteNoteID" ColumnName="DeliveryNoteNoteID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblJobs">
+            <EntityTypeMapping TypeName="ApplicationModel.tblJob">
+              <MappingFragment StoreEntitySet="tblJobs">
+                <ScalarProperty Name="JobID" ColumnName="JobID" />
+                <ScalarProperty Name="QuoteDate" ColumnName="QuoteDate" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+                <ScalarProperty Name="CustomerRef" ColumnName="CustomerRef" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="NextLineID" ColumnName="NextLineID" />
+                <ScalarProperty Name="ExpectedDeliveryDate" ColumnName="ExpectedDeliveryDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUploads">
+            <EntityTypeMapping TypeName="ApplicationModel.tblUpload">
+              <MappingFragment StoreEntitySet="tblUploads">
+                <ScalarProperty Name="UploadID" ColumnName="UploadID" />
+                <ScalarProperty Name="DirectoryGUID" ColumnName="DirectoryGUID" />
+                <ScalarProperty Name="UploadName" ColumnName="UploadName" />
+                <ScalarProperty Name="UploadTypeID" ColumnName="UploadTypeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUploadTypes">
+            <EntityTypeMapping TypeName="ApplicationModel.tblUploadType">
+              <MappingFragment StoreEntitySet="tblUploadTypes">
+                <ScalarProperty Name="UploadTypeID" ColumnName="UploadTypeID" />
+                <ScalarProperty Name="UploadTypeName" ColumnName="UploadTypeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStatuses">
+            <EntityTypeMapping TypeName="ApplicationModel.tblStatus">
+              <MappingFragment StoreEntitySet="tblStatuses">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="ApplicationModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="ApplicationModel.tblUser">
+              <MappingFragment StoreEntitySet="tblUsers">
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Forename" ColumnName="Forename" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ClientConversionReport" FunctionName="KenworthbModel.Store.ClientConversionReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ApplicationModel.ClientConversionReport_Result">
+                <ScalarProperty Name="ClientCompanyName" ColumnName="ClientCompanyName" />
+                <ScalarProperty Name="QuotedValue" ColumnName="QuotedValue" />
+                <ScalarProperty Name="QuoteValue" ColumnName="QuoteValue" />
+                <ScalarProperty Name="DeadValue" ColumnName="DeadValue" />
+                <ScalarProperty Name="WOPValue" ColumnName="WOPValue" />
+                <ScalarProperty Name="CompletedValue" ColumnName="CompletedValue" />
+                <ScalarProperty Name="QuotePercentage" ColumnName="QuotePercentage" />
+                <ScalarProperty Name="CompletedPercentage" ColumnName="CompletedPercentage" />
+                <ScalarProperty Name="WOPPercentage" ColumnName="WOPPercentage" />
+                <ScalarProperty Name="DeadPercentage" ColumnName="DeadPercentage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tblClients">
+            <EntityTypeMapping TypeName="ApplicationModel.tblClient">
+              <MappingFragment StoreEntitySet="tblClients">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CopyToAccounts" ColumnName="CopyToAccounts" />
+                <ScalarProperty Name="AccountsEmail" ColumnName="AccountsEmail" />
+                <ScalarProperty Name="ClientWWW" ColumnName="ClientWWW" />
+                <ScalarProperty Name="ClientFax" ColumnName="ClientFax" />
+                <ScalarProperty Name="ClientEmail" ColumnName="ClientEmail" />
+                <ScalarProperty Name="ClientTelephone" ColumnName="ClientTelephone" />
+                <ScalarProperty Name="ClientPostCode" ColumnName="ClientPostCode" />
+                <ScalarProperty Name="ClientCounty" ColumnName="ClientCounty" />
+                <ScalarProperty Name="ClientTown" ColumnName="ClientTown" />
+                <ScalarProperty Name="ClientAddress2" ColumnName="ClientAddress2" />
+                <ScalarProperty Name="ClientAddress1" ColumnName="ClientAddress1" />
+                <ScalarProperty Name="ClientCompanyName" ColumnName="ClientCompanyName" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="TimesheetReport" FunctionName="KenworthbModel.Store.TimesheetReport">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ApplicationModel.TimesheetReport_Result">
+                <ScalarProperty Name="clientcompanyname" ColumnName="clientcompanyname" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="jobid" ColumnName="jobid" />
+                <ScalarProperty Name="joblineid" ColumnName="joblineid" />
+                <ScalarProperty Name="hours" ColumnName="hours" />
+                <ScalarProperty Name="timesheetvalue" ColumnName="timesheetvalue" />
+                <ScalarProperty Name="Estimatedhours" ColumnName="Estimatedhours" />
+                <ScalarProperty Name="estimatedvalue" ColumnName="estimatedvalue" />
+                <ScalarProperty Name="timediff" ColumnName="timediff" />
+                <ScalarProperty Name="estimatedloss" ColumnName="estimatedloss" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tblFiles">
+            <EntityTypeMapping TypeName="ApplicationModel.tblFile">
+              <MappingFragment StoreEntitySet="tblFiles">
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="FileID" ColumnName="FileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblLines">
+            <EntityTypeMapping TypeName="ApplicationModel.tblLine">
+              <MappingFragment StoreEntitySet="tblLines">
+                <ScalarProperty Name="CustomerRef" ColumnName="CustomerRef" />
+                <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
+                <ScalarProperty Name="DeliveryNoteId" ColumnName="DeliveryNoteId" />
+                <ScalarProperty Name="StartedDate" ColumnName="StartedDate" />
+                <ScalarProperty Name="DeadDate" ColumnName="DeadDate" />
+                <ScalarProperty Name="CompletedDate" ColumnName="CompletedDate" />
+                <ScalarProperty Name="DeliveryNoteSentDate" ColumnName="DeliveryNoteSentDate" />
+                <ScalarProperty Name="DeliveryNoteSent" ColumnName="DeliveryNoteSent" />
+                <ScalarProperty Name="DrawingNumber" ColumnName="DrawingNumber" />
+                <ScalarProperty Name="JobLineID" ColumnName="JobLineID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryComments" ColumnName="DeliveryComments" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="ExpectedDeliveryDate" ColumnName="ExpectedDeliveryDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="JobID" ColumnName="JobID" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPurchaseOrders">
+            <EntityTypeMapping TypeName="ApplicationModel.tblPurchaseOrder">
+              <MappingFragment StoreEntitySet="tblPurchaseOrders">
+                <ScalarProperty Name="SupplierRef" ColumnName="SupplierRef" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PurchaseOrderDate" ColumnName="PurchaseOrderDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="PurchaseOrderID" ColumnName="PurchaseOrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTimesheets">
+            <EntityTypeMapping TypeName="ApplicationModel.tblTimesheet">
+              <MappingFragment StoreEntitySet="tblTimesheets">
+                <ScalarProperty Name="TimesheetDate" ColumnName="TimesheetDate" />
+                <ScalarProperty Name="HourlyRate" ColumnName="HourlyRate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Hours" ColumnName="Hours" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="TimesheetID" ColumnName="TimesheetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

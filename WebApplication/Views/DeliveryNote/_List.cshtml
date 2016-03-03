@@ -1,0 +1,42 @@
+﻿@using Kendo.Mvc.UI
+@using WebApplication.Controllers.ViewModels.DeliveryNote
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section head
+{
+    @Styles.Render("~/Content/kendo/css")
+    @Scripts.Render("~/bundles/kendo")
+}
+<div id="DeliveryNoteList">
+    <ul class="list-group">
+        <!-- ko foreach: _DeliveryNotes -->
+        <li class="list-group-item">
+            <span data-bind="text: UniqueId"></span> 
+            <span data-bind="text: Description"></span>
+            <strong><span data-bind="text: SentStatus"></span></strong>
+
+            <input type="checkbox" data-bind="checkedValue: LineId, checked: $parent.SelectedDeliveryNotes">
+        </li>
+        <!-- /ko -->
+    </ul>
+</div>
+
+
+<script type="text/javascript">
+    var listDeliveryNotesModel;
+    var listDeliveryNotesDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+
+    requirejs(['knockout',
+        'app/DeliveryNote/List/ViewModel'
+        ], function (ko, vm) {
+            listDeliveryNotesModel = new vm(listDeliveryNotesDetail);
+            ko.applyBindings(listDeliveryNotesModel, document.getElementById("DeliveryNoteList"));
+        });
+</script>
+
+
+
+
