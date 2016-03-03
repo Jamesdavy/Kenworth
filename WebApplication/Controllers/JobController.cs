@@ -261,6 +261,7 @@ namespace WebApplication.Controllers
 
                 foreach (var tblJob in jobs)
                 {
+                    Console.WriteLine(tblJob.JobID);
                     foreach (var line in tblJob.tblLines)
                     {
                         if (line.Status == 2)

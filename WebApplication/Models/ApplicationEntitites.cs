@@ -3,11 +3,24 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using WebApplication.Infrastructure.Logging;
 
 namespace WebApplication.Models.DatabaseFirst
 {
+    
+
+
     public partial class ApplicationEntities : DbContext 
     {
+
+        public class DBConfiguration : DbConfiguration
+        {
+            public DBConfiguration()
+            {
+                AddInterceptor(new QueryInterceptorLogging());
+            }
+        }
+
         public override int SaveChanges()
         {
              

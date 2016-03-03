@@ -42,7 +42,7 @@ namespace WebApplication.DependencyResolution {
             //For<IUserStore<ApplicationUser>>().Use<UserStore<ApplicationUser>>();
             For<DbContext>().Use(() => new ApplicationEntities());
             For(typeof(ApplicationEntities)).HttpContextScoped();
-            For<ILogger>().Use(ctx => new NLogLogger(ctx.ParentType.FullName));
+            For<ILogger>().Use<NLogLogger>();
         }
 
         #endregion

@@ -38,7 +38,6 @@
         var addTimesheetSubscription = ko.postbox.subscribe("EditTimesheet", function (callback) {
             blocker.Show();
             var data = ajaxHelper.ToServerJson(self);
-            alert(data);
             new ajaxHelper.Post(data, '/Timesheet/_Edit').done(function (response, textStatus, jqXHR) {
                 notifier.Notify('Saved');
                 if (callback) {

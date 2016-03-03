@@ -127,7 +127,6 @@
         var editLineSubscription = ko.postbox.subscribe("EditLine", function (callback) {
             blocker.Show();
             var data = ajaxHelper.ToServerJson(self);
-            alert(data);
             new ajaxHelper.Post(data, '/Line/_Edit').done(function (response, textStatus, jqXHR) {
                 notifier.Notify('Saved');
                 self.FileName(response.FileName);

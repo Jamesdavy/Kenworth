@@ -10,9 +10,9 @@ namespace WebApplication.Infrastructure.Nlog
 
         private Logger _logger;
 
-        public NLogLogger(string currentClassName)
+        public NLogLogger()
         {
-            _logger = LogManager.GetLogger(currentClassName);
+            _logger = LogManager.GetCurrentClassLogger();
             
         }
 
@@ -64,6 +64,11 @@ namespace WebApplication.Infrastructure.Nlog
         public void Fatal(Exception x)
         {
             Fatal(LogUtility.BuildExceptionMessage(x));
+        }
+
+        public void Trace(string message)
+        {
+            _logger.Trace(message);
         }
     }
 

@@ -37,7 +37,6 @@
         var createDeliveryNoteSubscription = ko.postbox.subscribe("CreateDeliveyNote", function (callback) {
             blocker.Show();
             var data = ajaxHelper.ToServerJson(self);
-            alert(data);
             new ajaxHelper.Post(data, '/DeliveryNote/_Create').done(function (response, textStatus, jqXHR) {
                 notifier.Notify('Saved');
                 if (callback) {

@@ -28,14 +28,14 @@ namespace WebApplication.Infrastructure
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             base.OnActionExecuted(filterContext);
-            try
-            {
-                DBSession.SaveChanges();
-            }
-            catch (DbEntityValidationException ex)
-            {
-                throw ex;
-            }
+            //try
+            //{
+            //    DBSession.SaveChanges();
+            //}
+            //catch (DbEntityValidationException ex)
+            //{
+            //    throw ex;
+            //}
             
 
         }

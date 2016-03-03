@@ -45,7 +45,6 @@
         var addLineSubscription = ko.postbox.subscribe("AddLine", function (callback) {
             blocker.Show();
             var data = ajaxHelper.ToServerJson(self);
-            alert(data);
             new ajaxHelper.Post(data, '/Line/_Create').done(function (response, textStatus, jqXHR) {
                 notifier.Notify('Saved');
                 callback(response);

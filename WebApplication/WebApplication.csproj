@@ -405,6 +405,7 @@
     <Compile Include="Infrastructure\Extensions\Controllers\Message.cs" />
     <Compile Include="Infrastructure\Extensions\General\EnumHelpers.cs" />
     <Compile Include="Infrastructure\Extensions\Html\Message.cs" />
+    <Compile Include="Infrastructure\Logging\QueryInterceptorLogging.cs" />
     <Compile Include="Infrastructure\Logging\ILogger.cs" />
     <Compile Include="Infrastructure\Nlog\NLogLogger.cs" />
     <Compile Include="Infrastructure\Nlog\Targets\SignalRTarget.cs" />

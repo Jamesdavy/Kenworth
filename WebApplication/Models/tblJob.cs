@@ -54,7 +54,7 @@ namespace WebApplication.Models.DatabaseFirst
             line.ExpectedDeliveryDate = expectedDeliveryDate.Date;
             line.DeliveryComments = deliveryComments;
             line.DrawingNumber = drawingNumber;
-            line.CustomerRef = customerRef;
+            line.CustomerRef = customerRef ?? "";
             line.EstimatedHours = estimatedHours;
             return line;
         }

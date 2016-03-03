@@ -12,5 +12,6 @@ namespace WebApplication.Infrastructure.Logging
         void Error(Exception x);
         void Fatal(string message);
         void Fatal(Exception x);
+        void Trace(string message);
     }
 }

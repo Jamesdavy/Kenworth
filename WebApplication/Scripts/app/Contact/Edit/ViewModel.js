@@ -37,7 +37,6 @@
         var editContactSubscription = ko.postbox.subscribe("EditContact", function (callback) {
             blocker.Show();
             var data = ajaxHelper.ToServerJson(self);
-            alert(data);
             new ajaxHelper.Post(data, '/Contact/_Edit').done(function (response, textStatus, jqXHR) {
                 notifier.Notify('Saved');
                 if (callback) {
