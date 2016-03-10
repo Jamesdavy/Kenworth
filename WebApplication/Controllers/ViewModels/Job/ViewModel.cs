@@ -61,6 +61,7 @@ namespace WebApplication.Controllers.ViewModels.Job
             public string tblStatusName { get; set; }
             public double? Quantity { get; set; }
             public decimal? UnitPrice { get; set; }
+            public decimal CalculatedUnitPrice { get; set; }
             public DateTime? ExpectedDeliveryDate { get; set; }
             public string tblFileFileName { get; set; }
             public string tblFileContentType { get; set; }

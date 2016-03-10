@@ -18,6 +18,7 @@ namespace WebApplication.Controllers.ViewModels.Line
             get { return tblJobJobID + "/" + JobLineId; }
         }
 
+        public DateTime? tblJobQuoteDate { get; set; }
         public string Description { get; set; }
         public double? Quantity { get; set; }
         public decimal? UnitPrice { get; set; }
@@ -30,7 +31,22 @@ namespace WebApplication.Controllers.ViewModels.Line
         public string tblFileContentType { get; set; }
 
         public double EstimatedHours { get; set; }
+        public decimal EstimatedHourlyRate { get; set; }
+        public decimal CalculatedUnitPrice { get; set; }
+
         public string CustomerRef { get; set; }
+
+        public bool LegacyQuote
+        {
+            get
+            {
+                if (tblJobQuoteDate < new DateTime(2016, 01, 01))
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public string FilePath
         {

@@ -125,7 +125,7 @@
             }, self);
 
             self.Costs = ko.computed(function () {
-                return self.TimesheetTotal() + self.BOMTotal();
+                return self.TimesheetTotal(); // + self.BOMTotal();
             }, self);
 
             self.ProfitLoss = ko.computed(function () {
@@ -448,7 +448,7 @@
                     JobLineID: response.JobLineId,
                     tblStatusName: response.StatusName,
                     Quantity: response.Quantity,
-                    UnitPrice: response.UnitPrice,
+                    UnitPrice: response.CalculatedUnitPrice,
                     ExpectedDeliveryDateString: response.ExpectedDeliveryDateString,
                     DeliveryComments: response.DeliveryComments,
                     DrawingNumber: response.DrawingNumber,
@@ -463,7 +463,7 @@
                 if (line) {
                     line.Description(response.Description);
                     line.Quantity(response.Quantity);
-                    line.UnitPrice(response.UnitPrice);
+                    line.UnitPrice(response.CalculatedUnitPrice);
                     line.ExpectedDeliveryDate(response.ExpectedDeliveryDateString);
                     line.DeliveryComments(response.DeliveryComments);
                     line.DrawingNumber(response.DrawingNumber);
@@ -487,6 +487,7 @@
                         PurchaseOrderDate: response.PurchaseOrderDateString,
                         SupplierRef: response.SupplierRef
                     }));
+                    line.UnitPrice(response.CalculatedUnitPrice);
                 }
             });
 
@@ -502,7 +503,7 @@
                         billOfMaterials.PurchaseOrderDate(response.PurchaseOrderDateString);
                         billOfMaterials.SupplierRef(response.SupplierRef);
                     }
-
+                    line.UnitPrice(response.CalculatedUnitPrice);
                 }
             });
 

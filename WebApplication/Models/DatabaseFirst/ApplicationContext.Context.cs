@@ -37,9 +37,9 @@ namespace WebApplication.Models.DatabaseFirst
         public virtual DbSet<tblUser> tblUsers { get; set; }
         public virtual DbSet<tblClient> tblClients { get; set; }
         public virtual DbSet<tblFile> tblFiles { get; set; }
-        public virtual DbSet<tblLine> tblLines { get; set; }
         public virtual DbSet<tblPurchaseOrder> tblPurchaseOrders { get; set; }
         public virtual DbSet<tblTimesheet> tblTimesheets { get; set; }
+        public virtual DbSet<tblLine> tblLines { get; set; }
     
         public virtual ObjectResult<ClientConversionReport_Result> ClientConversionReport(Nullable<double> threshhold, Nullable<System.DateTime> startdate, Nullable<System.DateTime> enddate)
         {

@@ -24,6 +24,7 @@
         self.DrawingNumber = ko.observable();
 
         self.EstimatedHours = ko.observable().extend({ required: true });;
+        self.EstimatedHourlyRate = ko.observable(lineDetail.EstimatedHourlyRate).extend({ required: true });;
         self.CustomerRef = ko.observable();
         //self._FileUpload = ko.observable();
         //self.Debug = ko.computed(function () {

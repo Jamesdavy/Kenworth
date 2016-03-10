@@ -1,5 +1,6 @@
 ﻿requirejs.config({
-    urlArgs: "bust=" + new Date().getTime(),
+    //urlArgs: "bust=" + new Date().getTime(),
+    urlArgs: "v=0.3", 
     baseUrl: '/Scripts',
     waitSeconds: 40,
     paths: {

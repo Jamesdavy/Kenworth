@@ -108,6 +108,8 @@
           <Property Name="DeliveryNoteId" Type="bigint" />
           <Property Name="EstimatedHours" Type="float" Nullable="false" />
           <Property Name="CustomerRef" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EstimatedHourlyRate" Type="money" Nullable="false" />
+          <Property Name="CalculatedUnitPrice" Type="money" Nullable="false" />
         </EntityType>
         <EntityType Name="tblPurchaseOrders">
           <Key>
@@ -472,9 +474,13 @@
             <Parameter Name="Enddate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="tblFiles" EntityType="ApplicationModel.tblFile" />
-          <EntitySet Name="tblLines" EntityType="ApplicationModel.tblLine" />
           <EntitySet Name="tblPurchaseOrders" EntityType="ApplicationModel.tblPurchaseOrder" />
           <EntitySet Name="tblTimesheets" EntityType="ApplicationModel.tblTimesheet" />
+          <AssociationSet Name="FK_tblTimesheets_tblUsers" Association="ApplicationModel.FK_tblTimesheets_tblUsers">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblTimesheet" EntitySet="tblTimesheets" />
+          </AssociationSet>
+          <EntitySet Name="tblLines" EntityType="ApplicationModel.tblLine" />
           <AssociationSet Name="FK_tblFiles_tblLines" Association="ApplicationModel.FK_tblFiles_tblLines">
             <End Role="tblLine" EntitySet="tblLines" />
             <End Role="tblFile" EntitySet="tblFiles" />
@@ -493,10 +499,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_tblTimesheets_tblLines" Association="ApplicationModel.FK_tblTimesheets_tblLines">
             <End Role="tblLine" EntitySet="tblLines" />
-            <End Role="tblTimesheet" EntitySet="tblTimesheets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblTimesheets_tblUsers" Association="ApplicationModel.FK_tblTimesheets_tblUsers">
-            <End Role="tblUser" EntitySet="tblUsers" />
             <End Role="tblTimesheet" EntitySet="tblTimesheets" />
           </AssociationSet>
           </EntityContainer>
@@ -629,36 +631,6 @@
           <Property Name="ContentType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblFile" ToRole="tblLine" />
         </EntityType>
-        <EntityType Name="tblLine">
-          <Key>
-            <PropertyRef Name="LineID" />
-          </Key>
-          <Property Name="LineID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="JobID" Type="Int64" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Double" />
-          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ExpectedDeliveryDate" Type="DateTime" Precision="0" />
-          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
-          <Property Name="DeliveryComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="JobLineID" Type="Int64" Nullable="false" />
-          <Property Name="DrawingNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryNoteSent" Type="Boolean" Nullable="false" />
-          <Property Name="DeliveryNoteSentDate" Type="DateTime" Precision="3" />
-          <Property Name="CompletedDate" Type="DateTime" Precision="3" />
-          <Property Name="DeadDate" Type="DateTime" Precision="3" />
-          <Property Name="StartedDate" Type="DateTime" Precision="3" />
-          <Property Name="DeliveryNoteId" Type="Int64" />
-          <Property Name="EstimatedHours" Type="Double" Nullable="false" />
-          <Property Name="CustomerRef" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblFile" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblLine" ToRole="tblFile" />
-          <NavigationProperty Name="tblJob" Relationship="ApplicationModel.FK_tblLines_tblJobs" FromRole="tblLine" ToRole="tblJob" />
-          <NavigationProperty Name="tblStatus" Relationship="ApplicationModel.FK_tblLines_tblStatuses" FromRole="tblLine" ToRole="tblStatus" />
-          <NavigationProperty Name="tblPurchaseOrders" Relationship="ApplicationModel.FK_tblPurchaseOrders_tblLines" FromRole="tblLine" ToRole="tblPurchaseOrder" />
-          <NavigationProperty Name="tblTimesheets" Relationship="ApplicationModel.FK_tblTimesheets_tblLines" FromRole="tblLine" ToRole="tblTimesheet" />
-        </EntityType>
         <EntityType Name="tblPurchaseOrder">
           <Key>
             <PropertyRef Name="PurchaseOrderID" />
@@ -684,8 +656,52 @@
           <Property Name="Comments" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="HourlyRate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="TimesheetDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblTimesheets_tblLines" FromRole="tblTimesheet" ToRole="tblLine" />
           <NavigationProperty Name="tblUser" Relationship="ApplicationModel.FK_tblTimesheets_tblUsers" FromRole="tblTimesheet" ToRole="tblUser" />
+          <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblTimesheets_tblLines" FromRole="tblTimesheet" ToRole="tblLine" />
+        </EntityType>
+        <Association Name="FK_tblTimesheets_tblUsers">
+          <End Type="ApplicationModel.tblUser" Role="tblUser" Multiplicity="1" />
+          <End Type="ApplicationModel.tblTimesheet" Role="tblTimesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tblTimesheet">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblLine">
+          <Key>
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="LineID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobID" Type="Int64" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Double" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ExpectedDeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryComments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="JobLineID" Type="Int64" Nullable="false" />
+          <Property Name="DrawingNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryNoteSent" Type="Boolean" Nullable="false" />
+          <Property Name="DeliveryNoteSentDate" Type="DateTime" Precision="3" />
+          <Property Name="CompletedDate" Type="DateTime" Precision="3" />
+          <Property Name="DeadDate" Type="DateTime" Precision="3" />
+          <Property Name="StartedDate" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryNoteId" Type="Int64" />
+          <Property Name="EstimatedHours" Type="Double" Nullable="false" />
+          <Property Name="CustomerRef" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EstimatedHourlyRate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="CalculatedUnitPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <NavigationProperty Name="tblFile" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblLine" ToRole="tblFile" />
+          <NavigationProperty Name="tblJob" Relationship="ApplicationModel.FK_tblLines_tblJobs" FromRole="tblLine" ToRole="tblJob" />
+          <NavigationProperty Name="tblStatus" Relationship="ApplicationModel.FK_tblLines_tblStatuses" FromRole="tblLine" ToRole="tblStatus" />
+          <NavigationProperty Name="tblPurchaseOrders" Relationship="ApplicationModel.FK_tblPurchaseOrders_tblLines" FromRole="tblLine" ToRole="tblPurchaseOrder" />
+          <NavigationProperty Name="tblTimesheets" Relationship="ApplicationModel.FK_tblTimesheets_tblLines" FromRole="tblLine" ToRole="tblTimesheet" />
         </EntityType>
         <Association Name="FK_tblFiles_tblLines">
           <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="1">
@@ -752,18 +768,6 @@
             </Principal>
             <Dependent Role="tblTimesheet">
               <PropertyRef Name="LineID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tblTimesheets_tblUsers">
-          <End Type="ApplicationModel.tblUser" Role="tblUser" Multiplicity="1" />
-          <End Type="ApplicationModel.tblTimesheet" Role="tblTimesheet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblUser">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="tblTimesheet">
-              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -928,32 +932,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblLines">
-            <EntityTypeMapping TypeName="ApplicationModel.tblLine">
-              <MappingFragment StoreEntitySet="tblLines">
-                <ScalarProperty Name="CustomerRef" ColumnName="CustomerRef" />
-                <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
-                <ScalarProperty Name="DeliveryNoteId" ColumnName="DeliveryNoteId" />
-                <ScalarProperty Name="StartedDate" ColumnName="StartedDate" />
-                <ScalarProperty Name="DeadDate" ColumnName="DeadDate" />
-                <ScalarProperty Name="CompletedDate" ColumnName="CompletedDate" />
-                <ScalarProperty Name="DeliveryNoteSentDate" ColumnName="DeliveryNoteSentDate" />
-                <ScalarProperty Name="DeliveryNoteSent" ColumnName="DeliveryNoteSent" />
-                <ScalarProperty Name="DrawingNumber" ColumnName="DrawingNumber" />
-                <ScalarProperty Name="JobLineID" ColumnName="JobLineID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DeliveryComments" ColumnName="DeliveryComments" />
-                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
-                <ScalarProperty Name="ExpectedDeliveryDate" ColumnName="ExpectedDeliveryDate" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="JobID" ColumnName="JobID" />
-                <ScalarProperty Name="LineID" ColumnName="LineID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblPurchaseOrders">
             <EntityTypeMapping TypeName="ApplicationModel.tblPurchaseOrder">
               <MappingFragment StoreEntitySet="tblPurchaseOrders">
@@ -978,6 +956,34 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="LineID" ColumnName="LineID" />
                 <ScalarProperty Name="TimesheetID" ColumnName="TimesheetID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblLines">
+            <EntityTypeMapping TypeName="ApplicationModel.tblLine">
+              <MappingFragment StoreEntitySet="tblLines">
+                <ScalarProperty Name="CalculatedUnitPrice" ColumnName="CalculatedUnitPrice" />
+                <ScalarProperty Name="EstimatedHourlyRate" ColumnName="EstimatedHourlyRate" />
+                <ScalarProperty Name="CustomerRef" ColumnName="CustomerRef" />
+                <ScalarProperty Name="EstimatedHours" ColumnName="EstimatedHours" />
+                <ScalarProperty Name="DeliveryNoteId" ColumnName="DeliveryNoteId" />
+                <ScalarProperty Name="StartedDate" ColumnName="StartedDate" />
+                <ScalarProperty Name="DeadDate" ColumnName="DeadDate" />
+                <ScalarProperty Name="CompletedDate" ColumnName="CompletedDate" />
+                <ScalarProperty Name="DeliveryNoteSentDate" ColumnName="DeliveryNoteSentDate" />
+                <ScalarProperty Name="DeliveryNoteSent" ColumnName="DeliveryNoteSent" />
+                <ScalarProperty Name="DrawingNumber" ColumnName="DrawingNumber" />
+                <ScalarProperty Name="JobLineID" ColumnName="JobLineID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryComments" ColumnName="DeliveryComments" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="ExpectedDeliveryDate" ColumnName="ExpectedDeliveryDate" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="JobID" ColumnName="JobID" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

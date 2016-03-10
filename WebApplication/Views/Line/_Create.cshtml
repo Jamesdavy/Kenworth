@@ -49,13 +49,23 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 col-sm-5 control-label">Estimated Hours </label>
-            <div class="col-md-8 col-sm-7">
+            <label class="col-md-4 col-sm-4 control-label">Estimated Hours / Rate </label>
+            <div class="col-md-4 col-sm-4">
                 <div data-bind="validationElement: EstimatedHours, css: { 'has-success': EstimatedHours.isModified() && EstimatedHours.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
                     <div class="input-group">
                         <input type="text" id="EstimatedHours" class="form-control" data-bind="value: EstimatedHours" />
                         <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
                             <span class="glyphicon glyphicon-ok" data-bind="validationElement: EstimatedHours"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <div data-bind="validationElement: EstimatedHourlyRate, css: { 'has-success': EstimatedHourlyRate.isModified() && EstimatedHourlyRate.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                    <div class="input-group">
+                        <input type="text" id="EstimatedHourlyRate" class="form-control" data-bind="value: EstimatedHourlyRate" />
+                        <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                            <span class="glyphicon glyphicon-ok" data-bind="validationElement: EstimatedHourlyRate"></span>
                         </span>
                     </div>
                 </div>

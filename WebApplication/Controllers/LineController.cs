@@ -87,7 +87,7 @@ namespace WebApplication.Controllers
             string contentType = "";
 
             var job = DBSession.tblJobs.Where(x => x.JobID == command.JobId).SingleOrDefault();
-            var line = job.AddLine(command.Description, 2, command.Quantity, command.UnitPrice, command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.CustomerRef, command.EstimatedHours);
+            var line = job.AddLine(command.Description, 2, command.Quantity, command.UnitPrice, command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.CustomerRef, command.EstimatedHours, command.EstimatedHourlyRate);
 
             if (command.File != null)
             {
@@ -123,7 +123,9 @@ namespace WebApplication.Controllers
                 FileName = fullFileName,
                 ContentType = contentType,
                 CustomerRef = command.CustomerRef,
-                EstimatedHours = command.EstimatedHours
+                EstimatedHours = command.EstimatedHours,
+                EstimatedHourlyRate = command.EstimatedHourlyRate,
+                CalculatedUnitPrice = line.CalculatedUnitPrice
             };
             
             return JsonActionResult(HttpStatusCode.OK, "Success", response);
@@ -152,7 +154,7 @@ namespace WebApplication.Controllers
 
             var jobId = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => x.JobID).SingleOrDefault();
             var job = DBSession.tblJobs.Where(x => x.JobID == jobId).SingleOrDefault();
-            var line = job.UpdateLine(command.LineId, command.Description, command.Quantity, command.UnitPrice, command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.CustomerRef, command.EstimatedHours );
+            var line = job.UpdateLine(command.LineId, command.Description, command.Quantity, command.UnitPrice, command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.CustomerRef, command.EstimatedHours, command.EstimatedHourlyRate );
 
             if (command.File != null)
             {
@@ -183,7 +185,9 @@ namespace WebApplication.Controllers
                 FileName = fullFileName,
                 ContentType = contentType,
                 CustomerRef = command.CustomerRef,
-                EstimatedHours = command.EstimatedHours
+                EstimatedHours = command.EstimatedHours,
+                EstimatedHourlyRate = command.EstimatedHourlyRate,
+                CalculatedUnitPrice = line.CalculatedUnitPrice
             };
 
             return JsonActionResult(HttpStatusCode.OK, "Success", response);

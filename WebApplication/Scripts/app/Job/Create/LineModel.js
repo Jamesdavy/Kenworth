@@ -17,7 +17,7 @@
         self.Description = ko.observable(model.Description);
         self.JobLineID = ko.observable(model.JobLineID);
         self.Quantity = ko.observable(model.Quantity);
-        self.UnitPrice = ko.observable(model.UnitPrice);
+        self.UnitPrice = ko.observable(model.CalculatedUnitPrice);
         self.ExpectedDeliveryDate = ko.observable(model.ExpectedDeliveryDateString);
         self.DeliveryComments = ko.observable(model.DeliveryComments);
         self.DrawingNumber = ko.observable(model.DrawingNumber);

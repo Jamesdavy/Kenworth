@@ -38,7 +38,7 @@
                         //    viewModel.Errors.push(error);
                         //}
                         //viewModel.errors.showAllMessages(true);
-                        alert(jqXHr.responseText);
+                        //alert(jqXHr.responseText);
                         var serverErrors = JSON.parse(jqXHr.responseText);
                         var errors = [];
                         $.each(serverErrors.ModelState, function (index, element) {

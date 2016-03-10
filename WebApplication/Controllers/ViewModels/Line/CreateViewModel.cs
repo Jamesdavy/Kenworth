@@ -8,7 +8,15 @@ namespace WebApplication.Controllers.ViewModels.Line
 {
     public class CreateViewModel
     {
+
+        public CreateViewModel()
+        {
+            EstimatedHourlyRate = 42;
+        }
+
         public long JobId { get; set; }
+        public decimal EstimatedHourlyRate { get; set; }
+
         public string ExpectedDeliveryDateString
         {
             get

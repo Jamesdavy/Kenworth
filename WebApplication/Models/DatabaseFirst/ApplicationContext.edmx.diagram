@@ -19,15 +19,15 @@
         <AssociationConnector Association="ApplicationModel.FK_tblContacts_tblClients" />
         <AssociationConnector Association="ApplicationModel.FK_tblJobs_tblClients" />
         <EntityTypeShape EntityType="ApplicationModel.tblFile" Width="1.5" PointX="11.875" PointY="11.125" />
-        <EntityTypeShape EntityType="ApplicationModel.tblLine" Width="1.5" PointX="9.625" PointY="3.875" />
         <EntityTypeShape EntityType="ApplicationModel.tblPurchaseOrder" Width="1.5" PointX="11.875" PointY="7.625" />
         <EntityTypeShape EntityType="ApplicationModel.tblTimesheet" Width="1.5" PointX="11.875" PointY="3.75" />
+        <AssociationConnector Association="ApplicationModel.FK_tblTimesheets_tblUsers" />
+        <EntityTypeShape EntityType="ApplicationModel.tblLine" Width="1.5" PointX="9" PointY="2.5" />
         <AssociationConnector Association="ApplicationModel.FK_tblFiles_tblLines" />
         <AssociationConnector Association="ApplicationModel.FK_tblLines_tblJobs" />
         <AssociationConnector Association="ApplicationModel.FK_tblLines_tblStatuses" />
         <AssociationConnector Association="ApplicationModel.FK_tblPurchaseOrders_tblLines" />
         <AssociationConnector Association="ApplicationModel.FK_tblTimesheets_tblLines" />
-        <AssociationConnector Association="ApplicationModel.FK_tblTimesheets_tblUsers" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

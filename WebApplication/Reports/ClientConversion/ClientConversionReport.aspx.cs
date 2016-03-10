@@ -15,7 +15,7 @@ namespace WebApplication.Reports.ClientConversion
             {
                 dateFromTextBox.Text = DateTime.Now.AddMonths(-3).ToShortDateString();
                 dateToTextBox.Text = DateTime.Now.AddDays(1).ToShortDateString();
-                quoteThreshold.Text = "0.2";
+                quoteThreshold.Text = "0";
             }
 
             var reportViewer = Form.FindControl("documentViewer") as DevExpress.XtraReports.Web.ReportViewer;

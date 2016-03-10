@@ -22,7 +22,7 @@ namespace WebApplication.Models.DatabaseFirst
         public decimal HourlyRate { get; set; }
         public Nullable<System.DateTime> TimesheetDate { get; set; }
     
-        public virtual tblLine tblLine { get; set; }
         public virtual tblUser tblUser { get; set; }
+        public virtual tblLine tblLine { get; set; }
     }
 }

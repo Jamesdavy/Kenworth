@@ -17,7 +17,7 @@ namespace WebApplication.Models.DatabaseFirst
             PurchaseOrderDate = purchaseOrderDate;
             Quantity = quantity;
             Comments = comments ?? "";
-            SupplierRef = supplierRef;
+            SupplierRef = supplierRef ?? "";
         }
     }
 }

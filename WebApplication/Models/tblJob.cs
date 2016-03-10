@@ -38,14 +38,14 @@ namespace WebApplication.Models.DatabaseFirst
             QuoteDate = DateTime.Now;
         }
 
-        public tblLine AddLine(string description, int? status, double? quantity, decimal? unitPrice, DateTime? expectedDeliveryDate, string deliveryComments, string drawingNumber, string customerRef, double estimatedHours)
+        public tblLine AddLine(string description, int? status, double? quantity, decimal? unitPrice, DateTime? expectedDeliveryDate, string deliveryComments, string drawingNumber, string customerRef, double estimatedHours, decimal estimatedHourlyRate)
         {
-            var line = new tblLine(description, GetNextJobLineId(), status, quantity, unitPrice, expectedDeliveryDate, deliveryComments, drawingNumber, customerRef, estimatedHours);
+            var line = new tblLine(description, GetNextJobLineId(), status, quantity, unitPrice, expectedDeliveryDate, deliveryComments, drawingNumber, customerRef, estimatedHours, estimatedHourlyRate);
             tblLines.Add(line);
             return line;
         }
 
-        public tblLine UpdateLine(long lineId, string description, double quantity, decimal unitPrice, DateTime expectedDeliveryDate, string deliveryComments, string drawingNumber, string customerRef, double estimatedHours)
+        public tblLine UpdateLine(long lineId, string description, double quantity, decimal unitPrice, DateTime expectedDeliveryDate, string deliveryComments, string drawingNumber, string customerRef, double estimatedHours, decimal estimatedHourlyRate)
         {
             var line = GetLine(lineId);
             line.Description = description;
@@ -56,6 +56,8 @@ namespace WebApplication.Models.DatabaseFirst
             line.DrawingNumber = drawingNumber;
             line.CustomerRef = customerRef ?? "";
             line.EstimatedHours = estimatedHours;
+            line.CalculatedUnitPrice = line.CalculateUnitPrice();
+            line.EstimatedHourlyRate = estimatedHourlyRate;
             return line;
         }
 
@@ -134,15 +136,21 @@ namespace WebApplication.Models.DatabaseFirst
         {
             var line = GetLine(lineId);
             var bom = new tblPurchaseOrder(description, cost, quantity, comments, purchaseOrderDate, supplierRef);
-            line.tblPurchaseOrders.Add(bom);
+            AddBomAndCalculateUnitPrice(line, bom);
             return bom;
         }
 
         public tblPurchaseOrder AddBillOfMaterials(tblLine line, string description, decimal cost, long quantity, string comments, DateTime? purchaseOrderDate, string supplierRef)
         {
             var bom = new tblPurchaseOrder(description, cost, quantity, comments, purchaseOrderDate, supplierRef);
-            line.tblPurchaseOrders.Add(bom);
+            AddBomAndCalculateUnitPrice(line, bom);
             return bom;
+        }
+
+        private void AddBomAndCalculateUnitPrice(tblLine line, tblPurchaseOrder bom)
+        {
+            line.tblPurchaseOrders.Add(bom);
+            line.CalculatedUnitPrice = line.CalculateUnitPrice();
         }
 
 
@@ -223,7 +231,7 @@ namespace WebApplication.Models.DatabaseFirst
             }
         }
 
-        public void UpdateBillOfMaterials(long purchaseOrderId, string description, decimal cost, long quantity, string comments, DateTime? purchaseOrderDate, string supplierRef)
+        public tblLine UpdateBillOfMaterials(long purchaseOrderId, string description, decimal cost, long quantity, string comments, DateTime? purchaseOrderDate, string supplierRef)
         {
             var line = tblLines.SingleOrDefault(x => x.tblPurchaseOrders.Any(y => y.PurchaseOrderID == purchaseOrderId));
             var billOfMaterials = line.tblPurchaseOrders.SingleOrDefault(x => x.PurchaseOrderID == purchaseOrderId);
@@ -232,7 +240,9 @@ namespace WebApplication.Models.DatabaseFirst
             billOfMaterials.Quantity = quantity;
             billOfMaterials.Comments = comments ?? "";
             billOfMaterials.Cost = cost;
-            billOfMaterials.SupplierRef = supplierRef;
+            billOfMaterials.SupplierRef = supplierRef ?? "";
+            line.CalculatedUnitPrice = line.CalculateUnitPrice();
+            return line;
         }
 
         public tblJob Copy()
@@ -241,7 +251,7 @@ namespace WebApplication.Models.DatabaseFirst
             foreach (var tblLine in tblLines)
             {
                 var line = job.AddLine(tblLine.Description, 2, tblLine.Quantity, tblLine.UnitPrice,
-                    DateTime.Now.AddMonths(1), tblLine.Comments, tblLine.DrawingNumber, "", tblLine.EstimatedHours);
+                    DateTime.Now.AddMonths(1), tblLine.Comments, tblLine.DrawingNumber, "", tblLine.EstimatedHours, tblLine.EstimatedHourlyRate);
                 if (tblLine.tblFile != null)
                 {
                     var file = new tblFile(Guid.NewGuid(), tblLine.tblFile.FileName, tblLine.tblFile.ContentType);

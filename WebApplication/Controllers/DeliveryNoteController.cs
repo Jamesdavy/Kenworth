@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using DevExpress.XtraPrinting;
+using DevExpress.XtraPrinting.Drawing;
 using DevExpress.XtraReports.UI;
 using Web.App.Attributes;
 using WebApplication.Controllers.ViewModels.DeliveryNote;
@@ -62,11 +63,17 @@ namespace WebApplication.Controllers
                 rep.Pages.Add(page);
             }
 
+            rep.Watermark.Text = "Office Use";
+            rep.Watermark.TextDirection = DirectionMode.ForwardDiagonal;
+            rep.Watermark.TextTransparency = 50;
+            rep.Watermark.ShowBehind = false;
+
             var fileName = "DeliveryNote-" + dnId + ".pdf";
             var deliveryNoteFilePath = Server.MapPath("~/Documents/" + fileName );
             rep.ExportToPdf(deliveryNoteFilePath);
 
             job.UpdateDeliveryNoteStatuses(command.SelectedDeliveryNotes, dnId);
+            DBSession.SaveChanges();
 
             var response = new CreateDeliveryNoteResponse()
             {

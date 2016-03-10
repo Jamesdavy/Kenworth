@@ -28,7 +28,7 @@ namespace WebApplication.Reports.Quote
 
             public double LineTotal
             {
-                get { return Quantity.GetValueOrDefault()*(double) UnitPrice.GetValueOrDefault(); }
+                get { return Quantity.GetValueOrDefault()*(double) CalculatedUnitPrice; }
             }
 
             public long? JobID { get; set; }
@@ -38,7 +38,7 @@ namespace WebApplication.Reports.Quote
             public DateTime? ExpectedDeliveryDate { get; set; }
             public double? Quantity { get; set; }
             public decimal? UnitPrice { get; set; }
-
+            public decimal CalculatedUnitPrice { get; set; }
         }
 
     }

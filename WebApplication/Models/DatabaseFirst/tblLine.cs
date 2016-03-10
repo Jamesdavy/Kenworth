@@ -41,6 +41,8 @@ namespace WebApplication.Models.DatabaseFirst
         public Nullable<long> DeliveryNoteId { get; set; }
         public double EstimatedHours { get; set; }
         public string CustomerRef { get; set; }
+        public decimal EstimatedHourlyRate { get; set; }
+        public decimal CalculatedUnitPrice { get; set; }
     
         public virtual tblFile tblFile { get; set; }
         public virtual tblJob tblJob { get; set; }

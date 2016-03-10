@@ -15,6 +15,7 @@ namespace WebApplication.Controllers.ViewModels.BillOfMaterials
         public string Comments { get; set; }
         public DateTime? PurchaseOrderDate { get; set; }
         public string SupplierRef { get; set; }
+        public decimal CalculatedUnitPrice { get; set; }
 
         public string PurchaseOrderDateString
         {

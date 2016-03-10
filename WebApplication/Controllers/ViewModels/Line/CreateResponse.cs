@@ -19,6 +19,9 @@ namespace WebApplication.Controllers.ViewModels.Line
         public string DrawingNumber { get; set; }
 
         public double EstimatedHours { get; set; }
+        public decimal EstimatedHourlyRate { get; set; }
+        public decimal CalculatedUnitPrice { get; set; }
+
         public string CustomerRef { get; set; }
 
         public string FileName { get; set; }

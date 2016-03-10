@@ -32,8 +32,11 @@
         self.DeliveryComments = ko.observable(lineDetail.DeliveryComments);
         self.DrawingNumber = ko.observable(lineDetail.DrawingNumber);
 
-        self.EstimatedHours = ko.observable(lineDetail.EstimatedHours).extend({ required: true });;
+        self.EstimatedHours = ko.observable(lineDetail.EstimatedHours).extend({ required: true });
+        self.EstimatedHourlyRate = ko.observable(lineDetail.EstimatedHourlyRate).extend({ required: true });
+        self.DBCalculatedUnitPrice = ko.observable(lineDetail.CalculatedUnitPrice).extend({ required: true });;
         self.CustomerRef = ko.observable(lineDetail.CustomerRef);
+        self.LegacyQuote = ko.observable(lineDetail.LegacyQuote);
 
         self._Status = ko.observable(lineDetail.tblStatusName);
 
@@ -73,6 +76,44 @@
             self._Timesheets(mappedTimesheets);
         }
 
+        self.BOMTotal = ko.computed(function() {
+            var total = 0;
+            for (var j = 0; j < self._BillOfMaterials().length; j++) {
+                total = total + (self._BillOfMaterials()[j].Total());
+            }
+            return total;
+        }, self);
+
+        self.LabourTotal = ko.computed(function () {
+            if (self.LegacyQuote())
+                return 0;
+            var total = ((parseFloat(self.EstimatedHours()) * parseFloat(self.EstimatedHourlyRate())) + parseFloat(self.UnitPrice())) * parseFloat(self.Quantity());
+            return total;
+        }, self);
+
+        self.QuoteTotal = ko.computed(function () {
+            if (self.LegacyQuote())
+                return 0;
+            var total = self.LabourTotal() + self.BOMTotal();
+            return total;
+        }, self);
+
+        self.CalculatedUnitPrice = ko.computed(function () {
+            if (self.LegacyQuote())
+                return self.UnitPrice();
+
+            var total = self.QuoteTotal() / self.Quantity();
+            return total;
+        }, self);
+
+
+        self.ShowLabour = ko.computed(function () {
+            if (self.LegacyQuote())
+                return false;
+            return true;
+        }, self);
+
+
         function ChangeStatus(lineId, status) {
             blocker.Show();
             ajaxHelper.Post(JSON.stringify({ 'LineId': lineId, 'Status': status }), '/Line/_ChangeStatus')
@@ -83,7 +124,6 @@
                 }).always(function () {
                     blocker.Hide();
                 });
-
         }
 
         self.Job = function () {
@@ -153,6 +193,7 @@
                 billOfMaterials.Comments(response.Comments);
                 billOfMaterials.PurchaseOrderDate(response.PurchaseOrderDateString);
                 billOfMaterials.SupplierRef(response.SupplierRef);
+                //self.UnitPrice(response.CalculatedUnitPrice);
             }
 
         });
@@ -177,6 +218,7 @@
                 PurchaseOrderDateString: response.PurchaseOrderDateString,
                 SupplierRef: response.SupplierRef
             }));
+            //self.UnitPrice(response.CalculatedUnitPrice);
         });
 
         ko.postbox.subscribe("TimesheetAdded", function (response) {

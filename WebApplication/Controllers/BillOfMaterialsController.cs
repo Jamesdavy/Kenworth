@@ -44,6 +44,8 @@ namespace WebApplication.Controllers
             
             DBSession.SaveChanges();
 
+            var bomLine = DBSession.tblLines.Where(x => x.LineID == bom.LineID).SingleOrDefault();
+
             var response = new CreateResponse()
             {
                 JobID = Ids.JobID,
@@ -55,7 +57,8 @@ namespace WebApplication.Controllers
                 Quantity = command.Quantity,
                 Comments = command.Comments,
                 PurchaseOrderDate = command.PurchaseOrderDate,
-                SupplierRef = command.SupplierRef
+                SupplierRef = command.SupplierRef,
+                CalculatedUnitPrice = bomLine.CalculatedUnitPrice
             };
 
             return JsonActionResult(HttpStatusCode.OK, "Success", response);
@@ -80,7 +83,7 @@ namespace WebApplication.Controllers
             if (job == null)
                 return HttpNotFound();
                 
-            job.UpdateBillOfMaterials(command.PurchaseOrderID, command.Description, command.Cost, command.Quantity, command.Comments, command.PurchaseOrderDate, command.SupplierRef);
+            var bomLine = job.UpdateBillOfMaterials(command.PurchaseOrderID, command.Description, command.Cost, command.Quantity, command.Comments, command.PurchaseOrderDate, command.SupplierRef);
             DBSession.SaveChanges();
 
             var response = new EditResponse()
@@ -92,7 +95,8 @@ namespace WebApplication.Controllers
                 Quantity = command.Quantity,
                 Comments = command.Comments,
                 PurchaseOrderDate = command.PurchaseOrderDate,
-                SupplierRef = command.SupplierRef
+                SupplierRef = command.SupplierRef,
+                CalculatedUnitPrice = bomLine.CalculatedUnitPrice
             };
 
             return JsonActionResult(HttpStatusCode.OK, "Success", response);

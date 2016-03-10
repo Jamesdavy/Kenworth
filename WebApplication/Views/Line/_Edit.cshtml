@@ -10,7 +10,6 @@
                         <span data-bind="text: UniqueId" ></span>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label class="col-md-4 col-sm-5 control-label">Description </label>
                     <div class="col-md-8 col-sm-7">
@@ -57,13 +56,23 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-4 col-sm-5 control-label">Estimated Hours </label>
-                    <div class="col-md-8 col-sm-7">
+                    <label class="col-md-4 col-sm-4 control-label">Estimated Hours / Rate </label>
+                    <div class="col-md-4 col-sm-4">
                         <div data-bind="validationElement: EstimatedHours, css: { 'has-success': EstimatedHours.isModified() && EstimatedHours.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
-                            <div class="input-group">
+                            <div class="input-group" data-bind="fadeDisable: ShowLabour()">
                                 <input type="text" id="EstimatedHours" class="form-control" data-bind="value: EstimatedHours" />
                                 <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
                                     <span class="glyphicon glyphicon-ok" data-bind="validationElement: EstimatedHours"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div data-bind="validationElement: EstimatedHourlyRate, css: { 'has-success': EstimatedHourlyRate.isModified() && EstimatedHourlyRate.isValid() }, validationOptions: { decorateInputElement: true, errorElementClass: 'has-error' }">
+                            <div class="input-group" data-bind="fadeDisable: ShowLabour()">
+                                <input type="text" id="EstimatedHourlyRate" class="form-control" data-bind="value: EstimatedHourlyRate" />
+                                <span class="input-group-addon" data-bind="validationOptions: { decorateInputElement: true, errorElementClass: 'glyphicon-remove' }">
+                                    <span class="glyphicon glyphicon-ok" data-bind="validationElement: EstimatedHourlyRate"></span>
                                 </span>
                             </div>
                         </div>
@@ -116,7 +125,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h2 class="panel-title">
-                            Bill Of Material 
+                            Bill Of Material
                             <button type="button" data-bind="click: AddBOM" class="btn btn-default navbar-btn">
                                 <span class="glyphicon glyphicon-floppy-disk"></span>
                                 <span class="hidden-xs">Add BOM</span>
@@ -140,14 +149,14 @@
                                 <span style="display: inline-block; margin-left:20px;">
                                     @*<span data-bind="text: BillOfMaterialsID"></span>*@
                                     <span data-bind="text: Description"></span>
-                                    <br/>
+                                    <br />
                                     <span data-bind="text: SupplierRef"></span> <span data-bind="text: PurchaseOrderDate"></span>
                                     <br />
                                     <strong>Quantity:</strong> <span data-bind="text: Quantity"></span>
                                     <strong>Cost:</strong> £<span data-bind="text: Cost"></span>
                                     <strong>Total:</strong> £<span data-bind="text: Total"></span>
                                 </span>
-                                <hr/>
+                                <hr />
                             </div>
                             <!-- /ko -->
                         </div>
@@ -181,22 +190,52 @@
                                     @*<span data-bind="text: TimesheetID"></span>*@
                                     <span data-bind="text: OperativeName"></span>
                                     <span data-bind="text: Comments"></span>
-                                    <br/>
+                                    <br />
                                     <span data-bind="text: TimesheetDate"></span>
                                     <br />
                                     <strong>Hours:</strong> <span data-bind="text: Hours"></span>
                                     <strong>Rate:</strong> £<span data-bind="text: HourlyRate"></span>
                                     <strong>Total:</strong> £<span data-bind="text: Total"></span>
                                 </span>
-                                <hr/>
+                                <hr />
                             </div>
                             <!-- /ko -->
                         </div>
                     </div>
                 </div>
-                
-                <strong>Status: </strong><span data-bind="text: _Status"></span><br/>
 
+                <table class="table table-condensed table-striped">
+                    <tbody>
+                        <tr>
+                            <td><strong>BOM Total</strong></td>
+                            <td>£<span data-bind="text: BOMTotal"></span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Labour Total</strong></td>
+                            <td>£<span data-bind="text: LabourTotal"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Quote Total</strong></td>
+                            <td>£<span data-bind="text: QuoteTotal"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Calc. Unit Price</strong></td>
+                            <td>£<span data-bind="text: CalculatedUnitPrice"></span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>DB Calc. Unit Price</strong></td>
+                            <td>£<span data-bind="text: DBCalculatedUnitPrice"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Status</strong></td>
+                            <td><span data-bind="text: _Status"></span></td>
+                        </tr>
+
+                    </tbody>
+                </table>
                 <span>
                     <button type="button" data-bind="click: Quote" class="btn btn-default navbar-btn">
                         <span class="glyphicon glyphicon-gbp"></span>
