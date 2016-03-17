@@ -80,9 +80,10 @@
                     if (result) {
                         blocker.Show();
                         ajaxHelper.Delete(JSON.stringify({ 'BillOfMaterialsId': bom.BillOfMaterialsID() }), '/BillOfMaterials/_Delete')
-                            .done(function() {
+                            .done(function(response) {
                                 notifier.Notify('Deleted');
                                 self._BillOfMaterials.remove(bom);
+                                self.UnitPrice(response.CalculatedUnitPrice);
                             }).always(function() {
                                 blocker.Hide();
                             });

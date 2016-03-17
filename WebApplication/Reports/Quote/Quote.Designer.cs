@@ -451,14 +451,13 @@
             // xrLabel6
             // 
             this.xrLabel6.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "tblLines.UnitPrice", "{0:c}")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "tblLines.CalculatedUnitPrice", "{0:c}")});
             this.xrLabel6.Font = new System.Drawing.Font("Arial", 8F);
             this.xrLabel6.LocationFloat = new DevExpress.Utils.PointFloat(600F, 0F);
             this.xrLabel6.Name = "xrLabel6";
             this.xrLabel6.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrLabel6.SizeF = new System.Drawing.SizeF(76.04169F, 23F);
             this.xrLabel6.StylePriority.UseFont = false;
-            this.xrLabel6.Text = "xrLabel6";
             // 
             // xrLabel5
             // 

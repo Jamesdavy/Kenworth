@@ -9,5 +9,6 @@ namespace WebApplication.Controllers.ViewModels.BillOfMaterials
     {
         public long LineId { get; set; }
         public long BillOfMaterialsId { get; set; }
+        public decimal CalculatedUnitPrice { get; set; }
     }
 }

@@ -7,8 +7,9 @@ namespace WebApplication.Models.DatabaseFirst
 {
     public partial class tblLine
     {
-        public tblLine(string description, long jobLineId, int? status, double? quantity, decimal? unitPrice, DateTime? expectedDeliveryDate, string deliveryComments, string drawingNumber, string customerRef, double estimatedHours, decimal estimatedHourlyRate) : this()
+        public tblLine(tblJob job, string description, long jobLineId, int? status, double? quantity, decimal? unitPrice, DateTime? expectedDeliveryDate, string deliveryComments, string drawingNumber, string customerRef, double estimatedHours, decimal estimatedHourlyRate) : this()
         {
+            tblJob = job;
             Description = description;
             JobLineID = jobLineId;
             Status = status;

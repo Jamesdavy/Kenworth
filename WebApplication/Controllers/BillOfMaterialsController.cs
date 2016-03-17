@@ -115,7 +115,9 @@ namespace WebApplication.Controllers
             job.DeleteBillOfMaterials(command.BillOfMaterialsId);
             DBSession.SaveChanges();
 
-            var response = new DeleteResponse() {BillOfMaterialsId = command.BillOfMaterialsId, LineId = ids.LineID};
+            var calculatedUnitPrice = DBSession.tblLines.Where(x => x.LineID == ids.LineID).Select(x=>x.CalculatedUnitPrice).SingleOrDefault();
+
+            var response = new DeleteResponse() {BillOfMaterialsId = command.BillOfMaterialsId, LineId = ids.LineID, CalculatedUnitPrice = calculatedUnitPrice};
 
             return JsonActionResult(HttpStatusCode.OK, "Success", response);
         }

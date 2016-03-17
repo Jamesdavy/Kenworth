@@ -40,7 +40,7 @@ namespace WebApplication.Models.DatabaseFirst
 
         public tblLine AddLine(string description, int? status, double? quantity, decimal? unitPrice, DateTime? expectedDeliveryDate, string deliveryComments, string drawingNumber, string customerRef, double estimatedHours, decimal estimatedHourlyRate)
         {
-            var line = new tblLine(description, GetNextJobLineId(), status, quantity, unitPrice, expectedDeliveryDate, deliveryComments, drawingNumber, customerRef, estimatedHours, estimatedHourlyRate);
+            var line = new tblLine(this, description, GetNextJobLineId(), status, quantity, unitPrice, expectedDeliveryDate, deliveryComments, drawingNumber, customerRef, estimatedHours, estimatedHourlyRate);
             tblLines.Add(line);
             return line;
         }
@@ -226,8 +226,9 @@ namespace WebApplication.Models.DatabaseFirst
                     continue;
                 {
                     tblLine.tblPurchaseOrders.Remove(billOfMaterials);
-
+                    tblLine.CalculatedUnitPrice = tblLine.CalculateUnitPrice();
                 }
+                
             }
         }
 

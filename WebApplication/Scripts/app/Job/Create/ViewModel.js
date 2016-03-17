@@ -442,20 +442,23 @@
 
 
             ko.postbox.subscribe("LineAdded", function (response) {
-                self._Lines.push(new lineModel({
+                var line = new lineModel({
                     LineID: response.LineId,
                     Description: response.Description,
                     JobLineID: response.JobLineId,
                     tblStatusName: response.StatusName,
                     Quantity: response.Quantity,
-                    UnitPrice: response.CalculatedUnitPrice,
+                    CalculatedUnitPrice: response.CalculatedUnitPrice,
                     ExpectedDeliveryDateString: response.ExpectedDeliveryDateString,
                     DeliveryComments: response.DeliveryComments,
                     DrawingNumber: response.DrawingNumber,
                     tblFileFileName: response.FileName,
                     tblFileContentType: response.ContentType,
                     FilePath: response.FilePath
-                }));
+                });
+
+                self._Lines.push(line);
+                self.EditLine(line);
             });
 
             ko.postbox.subscribe("LineEdited", function (response) {
@@ -538,7 +541,8 @@
             ko.postbox.subscribe("BOMDeleted", function (response) {
                 var line = self.getLine(response.LineId);
                 if (line) {
-                    line._BillOfMaterials.remove(function(item) { return item.BillOfMaterialsID() == response.BillOfMaterialsId; });
+                    line._BillOfMaterials.remove(function (item) { return item.BillOfMaterialsID() == response.BillOfMaterialsId; });
+                    line.UnitPrice(response.CalculatedUnitPrice);
                 }
             });
 

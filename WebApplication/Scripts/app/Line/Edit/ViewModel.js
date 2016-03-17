@@ -248,7 +248,8 @@
                                 notifier.Notify('Deleted');
                                 ko.postbox.publish("BOMDeleted", response);
                                 self._BillOfMaterials.remove(bom);
-                            }).always(function () {
+                                
+                        }).always(function () {
                                 blocker.Hide();
                             });
                     } else {
