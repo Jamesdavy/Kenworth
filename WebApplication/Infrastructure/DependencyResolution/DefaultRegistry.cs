@@ -16,13 +16,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Data.Entity;
+using System.Diagnostics;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using StructureMap;
+using StructureMap.Pipeline;
 using StructureMap.Web;
+using StructureMap.Web.Pipeline;
 using WebApplication.Infrastructure.Logging;
 using WebApplication.Infrastructure.Nlog;
+using WebApplication.Infrastructure.Services;
 using WebApplication.Models;
 using WebApplication.Models.DatabaseFirst;
+using StructureMap.Diagnostics;
 
 namespace WebApplication.DependencyResolution {
     using StructureMap.Configuration.DSL;
@@ -34,15 +40,20 @@ namespace WebApplication.DependencyResolution {
         public DefaultRegistry() {
             Scan(
                 scan => {
-                    scan.TheCallingAssembly();
-                    scan.WithDefaultConventions();
+                    //scan.TheCallingAssembly();
+                    //scan.WithDefaultConventions();
 					scan.With(new ControllerConvention());
                 });
 
-            //For<IUserStore<ApplicationUser>>().Use<UserStore<ApplicationUser>>();
-            For<DbContext>().Use(() => new ApplicationEntities());
-            For(typeof(ApplicationEntities)).HttpContextScoped();
+            For<ApplicationEntities>().HttpContextScoped().Use(() => new ApplicationEntities());
+            For<ContextFactory>().Use<ContextFactory>();
+            For<IOrderReferenceNumberLookupService>().Use<OrderReferenceNumberLookupService>();
+            //For(typeof(ApplicationEntities)).HttpContextScoped();
+            //For<ApplicationDbContext>.HttpContextScoped();
             For<ILogger>().Use<NLogLogger>();
+
+            
+
         }
 
         #endregion

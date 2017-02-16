@@ -21,6 +21,7 @@ namespace WebApplication.Reports.Jobs
         public class Job
         {
             public long JobID { get; set; }
+            public string OurOrderReference { get; set; }
             public string Description { get; set; }
             public DateTime? QuoteDate { get; set; }
             public DateTime? ExpectedDeliveryDate { get; set; }

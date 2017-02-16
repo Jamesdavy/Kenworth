@@ -39,12 +39,12 @@ namespace WebApplication.Controllers
         public ActionResult _Create(CreateCommand command)
         {
             var Ids = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => new { x.JobID, x.JobLineID  } ).SingleOrDefault();
-            var job = DBSession.tblJobs.Where(x => x.JobID == Ids.JobID).SingleOrDefault();
+            var job = DBSession.tblJobs.SingleOrDefault(x => x.JobID == Ids.JobID);
             var bom = job.AddBillOfMaterials(command.LineId, command.Description, command.Cost, command.Quantity,command.Comments, command.PurchaseOrderDate, command.SupplierRef);
             
             DBSession.SaveChanges();
 
-            var bomLine = DBSession.tblLines.Where(x => x.LineID == bom.LineID).SingleOrDefault();
+            var bomLine = DBSession.tblLines.SingleOrDefault(x => x.LineID == bom.LineID);
 
             var response = new CreateResponse()
             {

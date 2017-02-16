@@ -10,5 +10,6 @@ namespace WebApplication.Controllers.ViewModels.Line
         public long LineId { get; set; }
         public string Status { get; set; }
         public string JobStatus { get; set; }
+        public string OurOrderReference { get; set; }
     }
 }

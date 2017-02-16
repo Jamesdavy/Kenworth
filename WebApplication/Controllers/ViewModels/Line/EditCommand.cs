@@ -10,6 +10,7 @@ namespace WebApplication.Controllers.ViewModels.Line
     {
         public long LineId { get; set; }
         public string Description { get; set; }
+        public bool LegacyQuote { get; set; }
         public double Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public DateTime ExpectedDeliveryDate { get; set; }
@@ -19,12 +20,12 @@ namespace WebApplication.Controllers.ViewModels.Line
         public double EstimatedHours { get; set; }
         public decimal EstimatedHourlyRate { get; set; }
 
-        public string CustomerRef { get; set; }
+        //public string CustomerRef { get; set; }
 
-        public FileCommand File { get; set; }
-        public string FileObjectURL { get; set; }
-        public byte[] FileBinary { get; set; }
-        public string FileType { get; set; }
+        //public FileCommand File { get; set; }
+        //public string FileObjectURL { get; set; }
+        //public byte[] FileBinary { get; set; }
+        //public string FileType { get; set; }
 
         
     }

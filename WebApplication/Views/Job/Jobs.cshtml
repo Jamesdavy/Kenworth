@@ -28,9 +28,10 @@
       )
       .Columns(columns =>
       {
-          columns.Bound(o => o.JobID).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true).Template("IntegerFilter")));
+          columns.Bound(o => o.OurOrderReference).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
           columns.Bound(o => o.Description).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
           columns.Bound(o => o.tblClientClientCompanyName).Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
+          columns.Bound(o => o.CustomerRef).Title("Customer Order No.").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(false)));
           columns.Bound(o => o.QuoteDate).ClientTemplate("#: data.QuoteDateString #").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));
           columns.Bound(o => o.ExpectedDeliveryDate).ClientTemplate("#: data.ExpectedDeliveryDateString #").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));
           columns.Bound(o => o.QuotedValue).Format("{0:C}").Filterable(ftb => ftb.Cell(cell => cell.ShowOperators(true)));
@@ -39,7 +40,7 @@
       })
       .Sortable(sorting => sorting.SortMode(Kendo.Mvc.UI.GridSortMode.MultipleColumn)
       )
-      .Pageable()
+          .Pageable(pageable => pageable.PageSizes(new[] { 10, 20, 30, 50, 100, 200 }))
       .EnableCustomBinding(true)
       .Resizable(resizing => resizing.Columns(true))
       .Filterable(ftb => ftb.Mode(GridFilterMode.Row))

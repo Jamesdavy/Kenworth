@@ -15,6 +15,7 @@ namespace WebApplication.Controllers.ViewModels.Line
         }
 
         public long JobId { get; set; }
+        public string CustomerRef { get; set; }
         public decimal EstimatedHourlyRate { get; set; }
 
         public string ExpectedDeliveryDateString

@@ -22,6 +22,15 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="OrderReferenceNumberLookup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Month" Type="int" Nullable="false" />
+          <Property Name="CurrentOrderReference" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tblClients">
           <Key>
             <PropertyRef Name="ClientID" />
@@ -60,14 +69,39 @@
           </Key>
           <Property Name="DeliveryNoteNoteID" Type="bigint" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblEventStore">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ForeignKeyId" Type="bigint" Nullable="false" />
+          <Property Name="EventTypeId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ForeignKeyTypeId" Type="int" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="tblFiles">
           <Key>
-            <PropertyRef Name="LineID" />
+            <PropertyRef Name="FileID" />
           </Key>
           <Property Name="FileID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="LineID" Type="bigint" Nullable="false" />
+          <Property Name="LineID" Type="bigint" />
           <Property Name="FileName" Type="nvarchar" MaxLength="100" />
           <Property Name="ContentType" Type="nvarchar(max)" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="tblJobFiles">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ContentType" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="199" Nullable="false" />
         </EntityType>
         <EntityType Name="tblJobs">
           <Key>
@@ -83,6 +117,7 @@
           <Property Name="Status" Type="int" />
           <Property Name="NextLineID" Type="bigint" Nullable="false" />
           <Property Name="ExpectedDeliveryDate" Type="smalldatetime" />
+          <Property Name="OurOrderReference" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="tblLines">
           <Key>
@@ -110,6 +145,9 @@
           <Property Name="CustomerRef" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="EstimatedHourlyRate" Type="money" Nullable="false" />
           <Property Name="CalculatedUnitPrice" Type="money" Nullable="false" />
+          <Property Name="LegacyQuote" Type="bit" Nullable="false" />
+          <Property Name="QuantityAlreadyDispatched" Type="float" Nullable="false" />
+          <Property Name="LastQuantityDispatched" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="tblPurchaseOrders">
           <Key>
@@ -182,17 +220,53 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_tblEventStore_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="tblEventStore" Type="Self.tblEventStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblEventStore">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblEventStore_tblJobs">
+          <End Role="tblJobs" Type="Self.tblJobs" Multiplicity="1" />
+          <End Role="tblEventStore" Type="Self.tblEventStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblJobs">
+              <PropertyRef Name="JobID" />
+            </Principal>
+            <Dependent Role="tblEventStore">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_tblFiles_tblLines">
-          <End Role="tblLines" Type="Self.tblLines" Multiplicity="1">
+          <End Role="tblLines" Type="Self.tblLines" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="tblFiles" Type="Self.tblFiles" Multiplicity="0..1" />
+          <End Role="tblFiles" Type="Self.tblFiles" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblLines">
               <PropertyRef Name="LineID" />
             </Principal>
             <Dependent Role="tblFiles">
               <PropertyRef Name="LineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblJobFiles_tblJobs">
+          <End Role="tblJobs" Type="Self.tblJobs" Multiplicity="1" />
+          <End Role="tblJobFiles" Type="Self.tblJobFiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblJobs">
+              <PropertyRef Name="JobID" />
+            </Principal>
+            <Dependent Role="tblJobFiles">
+              <PropertyRef Name="JobId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -311,10 +385,13 @@
         </Function>
         <EntityContainer Name="KenworthbModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderReferenceNumberLookup" EntityType="Self.OrderReferenceNumberLookup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblClients" EntityType="Self.tblClients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblContacts" EntityType="Self.tblContacts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblDeliveryNotes" EntityType="Self.tblDeliveryNotes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblEventStore" EntityType="Self.tblEventStore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblFiles" EntityType="Self.tblFiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblJobFiles" EntityType="Self.tblJobFiles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblJobs" EntityType="Self.tblJobs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblLines" EntityType="Self.tblLines" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblPurchaseOrders" EntityType="Self.tblPurchaseOrders" Schema="dbo" store:Type="Tables" />
@@ -327,9 +404,21 @@
             <End Role="tblClients" EntitySet="tblClients" />
             <End Role="tblContacts" EntitySet="tblContacts" />
           </AssociationSet>
+          <AssociationSet Name="FK_tblEventStore_AspNetUsers" Association="Self.FK_tblEventStore_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="tblEventStore" EntitySet="tblEventStore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblEventStore_tblJobs" Association="Self.FK_tblEventStore_tblJobs">
+            <End Role="tblJobs" EntitySet="tblJobs" />
+            <End Role="tblEventStore" EntitySet="tblEventStore" />
+          </AssociationSet>
           <AssociationSet Name="FK_tblFiles_tblLines" Association="Self.FK_tblFiles_tblLines">
             <End Role="tblLines" EntitySet="tblLines" />
             <End Role="tblFiles" EntitySet="tblFiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblJobFiles_tblJobs" Association="Self.FK_tblJobFiles_tblJobs">
+            <End Role="tblJobs" EntitySet="tblJobs" />
+            <End Role="tblJobFiles" EntitySet="tblJobFiles" />
           </AssociationSet>
           <AssociationSet Name="FK_tblJobs_tblClients" Association="Self.FK_tblJobs_tblClients">
             <End Role="tblClients" EntitySet="tblClients" />
@@ -407,6 +496,9 @@
           <NavigationProperty Name="tblStatus" Relationship="ApplicationModel.FK_tblJobs_tblStatuses" FromRole="tblJob" ToRole="tblStatus" />
           <NavigationProperty Name="tblClient" Relationship="ApplicationModel.FK_tblJobs_tblClients" FromRole="tblJob" ToRole="tblClient" />
           <NavigationProperty Name="tblLines" Relationship="ApplicationModel.FK_tblLines_tblJobs" FromRole="tblJob" ToRole="tblLine" />
+          <NavigationProperty Name="tblJobFiles" Relationship="ApplicationModel.FK_tblJobFiles_tblJobs" FromRole="tblJob" ToRole="tblJobFile" />
+          <NavigationProperty Name="tblEventStores" Relationship="ApplicationModel.FK_tblEventStore_tblJobs" FromRole="tblJob" ToRole="tblEventStore" />
+          <Property Name="OurOrderReference" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="tblUpload">
           <Key>
@@ -451,7 +543,6 @@
             <End Role="tblStatus" EntitySet="tblStatuses" />
             <End Role="tblJob" EntitySet="tblJobs" />
           </AssociationSet>
-          <EntitySet Name="AspNetUsers" EntityType="ApplicationModel.AspNetUser" />
           <EntitySet Name="tblUsers" EntityType="ApplicationModel.tblUser" />
           <FunctionImport Name="ClientConversionReport" ReturnType="Collection(ApplicationModel.ClientConversionReport_Result)">
             <Parameter Name="Threshhold" Mode="In" Type="Double" />
@@ -473,13 +564,13 @@
             <Parameter Name="Startdate" Mode="In" Type="DateTime" />
             <Parameter Name="Enddate" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <EntitySet Name="tblFiles" EntityType="ApplicationModel.tblFile" />
           <EntitySet Name="tblPurchaseOrders" EntityType="ApplicationModel.tblPurchaseOrder" />
           <EntitySet Name="tblTimesheets" EntityType="ApplicationModel.tblTimesheet" />
           <AssociationSet Name="FK_tblTimesheets_tblUsers" Association="ApplicationModel.FK_tblTimesheets_tblUsers">
             <End Role="tblUser" EntitySet="tblUsers" />
             <End Role="tblTimesheet" EntitySet="tblTimesheets" />
           </AssociationSet>
+          <EntitySet Name="tblFiles" EntityType="ApplicationModel.tblFile" />
           <EntitySet Name="tblLines" EntityType="ApplicationModel.tblLine" />
           <AssociationSet Name="FK_tblFiles_tblLines" Association="ApplicationModel.FK_tblFiles_tblLines">
             <End Role="tblLine" EntitySet="tblLines" />
@@ -501,6 +592,22 @@
             <End Role="tblLine" EntitySet="tblLines" />
             <End Role="tblTimesheet" EntitySet="tblTimesheets" />
           </AssociationSet>
+          <EntitySet Name="tblJobFiles" EntityType="ApplicationModel.tblJobFile" />
+          <AssociationSet Name="FK_tblJobFiles_tblJobs" Association="ApplicationModel.FK_tblJobFiles_tblJobs">
+            <End Role="tblJob" EntitySet="tblJobs" />
+            <End Role="tblJobFile" EntitySet="tblJobFiles" />
+          </AssociationSet>
+          <EntitySet Name="tblEventStores" EntityType="ApplicationModel.tblEventStore" />
+          <AssociationSet Name="FK_tblEventStore_tblJobs" Association="ApplicationModel.FK_tblEventStore_tblJobs">
+            <End Role="tblJob" EntitySet="tblJobs" />
+            <End Role="tblEventStore" EntitySet="tblEventStores" />
+          </AssociationSet>
+          <EntitySet Name="AspNetUsers" EntityType="ApplicationModel.AspNetUser" />
+          <AssociationSet Name="FK_tblEventStore_AspNetUsers" Association="ApplicationModel.FK_tblEventStore_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="tblEventStore" EntitySet="tblEventStores" />
+          </AssociationSet>
+          <EntitySet Name="OrderReferenceNumberLookups" EntityType="ApplicationModel.OrderReferenceNumberLookup" />
           </EntityContainer>
         <EntityType Name="tblStatus">
           <Key>
@@ -523,23 +630,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="AspNetUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
-          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
-          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
-          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
-          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
-          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="tblUser">
           <Key>
             <PropertyRef Name="UserID" />
@@ -621,16 +711,6 @@
           <Property Type="Double" Name="timediff" Nullable="true" />
           <Property Type="Double" Name="estimatedloss" Nullable="true" />
         </ComplexType>
-        <EntityType Name="tblFile">
-          <Key>
-            <PropertyRef Name="LineID" />
-          </Key>
-          <Property Name="FileID" Type="Guid" Nullable="false" />
-          <Property Name="LineID" Type="Int64" Nullable="false" />
-          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="ContentType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblFile" ToRole="tblLine" />
-        </EntityType>
         <EntityType Name="tblPurchaseOrder">
           <Key>
             <PropertyRef Name="PurchaseOrderID" />
@@ -671,6 +751,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblFile">
+          <Key>
+            <PropertyRef Name="FileID" />
+          </Key>
+          <Property Name="FileID" Type="Guid" Nullable="false" />
+          <Property Name="LineID" Type="Int64" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblLine" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblFile" ToRole="tblLine" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="tblLine">
           <Key>
             <PropertyRef Name="LineID" />
@@ -697,17 +788,20 @@
           <Property Name="CustomerRef" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EstimatedHourlyRate" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="CalculatedUnitPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <NavigationProperty Name="tblFile" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblLine" ToRole="tblFile" />
+          <Property Name="LegacyQuote" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblFiles" Relationship="ApplicationModel.FK_tblFiles_tblLines" FromRole="tblLine" ToRole="tblFile" />
           <NavigationProperty Name="tblJob" Relationship="ApplicationModel.FK_tblLines_tblJobs" FromRole="tblLine" ToRole="tblJob" />
           <NavigationProperty Name="tblStatus" Relationship="ApplicationModel.FK_tblLines_tblStatuses" FromRole="tblLine" ToRole="tblStatus" />
           <NavigationProperty Name="tblPurchaseOrders" Relationship="ApplicationModel.FK_tblPurchaseOrders_tblLines" FromRole="tblLine" ToRole="tblPurchaseOrder" />
           <NavigationProperty Name="tblTimesheets" Relationship="ApplicationModel.FK_tblTimesheets_tblLines" FromRole="tblLine" ToRole="tblTimesheet" />
+          <Property Name="QuantityAlreadyDispatched" Type="Double" Nullable="false" />
+          <Property Name="LastQuantityDispatched" Type="Double" Nullable="false" />
         </EntityType>
         <Association Name="FK_tblFiles_tblLines">
-          <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="1">
+          <End Type="ApplicationModel.tblLine" Role="tblLine" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="ApplicationModel.tblFile" Role="tblFile" Multiplicity="0..1" />
+          <End Type="ApplicationModel.tblFile" Role="tblFile" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tblLine">
               <PropertyRef Name="LineID" />
@@ -771,6 +865,96 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="tblJobFile">
+          <Key>
+            <PropertyRef Name="FileId" />
+          </Key>
+          <Property Name="FileId" Type="Guid" Nullable="false" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="199" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblJob" Relationship="ApplicationModel.FK_tblJobFiles_tblJobs" FromRole="tblJobFile" ToRole="tblJob" />
+        </EntityType>
+        <Association Name="FK_tblJobFiles_tblJobs">
+          <End Type="ApplicationModel.tblJob" Role="tblJob" Multiplicity="1" />
+          <End Type="ApplicationModel.tblJobFile" Role="tblJobFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblJob">
+              <PropertyRef Name="JobID" />
+            </Principal>
+            <Dependent Role="tblJobFile">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tblEventStore">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ForeignKeyId" Type="Int64" Nullable="false" />
+          <Property Name="EventTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
+          <Property Name="ForeignKeyTypeId" Type="Int32" Nullable="false" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="tblJob" Relationship="ApplicationModel.FK_tblEventStore_tblJobs" FromRole="tblEventStore" ToRole="tblJob" />
+          <NavigationProperty Name="AspNetUser" Relationship="ApplicationModel.FK_tblEventStore_AspNetUsers" FromRole="tblEventStore" ToRole="AspNetUser" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_tblEventStore_tblJobs">
+          <End Type="ApplicationModel.tblJob" Role="tblJob" Multiplicity="1" />
+          <End Type="ApplicationModel.tblEventStore" Role="tblEventStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblJob">
+              <PropertyRef Name="JobID" />
+            </Principal>
+            <Dependent Role="tblEventStore">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="AspNetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblEventStores" Relationship="ApplicationModel.FK_tblEventStore_AspNetUsers" FromRole="AspNetUser" ToRole="tblEventStore" />
+        </EntityType>
+        <Association Name="FK_tblEventStore_AspNetUsers">
+          <End Type="ApplicationModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="ApplicationModel.tblEventStore" Role="tblEventStore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblEventStore">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OrderReferenceNumberLookup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Month" Type="Int32" Nullable="false" />
+          <Property Name="CurrentOrderReference" Type="Int32" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -801,6 +985,7 @@
           <EntitySetMapping Name="tblJobs">
             <EntityTypeMapping TypeName="ApplicationModel.tblJob">
               <MappingFragment StoreEntitySet="tblJobs">
+                <ScalarProperty Name="OurOrderReference" ColumnName="OurOrderReference" />
                 <ScalarProperty Name="JobID" ColumnName="JobID" />
                 <ScalarProperty Name="QuoteDate" ColumnName="QuoteDate" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -836,24 +1021,6 @@
             <EntityTypeMapping TypeName="ApplicationModel.tblStatus">
               <MappingFragment StoreEntitySet="tblStatuses">
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AspNetUsers">
-            <EntityTypeMapping TypeName="ApplicationModel.AspNetUser">
-              <MappingFragment StoreEntitySet="AspNetUsers">
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -922,16 +1089,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="tblFiles">
-            <EntityTypeMapping TypeName="ApplicationModel.tblFile">
-              <MappingFragment StoreEntitySet="tblFiles">
-                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
-                <ScalarProperty Name="FileName" ColumnName="FileName" />
-                <ScalarProperty Name="LineID" ColumnName="LineID" />
-                <ScalarProperty Name="FileID" ColumnName="FileID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblPurchaseOrders">
             <EntityTypeMapping TypeName="ApplicationModel.tblPurchaseOrder">
               <MappingFragment StoreEntitySet="tblPurchaseOrders">
@@ -959,9 +1116,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblFiles">
+            <EntityTypeMapping TypeName="ApplicationModel.tblFile">
+              <MappingFragment StoreEntitySet="tblFiles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="FileID" ColumnName="FileID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblLines">
             <EntityTypeMapping TypeName="ApplicationModel.tblLine">
               <MappingFragment StoreEntitySet="tblLines">
+                <ScalarProperty Name="LastQuantityDispatched" ColumnName="LastQuantityDispatched" />
+                <ScalarProperty Name="QuantityAlreadyDispatched" ColumnName="QuantityAlreadyDispatched" />
+                <ScalarProperty Name="LegacyQuote" ColumnName="LegacyQuote" />
                 <ScalarProperty Name="CalculatedUnitPrice" ColumnName="CalculatedUnitPrice" />
                 <ScalarProperty Name="EstimatedHourlyRate" ColumnName="EstimatedHourlyRate" />
                 <ScalarProperty Name="CustomerRef" ColumnName="CustomerRef" />
@@ -984,6 +1155,60 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="JobID" ColumnName="JobID" />
                 <ScalarProperty Name="LineID" ColumnName="LineID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblJobFiles">
+            <EntityTypeMapping TypeName="ApplicationModel.tblJobFile">
+              <MappingFragment StoreEntitySet="tblJobFiles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="FileId" ColumnName="FileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEventStores">
+            <EntityTypeMapping TypeName="ApplicationModel.tblEventStore">
+              <MappingFragment StoreEntitySet="tblEventStore">
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="ForeignKeyTypeId" ColumnName="ForeignKeyTypeId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EventTypeId" ColumnName="EventTypeId" />
+                <ScalarProperty Name="ForeignKeyId" ColumnName="ForeignKeyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="ApplicationModel.AspNetUser">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderReferenceNumberLookups">
+            <EntityTypeMapping TypeName="ApplicationModel.OrderReferenceNumberLookup">
+              <MappingFragment StoreEntitySet="OrderReferenceNumberLookup">
+                <ScalarProperty Name="CurrentOrderReference" ColumnName="CurrentOrderReference" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

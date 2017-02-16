@@ -9,6 +9,8 @@ using WebApplication.Reports.JobCard;
 using WebApplication.Reports.Jobs;
 using WebApplication.Reports.Quote;
 using WebApplication.Reports.Quotes;
+using WebApplication.Reports.SageConsolidation;
+using WebApplication.Reports.WorkInProgress;
 
 namespace WebApplication.Reports
 {
@@ -22,6 +24,9 @@ namespace WebApplication.Reports
             Mapper.AddProfile(new DeliveryNoteProfile());
             Mapper.AddProfile(new ClientConversionProfile());
             Mapper.AddProfile(new JobCardProfile());
+            Mapper.AddProfile(new SageConsolidationProfile());
+            Mapper.AddProfile(new WorkInProgressProfile());
+
         }
     }
 }

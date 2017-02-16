@@ -12,13 +12,28 @@
 }
 <div id="DeliveryNoteList">
     <ul class="list-group">
-        <!-- ko foreach: _DeliveryNotes -->
-        <li class="list-group-item">
-            <span data-bind="text: UniqueId"></span> 
-            <span data-bind="text: Description"></span>
-            <strong><span data-bind="text: SentStatus"></span></strong>
-
-            <input type="checkbox" data-bind="checkedValue: LineId, checked: $parent.SelectedDeliveryNotes">
+        <!-- ko foreach: DeliveryNotes -->
+        <li class="list-group-item list-group-item-success" data-bind="css : { 'list-group-item-success' : HasItemsToDispatch(), 'list-group-item-danger' : HasTooManyDispatchItems() } ">
+            <div class="row">
+                <strong>Line:</strong>
+                <span data-bind="text: UniqueId"></span>
+                <span data-bind="text: Description"></span>
+            </div>
+            <div class="row">
+                <strong>Last Dispatch:</strong>
+                <span data-bind="text: SentStatus"></span>
+                @*<strong>Qty:</strong><span data-bind="text: LastQuantityDispatched"></span>*@
+            </div>
+            <div data-bind="visible:HasBeenPreviouslyDispatched()">
+                <strong>Already Dispatched:</strong> <input type="text" data-bind="textInput: QuantityAlreadyDispatched"> / <strong>Total Qty</strong> <span data-bind="text: Quantity"></span> <span class="text-warning"><strong>Use this to adjust a previous error</strong></span>
+            </div>
+            <div class="row alert alert-info" data-bind="visible:HasAllItemsDispatched()">
+                <strong>Dispatch</strong> @*<input type="checkbox" data-bind="checked: SendDeliveryNote">*@
+                <input type="text" data-bind="textInput: QuantityToDispatch, fadeDisable: HasAllItemsDispatched()"> / <span data-bind="text: QuantityLeftToDispatch()"></span> <strong>Remaining</strong>
+            </div>
+            <div class="row" data-bind="visible: !HasAllItemsDispatched()">
+                <span class="text-success"><i class="glyphicon glyphicon-ok"></i><strong>All Items Disptached</strong> </span>
+            </div>
         </li>
         <!-- /ko -->
     </ul>
@@ -30,7 +45,8 @@
     var listDeliveryNotesDetail = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
 
     requirejs(['knockout',
-        'app/DeliveryNote/List/ViewModel'
+        'app/DeliveryNote/List/ViewModel',
+        'app/Common/bindingHandlers/fadeDisable'
         ], function (ko, vm) {
             listDeliveryNotesModel = new vm(listDeliveryNotesDetail);
             ko.applyBindings(listDeliveryNotesModel, document.getElementById("DeliveryNoteList"));

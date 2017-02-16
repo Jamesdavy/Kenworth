@@ -220,14 +220,13 @@
             // xrLabel1
             // 
             this.xrLabel1.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "JobID")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "OurOrderReference")});
             this.xrLabel1.Font = new System.Drawing.Font("Arial", 16F);
             this.xrLabel1.LocationFloat = new DevExpress.Utils.PointFloat(150F, 151.5416F);
             this.xrLabel1.Name = "xrLabel1";
             this.xrLabel1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel1.SizeF = new System.Drawing.SizeF(100F, 23F);
+            this.xrLabel1.SizeF = new System.Drawing.SizeF(203.125F, 23F);
             this.xrLabel1.StylePriority.UseFont = false;
-            this.xrLabel1.Text = "xrLabel1";
             // 
             // TopMargin
             // 
@@ -291,7 +290,7 @@
             this.xrLabel11.SizeF = new System.Drawing.SizeF(289.9999F, 15.70833F);
             this.xrLabel11.StylePriority.UseFont = false;
             this.xrLabel11.StylePriority.UseForeColor = false;
-            this.xrLabel11.Text = "N R Lincs, DN36 4AS";
+            this.xrLabel11.Text = "N E Lincs, DN36 4AS";
             // 
             // xrLabel10
             // 
@@ -658,8 +657,7 @@
             this.xrLabel31.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrLabel31.SizeF = new System.Drawing.SizeF(600F, 23F);
             this.xrLabel31.StylePriority.UseFont = false;
-            this.xrLabel31.Text = "30 days from receipt of invoice. Quoted price is based on all lines being ordered" +
-    " collectively";
+            this.xrLabel31.Text = "30 days from receipt of invoice. ";
             // 
             // xrLabel30
             // 

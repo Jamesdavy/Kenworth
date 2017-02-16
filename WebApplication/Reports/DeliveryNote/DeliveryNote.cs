@@ -19,13 +19,14 @@ namespace WebApplication.Reports.DeliveryNote
 
         private string _watermark;
 
-        public DeliveryNote(long clientId, long deliveryNoteId, long[] ids, string watermark = "")
+        public DeliveryNote(long jobId, long clientId, long deliveryNoteId, long[] ids, string watermark = "")
             : this()
         {
             _watermark = watermark;
 
             var db = StructureMap.ObjectFactory.GetInstance<ApplicationEntities>();
             var client = db.tblClients.Where(x => x.ClientID == clientId).Select(x=>x.ClientCompanyName).SingleOrDefault();
+            var job = db.tblJobs.Where(x => x.JobID == jobId).Select(x => new { x.CustomerRef, x.OurOrderReference} ).SingleOrDefault();
             var lines = db.tblLines.Where(x => ids.Contains(x.LineID)).ProjectTo<DeliveryNoteModel.Line>().ToList();
 
             var model = new DeliveryNoteModel()
@@ -33,7 +34,9 @@ namespace WebApplication.Reports.DeliveryNote
                 DeliveryNoteID = deliveryNoteId,
                 DeliveryNoteDate = DateTime.Now,
                 tblClientsClientCompanyName = client,
-                tblLines = lines
+                tblLines = lines,
+                CustomerRef = job.CustomerRef,
+                OurOrderReference = job.OurOrderReference
             };
 
             bindingSource1.DataSource = model;

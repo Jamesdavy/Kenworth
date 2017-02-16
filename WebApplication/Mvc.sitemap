@@ -10,7 +10,10 @@
             <mvcSiteMapNode title="New BOM" controller="BillOfMaterials" action="Create" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
             <mvcSiteMapNode title="New Timesheet" controller="Timesheet" action="Create" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
         </mvcSiteMapNode>-->
-        <mvcSiteMapNode title="Jobs" controller="Job" action="Quotes">
+        <mvcSiteMapNode title="Enquiries" controller="Enquiries" action="Index" glyphicon="glyphicon-list-alt">
+            <mvcSiteMapNode title="Enquiries" controller="Enquiries" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
+        </mvcSiteMapNode>
+        <mvcSiteMapNode title="Jobs" controller="Job" action="Jobs">
             <mvcSiteMapNode title="Quotes" controller="Job" action="Quotes" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
             <mvcSiteMapNode title="Jobs" controller="Job" action="Jobs" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>
             <mvcSiteMapNode title="Archive" controller="Job" action="Index" glyphicon="glyphicon-list-alt"></mvcSiteMapNode>

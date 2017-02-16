@@ -14,10 +14,11 @@ namespace WebApplication.Reports.JobCard
         {
             public long tblJobJobID { get; set; }
             public long JobLineID { get; set; }
+            public string tblJobOurOrderReference { get; set; }
 
             public string UniqueId
             {
-                get { return tblJobJobID + "/" + JobLineID; }
+                get { return tblJobOurOrderReference + "/" + JobLineID.ToString(); }
             }
 
             public string ClientName { get; set; }

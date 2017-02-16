@@ -5,8 +5,9 @@
     'app/Common/Notification',
     'app/Job/Create/BillOfMaterialsModel',
     'app/Job/Create/TimesheetModel',
+    'app/Job/Create/FileModel',
     'bootstrap-dialog'
-], function (ko, ajaxHelper, uiBlocker, notification, bomModel, timesheetModel, BootstrapDialog) {
+], function (ko, ajaxHelper, uiBlocker, notification, bomModel, timesheetModel, fileModel, BootstrapDialog) {
     return function LineModel(model) {
         var self = this;
 
@@ -21,7 +22,7 @@
         self.ExpectedDeliveryDate = ko.observable(model.ExpectedDeliveryDateString);
         self.DeliveryComments = ko.observable(model.DeliveryComments);
         self.DrawingNumber = ko.observable(model.DrawingNumber);
-
+        self.LegacyQuote = ko.observable(model.LegacyQuote);
         self.FileName = ko.observable(model.tblFileFileName);
         self.ContentType = ko.observable(model.tblFileContentType);
         self.FilePath = ko.observable(model.FilePath);
@@ -48,9 +49,47 @@
             self._Timesheets(mappedTimesheets);
         }
 
+        self._Files = ko.observableArray([]);
+
+        if (model.tblFiles) {
+            var mappedFiles = $.map(model.tblFiles, function (item) { return new fileModel(item); });
+            self._Files(mappedFiles);
+        }
+
+        self.TimesheetTotal = ko.computed(function() {
+            var total = 0;
+            for (var j = 0; j < self._Timesheets().length; j++) {
+                total = total + (self._Timesheets()[j].Total());
+            }
+            return total;
+        }, self);
+
+        self.BOMTotal = ko.computed(function() {
+            var total = 0;
+            if (self._Status() == 'Job' || self._Status() == 'Complete') {
+                for (var j = 0; j < self._BillOfMaterials().length; j++) {
+                    total = total + (self._BillOfMaterials()[j].Total());
+                }
+            }
+            return total;
+        }, self);
+
+
         self.LineTotal = ko.computed(function () {
             return self.Quantity() * self.UnitPrice();
         }, self);
+
+        self.ProfitLoss = ko.computed(function () {
+            var profit = 0;
+            var loss = 0;
+            if (self._Status() == 'Complete')
+                profit = self.LineTotal();
+
+            loss = self.TimesheetTotal() + self.BOMTotal();
+
+            return profit - loss;
+        }, self);
+
 
         self.getBillOfMaterials = function (billOfMaterialsId) {
             for (var i = 0; i < self._BillOfMaterials().length; i++) {

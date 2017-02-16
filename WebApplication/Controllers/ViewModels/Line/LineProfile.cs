@@ -12,6 +12,9 @@ namespace WebApplication.Controllers.ViewModels.Line
         protected override void Configure()
         {
             Mapper.CreateMap<Models.DatabaseFirst.tblLine, EditViewModel>();
+                //.ForMember(x => x.tblFileFileName, opt => opt.MapFrom(c => c.tblFiles.FirstOrDefault().FileName))
+                //.ForMember(x => x.tblFileContentType, opt => opt.MapFrom(c => c.tblFiles.FirstOrDefault().ContentType));
+            
             Mapper.CreateMap<Models.DatabaseFirst.tblLine, IndexModel>()
                 .ForMember(m => m.Value, opt => opt.MapFrom(
                     x => ((double?)(x.Quantity ?? 0) * (double?)x.CalculatedUnitPrice)))
@@ -30,7 +33,7 @@ namespace WebApplication.Controllers.ViewModels.Line
 
             Mapper.CreateMap<Models.DatabaseFirst.tblPurchaseOrder, EditViewModel.BillOfMaterials>();
             Mapper.CreateMap<Models.DatabaseFirst.tblTimesheet, EditViewModel.TimeSheets>();
-
+            Mapper.CreateMap<Models.DatabaseFirst.tblFile, EditViewModel.File>();
         }
     }
 }

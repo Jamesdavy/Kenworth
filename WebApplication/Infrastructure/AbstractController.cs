@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using WebApplication.Infrastructure.ActionResults;
+using WebApplication.Infrastructure.Services;
 using WebApplication.Models;
 using WebApplication.Models.DatabaseFirst;
 
@@ -19,10 +21,7 @@ namespace WebApplication.Infrastructure
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            DBSession = StructureMap.ObjectFactory.GetInstance<ApplicationEntities>();
-            //UserManager = StructureMap.ObjectFactory.GetInstance<UserManager<ApplicationUser>>();
-            //RoleManager = new RoleManager<ApplicationRole>(new RoleStore<ApplicationRole>(DBSession));
-            //_identityManager = new IdentityManager(UserManager, RoleManager);
+            DBSession = StructureMap.ObjectFactory.GetInstance<ContextFactory>().GetDbSession();
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
@@ -36,8 +35,6 @@ namespace WebApplication.Infrastructure
             //{
             //    throw ex;
             //}
-            
-
         }
 
         public ActionResult JsonActionResult(HttpStatusCode statusCode, string message, object content)

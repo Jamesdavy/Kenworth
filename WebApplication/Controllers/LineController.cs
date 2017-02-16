@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
+using Microsoft.AspNet.Identity;
 using Web.App.Attributes;
 using WebApplication.Controllers.ViewModels.Line;
 using WebApplication.Infrastructure;
 using WebApplication.Infrastructure.Attributes;
-using WebApplication.Models.DatabaseFirst;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
 
 namespace WebApplication.Controllers
 {
@@ -26,7 +26,7 @@ namespace WebApplication.Controllers
         }
 
         [AjaxAuthorise]
-        public ActionResult _Index([CustomDataSourceRequest]DataSourceRequest request)
+        public ActionResult _Index([CustomDataSourceRequest] DataSourceRequest request)
         {
             try
             {
@@ -47,9 +47,10 @@ namespace WebApplication.Controllers
         }
 
         [AjaxAuthorise]
-        public ActionResult _Quotes([CustomDataSourceRequest]DataSourceRequest request)
+        public ActionResult _Quotes([CustomDataSourceRequest] DataSourceRequest request)
         {
-            var jobs = DBSession.tblLines.Where(x => x.Status == 2 && x.tblJob.tblClient.Status).ProjectTo<QuotesModel>();
+            var jobs =
+                DBSession.tblLines.Where(x => x.Status == 2 && x.tblJob.tblClient.Status).ProjectTo<QuotesModel>();
             return Json(jobs.ToDataSourceResult(request));
         }
 
@@ -61,7 +62,7 @@ namespace WebApplication.Controllers
         }
 
         [AjaxAuthorise]
-        public ActionResult _Jobs([CustomDataSourceRequest]DataSourceRequest request)
+        public ActionResult _Jobs([CustomDataSourceRequest] DataSourceRequest request)
         {
             var jobs = DBSession.tblLines.Where(x => x.Status == 4 && x.tblJob.tblClient.Status).ProjectTo<JobsModel>();
             return Json(jobs.ToDataSourceResult(request));
@@ -69,11 +70,15 @@ namespace WebApplication.Controllers
 
         [AjaxAuthorise]
         [HttpGet]
-        public ActionResult _Create(long id)
+        public ActionResult _Create(long id, string customerRef)
         {
+            if (customerRef == null)
+                customerRef = DBSession.tblJobs.Where(x => x.JobID == id).Select(x => x.CustomerRef).SingleOrDefault();
+
             var viewModel = new CreateViewModel()
             {
-                JobId = id
+                JobId = id,
+                CustomerRef = customerRef
             };
 
             return PartialView(viewModel);
@@ -86,26 +91,39 @@ namespace WebApplication.Controllers
             string fullFileName = "";
             string contentType = "";
 
-            var job = DBSession.tblJobs.Where(x => x.JobID == command.JobId).SingleOrDefault();
-            var line = job.AddLine(command.Description, 2, command.Quantity, command.UnitPrice, command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.CustomerRef, command.EstimatedHours, command.EstimatedHourlyRate);
+            var job = DBSession.tblJobs.SingleOrDefault(x => x.JobID == command.JobId);
+            if (job == null)
+                return HttpNotFound();
 
-            if (command.File != null)
+            string userId = User.Identity.GetUserId();
+            var line = job.AddLine(command.Description, 2, command.LegacyQuote, command.Quantity, command.UnitPrice,
+                command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.EstimatedHours,
+                command.EstimatedHourlyRate, userId);
+
+            //if (command.File != null)
+            //{
+            //    var filename = Guid.NewGuid();
+            //    fullFileName = filename + command.File.ext;
+            //    contentType = command.File.type;
+            //    line.AddFile(new tblFile(filename, filename + command.File.ext, command.File.type));
+
+            //    using (
+            //        var fileStream =
+            //            new System.IO.FileStream(Server.MapPath("~/Documents/" + fullFileName),
+            //                System.IO.FileMode.Create, System.IO.FileAccess.Write))
+            //    {
+            //        fileStream.Write(command.FileBinary, 0, command.FileBinary.Length);
+            //    };
+            //}
+
+            try
             {
-                var filename = Guid.NewGuid();
-                fullFileName = filename + command.File.ext;
-                contentType = command.File.type;
-                line.tblFile = new tblFile(filename, filename + command.File.ext, command.File.type);
-
-                using (
-                    var _FileStream =
-                        new System.IO.FileStream(Server.MapPath("~/Documents/" + fullFileName),
-                            System.IO.FileMode.Create, System.IO.FileAccess.Write))
-                {
-                    _FileStream.Write(command.FileBinary, 0, command.FileBinary.Length);
-                };
+                DBSession.SaveChanges();                
             }
-
-            DBSession.SaveChanges();
+            catch (DbEntityValidationException ex)
+            {
+                throw ex;
+            }
 
             var status = DBSession.tblStatuses.Where(x => x.Id == line.Status).Select(x => x.Name).SingleOrDefault();
             var response = new CreateResponse()
@@ -120,9 +138,9 @@ namespace WebApplication.Controllers
                 ExpectedDeliveryDate = command.ExpectedDeliveryDate,
                 DeliveryComments = command.DeliveryComments,
                 DrawingNumber = command.DrawingNumber,
-                FileName = fullFileName,
-                ContentType = contentType,
-                CustomerRef = command.CustomerRef,
+                //FileName = fullFileName,
+                //ContentType = contentType,
+                //CustomerRef = command.CustomerRef,
                 EstimatedHours = command.EstimatedHours,
                 EstimatedHourlyRate = command.EstimatedHourlyRate,
                 CalculatedUnitPrice = line.CalculatedUnitPrice
@@ -147,34 +165,103 @@ namespace WebApplication.Controllers
 
         [AjaxAuthorise]
         [HttpPost, JsonValidate]
-        public ActionResult _Edit(EditCommand command)
+        public ActionResult _UploadFile(UploadFileCommand command)
         {
-            string fullFileName = "";
-            string contentType = "";
-
             var jobId = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => x.JobID).SingleOrDefault();
-            var job = DBSession.tblJobs.Where(x => x.JobID == jobId).SingleOrDefault();
-            var line = job.UpdateLine(command.LineId, command.Description, command.Quantity, command.UnitPrice, command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.CustomerRef, command.EstimatedHours, command.EstimatedHourlyRate );
+            var job = DBSession.tblJobs.SingleOrDefault(x => x.JobID == jobId);
+
+            if (job == null)
+                return HttpNotFound();
 
             if (command.File != null)
             {
                 var filename = Guid.NewGuid();
-                fullFileName = filename + command.File.ext;
-                contentType = command.File.type;
-                line.tblFile = new tblFile(filename, filename + command.File.ext, command.File.type);    
+                var fullFileName = filename + command.File.ext;
+                var contentType = command.File.type;
+                job.AddFileToLine(command.LineId, filename, command.File.name, fullFileName, contentType);
                 using (
-                    var _FileStream =
+                    var fileStream =
                         new System.IO.FileStream(Server.MapPath("~/Documents/" + fullFileName),
                             System.IO.FileMode.Create, System.IO.FileAccess.Write))
                 {
-                    _FileStream.Write(command.FileBinary, 0, command.FileBinary.Length);
+                    fileStream.Write(command.FileBinary, 0, command.FileBinary.Length);
+                }
+
+                DBSession.SaveChanges();
+
+                var response = new UploadFileResponse()
+                {
+                    LineId = command.LineId,
+                    FileID = filename,
+                    ContentType = contentType,
+                    FileName = fullFileName,
+                    Name = command.File.name
                 };
+
+                return JsonActionResult(HttpStatusCode.OK, "Success", response);
             }
+
+            return JsonActionResult(HttpStatusCode.BadRequest, "Success", "No file Selected");
+        }
+
+        [AjaxAuthorise]
+        [HttpDelete, JsonValidate]
+        public ActionResult _DeleteFile(DeleteFileCommand command)
+        {
+            var jobId = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => x.JobID).SingleOrDefault();
+            var job = DBSession.tblJobs.SingleOrDefault(x => x.JobID == jobId);
+
+            if (job == null)
+                return HttpNotFound();
+
+            job.RemoveFileFromLine(command.LineId, command.FileId);
+
+            DBSession.SaveChanges();
+
+            var response = new DeleteFileResponse()
+            {
+                LineId = command.LineId,
+                FileId = command.FileId
+            };
+
+            return JsonActionResult(HttpStatusCode.OK, "Success", response);
+        }
+
+        [AjaxAuthorise]
+        [HttpPost, JsonValidate]
+        public ActionResult _Edit(EditCommand command)
+        {
+            //string fullFileName = "";
+            //string contentType = "";
+
+            var jobId = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => x.JobID).SingleOrDefault();
+            var job = DBSession.tblJobs.SingleOrDefault(x => x.JobID == jobId);
+
+            if (job == null)
+                return HttpNotFound();
+
+            var line = job.UpdateLine(command.LineId, command.Description, command.LegacyQuote, command.Quantity, command.UnitPrice, command.ExpectedDeliveryDate, command.DeliveryComments, command.DrawingNumber, command.EstimatedHours, command.EstimatedHourlyRate );
+
+            //if (command.File != null)
+            //{
+            //    var filename = Guid.NewGuid();
+            //    fullFileName = filename + command.File.ext;
+            //    contentType = command.File.type;
+            //    line.UpdateFile(filename, filename + command.File.ext, command.File.type);    
+            //    using (
+            //        var _FileStream =
+            //            new System.IO.FileStream(Server.MapPath("~/Documents/" + fullFileName),
+            //                System.IO.FileMode.Create, System.IO.FileAccess.Write))
+            //    {
+            //        _FileStream.Write(command.FileBinary, 0, command.FileBinary.Length);
+            //    };
+            //}
 
             DBSession.SaveChanges();
 
             var response = new EditResponse()
             {
+                JobId = job.JobID,
                 LineId = command.LineId,
                 Description = command.Description,
                 Quantity = command.Quantity,
@@ -182,9 +269,9 @@ namespace WebApplication.Controllers
                 ExpectedDeliveryDate = command.ExpectedDeliveryDate,
                 DeliveryComments = command.DeliveryComments,
                 DrawingNumber = command.DrawingNumber,
-                FileName = fullFileName,
-                ContentType = contentType,
-                CustomerRef = command.CustomerRef,
+                //FileName = fullFileName,
+                //ContentType = contentType,
+                //CustomerRef = command.CustomerRef,
                 EstimatedHours = command.EstimatedHours,
                 EstimatedHourlyRate = command.EstimatedHourlyRate,
                 CalculatedUnitPrice = line.CalculatedUnitPrice
@@ -210,38 +297,45 @@ namespace WebApplication.Controllers
         public ActionResult _ChangeStatus(ChangeStatusCommand command)
         {
             var jobId = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => x.JobID).SingleOrDefault();
-            var job = DBSession.tblJobs.Where(x => x.JobID == jobId).SingleOrDefault();
-            job.UpdateLineStatus(command.LineId, command.Status);
+            var job = DBSession.tblJobs
+                .Include(x => x.tblLines.Select(y=>y.tblStatus))
+                .SingleOrDefault(x => x.JobID == jobId);
+            string userId = User.Identity.GetUserId();
+            job.UpdateLineStatus(command.LineId, command.Status, userId);
             DBSession.SaveChanges();
 
-            var status = DBSession.tblStatuses.Where(x => x.Id == command.Status).SingleOrDefault();
-            var jobStatus = DBSession.tblStatuses.Where(x => x.Id == job.Status).SingleOrDefault();
+            var status = DBSession.tblStatuses.SingleOrDefault(x => x.Id == command.Status);
+            var jobStatus = DBSession.tblStatuses.SingleOrDefault(x => x.Id == job.Status);
 
             var response = new ChangeStatusResponse()
             {
                 LineId = command.LineId,
                 Status = status.Name,
-                JobStatus = jobStatus.Name
+                JobStatus = jobStatus.Name,
+                OurOrderReference = job.OurOrderReference
             };
 
 
             return JsonActionResult(HttpStatusCode.OK, "Success", response);
         }
 
-        [AjaxAuthorise]
-        [HttpPost, JsonValidate]
-        public ActionResult _DeleteDrawing(DeleteDrawingCommand command)
-        {
-            var jobId = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => x.JobID).SingleOrDefault();
-            var job = DBSession.tblJobs.Where(x => x.JobID == jobId).SingleOrDefault();
-            job.DeleteDrawing(command.LineId);
+        //[AjaxAuthorise]
+        //[HttpPost, JsonValidate]
+        //public ActionResult _DeleteDrawing(DeleteDrawingCommand command)
+        //{
+        //    var jobId = DBSession.tblLines.Where(x => x.LineID == command.LineId).Select(x => x.JobID).SingleOrDefault();
+        //    var job = DBSession.tblJobs.Where(x => x.JobID == jobId).SingleOrDefault();
+        //    job.DeleteDrawing(command.LineId);
+        //    DBSession.SaveChanges();
 
-            var response = new DeleteDrawingResponse()
-            {
-                LineId = command.LineId
-            }; 
+        //    var response = new DeleteDrawingResponse()
+        //    {
+        //        LineId = command.LineId
+        //    }; 
 
-            return JsonActionResult(HttpStatusCode.OK, "Success", response);
-        }
+
+
+        //    return JsonActionResult(HttpStatusCode.OK, "Success", response);
+        //}
     }
 }

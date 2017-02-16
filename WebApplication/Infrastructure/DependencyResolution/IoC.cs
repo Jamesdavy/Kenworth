@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.Diagnostics;
 using WebApplication.DI.StructureMap.Registries;
 using WebApplication.Infrastructure.DependencyResolution;
 
@@ -24,12 +25,16 @@ namespace WebApplication.DependencyResolution {
 	
     public static class IoC {
         public static IContainer Initialize() {
-            return new Container(c =>
+            var container = new Container(c =>
             {
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<MvcSiteMapProviderRegistry>();
                 c.AddRegistry<ValidationRegistry>();
             });
+
+            Debug.WriteLine(container.WhatDoIHave());
+
+            return container;
         }
     }
 }

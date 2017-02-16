@@ -33,13 +33,16 @@ namespace WebApplication.Models.DatabaseFirst
         public virtual DbSet<tblUpload> tblUploads { get; set; }
         public virtual DbSet<tblUploadType> tblUploadTypes { get; set; }
         public virtual DbSet<tblStatus> tblStatuses { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<tblUser> tblUsers { get; set; }
         public virtual DbSet<tblClient> tblClients { get; set; }
-        public virtual DbSet<tblFile> tblFiles { get; set; }
         public virtual DbSet<tblPurchaseOrder> tblPurchaseOrders { get; set; }
         public virtual DbSet<tblTimesheet> tblTimesheets { get; set; }
+        public virtual DbSet<tblFile> tblFiles { get; set; }
         public virtual DbSet<tblLine> tblLines { get; set; }
+        public virtual DbSet<tblJobFile> tblJobFiles { get; set; }
+        public virtual DbSet<tblEventStore> tblEventStores { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<OrderReferenceNumberLookup> OrderReferenceNumberLookups { get; set; }
     
         public virtual ObjectResult<ClientConversionReport_Result> ClientConversionReport(Nullable<double> threshhold, Nullable<System.DateTime> startdate, Nullable<System.DateTime> enddate)
         {

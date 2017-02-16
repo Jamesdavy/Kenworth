@@ -48,6 +48,7 @@ namespace WebApplication.Controllers
 
             var client = new tblClient(command.ClientCompanyName, command.ClientAddress1, command.ClientAddress2, command.ClientTown, command.ClientCounty, command.ClientPostCode, command.ClientTelephone, command.ClientEmail, command.ClientFax, command.ClientWWW, command.AccountsEmail, command.CopyToAccounts);
             DBSession.tblClients.Add(client);
+            DBSession.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -68,7 +69,7 @@ namespace WebApplication.Controllers
                 return View();
             }
 
-            var client = DBSession.tblClients.Where(x => x.ClientID == command.ClientID).SingleOrDefault();
+            var client = DBSession.tblClients.SingleOrDefault(x => x.ClientID == command.ClientID);
 
             client.ClientCompanyName = command.ClientCompanyName;
             client.ClientAddress1 = command.ClientAddress1;

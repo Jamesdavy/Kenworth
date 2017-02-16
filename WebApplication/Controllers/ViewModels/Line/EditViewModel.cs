@@ -8,17 +8,18 @@ namespace WebApplication.Controllers.ViewModels.Line
 {
     public class EditViewModel
     {
-        public long tblJobJobID { get; set; }
+        public string tblJobOurOrderReference { get; set; }
         public long LineId { get; set; }
 
         public long JobLineId { get; set; }
 
         public string UniqueId
         {
-            get { return tblJobJobID + "/" + JobLineId; }
+            get { return tblJobOurOrderReference + "/" + JobLineId; }
         }
 
         public DateTime? tblJobQuoteDate { get; set; }
+        public string tblJobCustomerRef { get; set; }
         public string Description { get; set; }
         public double? Quantity { get; set; }
         public decimal? UnitPrice { get; set; }
@@ -27,8 +28,8 @@ namespace WebApplication.Controllers.ViewModels.Line
         public string DrawingNumber { get; set; }
         public string tblStatusName { get; set; }
 
-        public string tblFileFileName { get; set; }
-        public string tblFileContentType { get; set; }
+        //public string tblFileFileName { get; set; }
+        //public string tblFileContentType { get; set; }
 
         public double EstimatedHours { get; set; }
         public decimal EstimatedHourlyRate { get; set; }
@@ -36,26 +37,26 @@ namespace WebApplication.Controllers.ViewModels.Line
 
         public string CustomerRef { get; set; }
 
-        public bool LegacyQuote
-        {
-            get
-            {
-                if (tblJobQuoteDate < new DateTime(2016, 01, 01))
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
+        public bool LegacyQuote { get; set; }
+        //{
+        //    get
+        //    {
+        //        if (tblJobQuoteDate < new DateTime(2016, 03, 24))
+        //        {
+        //            return true;
+        //        }
+        //        return false;
+        //    }
+        //}
 
-        public string FilePath
-        {
-            get
-            {
-                //return System.Web.Hosting.HostingEnvironment.MapPath("~/Documents/") + tblFileFileName;
-                return "/Documents/" + tblFileFileName;
-            }
-        }
+        //public string FilePath
+        //{
+        //    get
+        //    {
+        //        //return System.Web.Hosting.HostingEnvironment.MapPath("~/Documents/") + tblFileFileName;
+        //        return "/Documents/" + tblFileFileName;
+        //    }
+        //}
 
         public string ExpectedDeliveryDateString
         {
@@ -67,6 +68,7 @@ namespace WebApplication.Controllers.ViewModels.Line
 
         public List<BillOfMaterials> tblPurchaseOrders { get; set; }
         public List<TimeSheets> tblTimesheets { get; set; }
+        public List<File> tblFiles { get; set; }
 
         public class BillOfMaterials
         {
@@ -107,6 +109,22 @@ namespace WebApplication.Controllers.ViewModels.Line
 
         }
 
+        public class File
+        {
+            public Guid FileID { get; set; }
+            public string FileName { get; set; }
+            public string ContentType { get; set; }
+            public string Name { get; set; }
+
+            public string FilePath
+            {
+                get
+                {
+                    //return System.Web.Hosting.HostingEnvironment.MapPath("~/Documents/") + tblFileFileName;
+                    return "/Documents/" + FileName;
+                }
+            }
+        }
 
         public override string ToString()
         {

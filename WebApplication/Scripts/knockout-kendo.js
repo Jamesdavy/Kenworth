@@ -1,5 +1,5 @@
 /*
- * knockout-kendo 0.9.6
+ * knockout-kendo 0.9.7
  * Copyright © 2015 Ryan Niemeyer & Telerik
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -912,7 +912,8 @@ createBinding({
     name: "kendoNumericTextBox",
     defaultOption: VALUE,
     events: {
-        change: VALUE
+        change: VALUE,
+        spin: VALUE
     },
     watch: {
         enabled: ENABLE,
@@ -1003,7 +1004,7 @@ createBinding({
 
 var schedulerUpdateModel = function(func) {
     return function(options, e) {
-        var allModels = unwrap(options.data),
+        var allModels = unwrap(options.data || options.dataSource),
             idField = unwrap(options.idField) || "id",
             model = ko.utils.arrayFirst(allModels, function(item) {
                 return unwrap(item[idField]) === e.event[idField];
@@ -1020,6 +1021,7 @@ var schedulerUpdateModel = function(func) {
                     }
                 }
             };
+
         if (model) {
             func(options, e, model, write);
         }
@@ -1036,9 +1038,25 @@ createBinding({
         save: schedulerUpdateModel(function(options, e, model, write) {
             write(e.event);
         }),
-        remove: schedulerUpdateModel(function(options, e, model, write) {
-            options.data.remove(model);
-        })
+        remove: function(options, e) {
+            var match;
+            var data = options.data || options.dataSource;
+            var unwrapped = ko.unwrap(data);
+
+            if (unwrapped && unwrapped.length) {
+                match = ko.utils.arrayFirst(ko.unwrap(data), function(item) {
+                    return item.uuid === e.event.uuid;
+                });
+
+                if (match) {
+                    ko.utils.arrayRemoveItem(unwrapped, match);
+
+                    if (ko.isWriteableObservable(data)) {
+                        data.valueHasMutated();
+                    }
+                }
+            }
+        }
     },
     watch: {
         data: function(value, options) {
@@ -1089,7 +1107,7 @@ createBinding({
                 delete e.draggableEvent[dataKey];
 
                 //we are moving the item ourselves via the observableArray, cancel the draggable and hide the animation
-                e.sender._cancel();
+                e.sender.placeholder.remove();
             }
 
             //signal that the observableArray has changed now that we are done changing the array

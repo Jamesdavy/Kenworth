@@ -9,6 +9,7 @@ namespace WebApplication.Reports.Quote
     public class QuoteModel
     {
         public long JobID { get; set; }
+        public string OurOrderReference { get; set; }
         public string tblClientClientCompanyName { get; set; }
         public string tblContactForename { get; set; }
         public string tblContactSurname { get; set; }

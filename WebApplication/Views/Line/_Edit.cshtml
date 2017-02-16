@@ -5,9 +5,9 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="col-md-4 col-sm-5 control-label">ID </label>
+                    <label class="col-md-4 col-sm-5 control-label">Line ID </label>
                     <div class="col-md-8 col-sm-7 form-control-static">
-                        <span data-bind="text: UniqueId" ></span>
+                        <span data-bind="text: JobLineId"></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -23,10 +23,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Customer Order No. </label>
+                    <div class="col-md-8 col-sm-7 form-control-static">
+                        <span data-bind="text: CustomerRef"></span>
+                    </div>
+                </div>*@
+                @*<div class="form-group">
                     <label class="col-md-4 col-sm-5 control-label">Customer Ref </label>
                     <div class="col-md-8 col-sm-7">
                         <input type="text" id="customerRef" class="form-control" data-bind="value: CustomerRef" />
+                    </div>
+                </div>*@
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Unit Priced </label>
+                    <div class="col-md-8 col-sm-7">
+                        <input type="checkbox" id="customerRef" class="form-control" data-bind="checked: LegacyQuote" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -98,27 +110,48 @@
                         <input type="text" id="DeliveryComments" class="form-control" data-bind="value: DeliveryComments" />
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-sm-5 control-label">Drawing Number </label>
+                    <div class="col-md-8 col-sm-7">
+                        <input type="text" id="DrawingNumber" class="form-control" data-bind="value: DrawingNumber" />
+                    </div>
+                </div>
                 <div class="well">
-                    <div class="form-group">
-                        <label class="col-md-4 col-sm-5 control-label">Drawing Number </label>
-                        <div class="col-md-8 col-sm-7">
-                            <input type="text" id="DrawingNumber" class="form-control" data-bind="value: DrawingNumber" />
+                    <h4>Files</h4>
+                    <div >
+                        <div class="input-group">
+                            <input class="form-control" type="text" data-bind="value: FileName"/>
+                            <div class="input-group-btn">
+                                <label class="btn btn-default">
+                                    Browse <input type="file" style="display: none" accept=".csv, .xls, .xlsx" data-bind="file: File, fileObjectURL: FileObjectURL, fileBinaryData: FileBinary, fileType: FileType"/>
+                                </label>
+                                <button class="btn btn-primary" data-bind="click: UploadFile, fadeDisable: FileSelected">Upload</button>
+                            </div>
+                        </div>
+                        @*<input type="file" accept="image/*" data-bind="file: File, fileObjectURL: FileObjectURL, fileBinaryData: FileBinary, fileType: FileType"/>
+            <div>Size: <span data-bind="text: FileSize"></span>&nbsp;bytes
+            </div>
+            <button class="btn btn-default pull-right" data-bind="click:UploadFile"><span class="glyphicon glyphicon-upload"></span></button>*@
+                    </div>
+                    <hr />
+                    <!-- ko foreach: _Files -->
+                    <div class="row">
+                        <div class="btn-group">
+                            <a style="overflow: hidden; text-overflow: ellipsis; width:300px;" class="btn btn-default" data-bind="attr: { href: FilePath, target: '_blank', title: Name }">
+                                <span class="glyphicon glyphicon-download-alt"></span> <span style="overflow: hidden; text-overflow: ellipsis; width:100px;" data-bind="text: Name"></span>
+                            </a>
+                            <button class="btn btn-danger" data-bind="click: $root.DeleteFile"><span class="glyphicon glyphicon-trash"></span></button>
                         </div>
                     </div>
-                    <div data-bind="visible: !ShowFile()">
-                        <input type="file" accept="image/*" data-bind="file: File, fileObjectURL: FileObjectURL, fileBinaryData: FileBinary, fileType: FileType" />
-                        <div>Size: <span data-bind="text: FileSize"></span>&nbsp;bytes</div>
-                    </div>
-
-                    <div  data-bind="visible: ShowFile()" >
-                        @*FileName: <span data-bind="text: FileName"></span>*@
-                        <button type="button" data-bind="click: DeleteDrawing" class="btn btn-default navbar-btn pull-right">
-                            <span class="glyphicon glyphicon-floppy-disk"></span>
-                            <span class="hidden-xs">Remove Drawing</span>
-                        </button>
-                        <a class="btn btn-default navbar-btn pull-right" data-bind="attr: { href: FilePath, title: DrawingNumber }"><span class="glyphicon glyphicon-download-alt"></span> <span data-bind="text: DrawingNumber"></span></a>
-                        <div class="clearfix"></div>
-                    </div>
+                    <!-- /ko -->
+                    @*<div  data-bind="visible: ShowFile()" >
+                <button type="button" data-bind="click: DeleteDrawing" class="btn btn-default navbar-btn pull-right">
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                    <span class="hidden-xs">Remove Drawing</span>
+                </button>
+                <a class="btn btn-default navbar-btn pull-right" data-bind="attr: { href: FilePath, title: DrawingNumber }"><span class="glyphicon glyphicon-download-alt"></span> <span data-bind="text: DrawingNumber"></span></a>
+                <div class="clearfix"></div>
+            </div>*@
                 </div>
             </div>
             <div class="col-md-6">

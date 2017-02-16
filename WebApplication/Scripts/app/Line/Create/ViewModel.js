@@ -18,14 +18,15 @@
         self.JobId = ko.observable(lineDetail.JobId);
         self.Description = ko.observable().extend({ required: true });
         self.Quantity = ko.observable().extend({ required: true });
-        self.UnitPrice = ko.observable().extend({ required: true });
+        self.UnitPrice = ko.observable(0).extend({ required: true });
         self.ExpectedDeliveryDate = ko.observable(lineDetail.ExpectedDeliveryDateString).extend({ required: true });
         self.DeliveryComments = ko.observable();
         self.DrawingNumber = ko.observable();
 
-        self.EstimatedHours = ko.observable().extend({ required: true });;
+        self.EstimatedHours = ko.observable(0).extend({ required: true });;
         self.EstimatedHourlyRate = ko.observable(lineDetail.EstimatedHourlyRate).extend({ required: true });;
-        self.CustomerRef = ko.observable();
+        self.CustomerRef = ko.observable(lineDetail.CustomerRef);
+        self.LegacyQuote = ko.observable(false);
         //self._FileUpload = ko.observable();
         //self.Debug = ko.computed(function () {
         //    return ajaxHelper.ToServerJson(self);
@@ -40,6 +41,12 @@
         self.FileSize = ko.computed(function() {
             var file = this.File();
             return file ? file.size : 0;
+        }, self);
+
+        self.ShowLabour = ko.computed(function () {
+            if (self.LegacyQuote())
+                return false;
+            return true;
         }, self);
 
         /*Recieve External Request to Add new Item*/

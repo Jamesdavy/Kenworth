@@ -4,7 +4,7 @@
     'bootstrap-dialog',
     'knockout-postbox'
 ], function (ko, ajaxHelper, disposables, BootstrapDialog) {
-        return function Dialog(jobId) {
+        return function Dialog(jobId, customerRef) {
             var self = this;
             var dialog;
 
@@ -54,7 +54,7 @@
             };
 
             function getLineDetail() {
-                return ajaxHelper.GetPartialView({ 'id': jobId }, '/Line/_Create');
+                return ajaxHelper.GetPartialView({ 'id': jobId, 'CustomerRef': customerRef }, '/Line/_Create');
             }
 
             function getLineDetailDone(dialogRef, data, textStatus, jqXHR) {

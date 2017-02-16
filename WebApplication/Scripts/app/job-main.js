@@ -9,6 +9,10 @@
         var self = this;
         var ViewModel = "";
 
+        self.setDate = function(date) {
+            ViewModel.ExpectedDeliveryDate(date);
+        }
+
         self.Initialise = function (model) {
             ViewModel = new vm(model);
             

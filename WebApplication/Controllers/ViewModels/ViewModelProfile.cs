@@ -8,6 +8,7 @@ using WebApplication.Controllers.ViewModels.BillOfMaterials;
 using WebApplication.Controllers.ViewModels.Client;
 using WebApplication.Controllers.ViewModels.Contact;
 using WebApplication.Controllers.ViewModels.DeliveryNote;
+using WebApplication.Controllers.ViewModels.Enquiries;
 using WebApplication.Controllers.ViewModels.Job;
 using WebApplication.Controllers.ViewModels.Line;
 using WebApplication.Controllers.ViewModels.Operative;
@@ -22,6 +23,7 @@ namespace WebApplication.Controllers.ViewModels
         {
             Mapper.AddProfile(new ClientProfile());
             Mapper.AddProfile(new OperativeProfile());
+            Mapper.AddProfile(new EnquiriesProfile());
             Mapper.AddProfile(new JobProfile());
             Mapper.AddProfile(new LineProfile());
             Mapper.AddProfile(new BillOfMaterialsProfile());

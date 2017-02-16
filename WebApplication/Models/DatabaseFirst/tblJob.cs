@@ -18,6 +18,8 @@ namespace WebApplication.Models.DatabaseFirst
         public tblJob()
         {
             this.tblLines = new HashSet<tblLine>();
+            this.tblJobFiles = new HashSet<tblJobFile>();
+            this.tblEventStores = new HashSet<tblEventStore>();
         }
     
         public long JobID { get; set; }
@@ -30,11 +32,16 @@ namespace WebApplication.Models.DatabaseFirst
         public Nullable<int> Status { get; set; }
         public long NextLineID { get; set; }
         public Nullable<System.DateTime> ExpectedDeliveryDate { get; set; }
+        public string OurOrderReference { get; set; }
     
         public virtual tblContact tblContact { get; set; }
         public virtual tblStatus tblStatus { get; set; }
         public virtual tblClient tblClient { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tblLine> tblLines { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblJobFile> tblJobFiles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblEventStore> tblEventStores { get; set; }
     }
 }

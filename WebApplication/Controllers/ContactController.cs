@@ -65,7 +65,7 @@ namespace WebApplication.Controllers
         public ActionResult _Create(CreateCommand command)
         {
             var client = DBSession.tblClients.Where(x => x.ClientID == command.ClientId).SingleOrDefault();
-            var contact = new tblContact(command.Forename, command.Surname, command.Position, command.Email, command.Phone);
+            var contact = new tblContact(command.Forename, command.Surname, command.Position, command.Phone, command.Email);
             client.tblContacts.Add(contact);
 
             DBSession.SaveChanges();

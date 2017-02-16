@@ -15,9 +15,10 @@ namespace WebApplication.Models.DatabaseFirst
     public partial class tblFile
     {
         public System.Guid FileID { get; set; }
-        public long LineID { get; set; }
+        public Nullable<long> LineID { get; set; }
         public string FileName { get; set; }
         public string ContentType { get; set; }
+        public string Name { get; set; }
     
         public virtual tblLine tblLine { get; set; }
     }

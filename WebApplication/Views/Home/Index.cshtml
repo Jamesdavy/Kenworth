@@ -12,7 +12,7 @@
 <div class="row">
     <div class="col-md-4">
         <h2>Quick Links</h2>
-        <p><a href="@Url.Action("Create", "Job")">New Quote</a></p>
+        <p><a href="@Url.Action("Create", "Enquiries")">New Enquiry</a></p>
         <p><a href="@Url.Action("Create", "Timesheet")">New Timesheet</a></p>
         <p><a href="@Url.Action("Create", "BillOfMaterials")">New BOM</a></p>
     </div>
@@ -20,10 +20,12 @@
         <h2>Reports</h2>
         @*<a href="#" onclick="window.open('/Reports/DeliveryNote/DeliveryNoteReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Delivery Note</a>
         <a href="#" onclick="window.open('/Reports/Quote/QuoteReport.aspx?id=25', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Quote</a>*@
+        <p><a href="@Url.Action("ActiveJobs", "Job")">Active Jobs</a></p>
         <p><a href="#" onclick="window.open('/Reports/Quotes/QuotesReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Quotes</a></p>
         <p><a href="#" onclick="window.open('/Reports/Jobs/JobsReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Jobs</a></p>
         <p><a href="#" onclick="window.open('/Reports/ClientConversion/ClientConversionReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Client Conversion</a></p>
         <p><a href="#" onclick="window.open('/Reports/Timesheet/TimesheetReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Timesheet</a></p>
+        <p><a href="#" onclick="window.open('/Reports/WorkInProgress/WorkInProgressReport.aspx', 'name', 'height=800,width=1100,scrollbars=1;toolbars=0'); return false;">Work In Progress</a></p>
     </div>
     <div class="col-md-4">
         <h2>Maintenance</h2>

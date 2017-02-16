@@ -45,6 +45,12 @@ namespace WebApplication.Models.DatabaseFirst
                     tblFiles.Remove(orphan);
             }
 
+            foreach (var orphan in tblJobFiles.Local.ToList())
+            {
+                if (orphan.tblJob == null)
+                    tblJobFiles.Remove(orphan);
+            }
+
             return base.SaveChanges();
         }
     }

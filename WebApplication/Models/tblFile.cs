@@ -10,11 +10,12 @@ namespace WebApplication.Models.DatabaseFirst
 
         public tblFile() { }
 
-        public tblFile(Guid fileId, string fileName, string contentType)
+        public tblFile(Guid fileId, string name, string fileName, string contentType)
         {
             FileID = fileId;
             FileName = fileName;
             ContentType = contentType;
+            Name = name;
         }
     }
 

@@ -10,13 +10,14 @@ namespace WebApplication.Controllers.ViewModels.Line
     {
         [Display(Name = "Job Id")]
         public long tblJobJobID { get; set; }
+        public string tblJobOurOrderReference { get; set; }
         public long LineId { get; set; }
 
         public long JobLineId { get; set; }
 
         public string UniqueId
         {
-            get { return tblJobJobID + "/" + JobLineId; }
+            get { return tblJobOurOrderReference + "/" + JobLineId; }
         }
 
         [Display(Name = "Company Name")]

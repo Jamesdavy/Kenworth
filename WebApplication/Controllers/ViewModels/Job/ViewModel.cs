@@ -15,6 +15,7 @@ namespace WebApplication.Controllers.ViewModels.Job
         }
 
         public long JobID { get; set; }
+        public string OurOrderReference { get; set; }
         public DateTime? QuoteDate { get; set; }
         public long? ClientID { get; set; }
         public long? ContactID { get; set; }
@@ -38,6 +39,7 @@ namespace WebApplication.Controllers.ViewModels.Job
         public string CustomerRef { get; set; }
         public string Comments { get; set; }
         public List<Lines> tblLines { get; set; }
+        public List<File> tblJobFiles { get; set; }
         public string tblStatusName { get; set; }
 
         public override string ToString()
@@ -46,12 +48,30 @@ namespace WebApplication.Controllers.ViewModels.Job
             return JsonConvert.SerializeObject(this, Formatting.None, settings);
         }
 
+        public class File
+        {
+            public Guid FileID { get; set; }
+            public string FileName { get; set; }
+            public string ContentType { get; set; }
+            public string Name { get; set; }
+
+            public string FilePath
+            {
+                get
+                {
+                    //return System.Web.Hosting.HostingEnvironment.MapPath("~/Documents/") + tblFileFileName;
+                    return "/Documents/" + FileName;
+                }
+            }
+        }
+
         public class Lines
         {
             public Lines()
             {
                 tblPurchaseOrders = new List<BillOfMaterials>();
                 tblTimesheets = new List<TimeSheets>();
+                tblFiles = new List<File>();
             }
 
 
@@ -63,6 +83,7 @@ namespace WebApplication.Controllers.ViewModels.Job
             public decimal? UnitPrice { get; set; }
             public decimal CalculatedUnitPrice { get; set; }
             public DateTime? ExpectedDeliveryDate { get; set; }
+            public bool LegacyQuote { get; set; }
             public string tblFileFileName { get; set; }
             public string tblFileContentType { get; set; }
 
@@ -85,6 +106,7 @@ namespace WebApplication.Controllers.ViewModels.Job
 
             public List<BillOfMaterials> tblPurchaseOrders { get; set; }
             public List<TimeSheets> tblTimesheets { get; set; }
+            public List<File> tblFiles { get; set; }
 
             public class BillOfMaterials
             {
@@ -137,6 +159,23 @@ namespace WebApplication.Controllers.ViewModels.Job
                     get { return TimesheetDate.GetValueOrDefault().ToShortDateString(); }
                 }
 
+            }
+
+            public class File
+            {
+                public Guid FileID { get; set; }
+                public string FileName { get; set; }
+                public string ContentType { get; set; }
+                public string Name { get; set; }
+
+                public string FilePath
+                {
+                    get
+                    {
+                        //return System.Web.Hosting.HostingEnvironment.MapPath("~/Documents/") + tblFileFileName;
+                        return "/Documents/" + FileName;
+                    }
+                }
             }
 
         }

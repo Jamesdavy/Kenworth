@@ -14,25 +14,11 @@
         var notifier = new notification();
 
         self.JobId = model.JobId;
-        self._DeliveryNotes = ko.observableArray([]);
+        self.DeliveryNotes = ko.observableArray([]);
         var mappedDeliveryNotes = $.map(model.DeliveryNotes, function (item) { return new deliveryNoteModel(item); });
-        self._DeliveryNotes(mappedDeliveryNotes);
+        self.DeliveryNotes(mappedDeliveryNotes);
 
-        self.SelectedDeliveryNotes = ko.observableArray();
-
-        //ko.validation.init({
-        //    registerExtenders: true,
-        //    messagesOnModified: false,
-        //    insertMessages: false,
-        //    parseInputAttributes: true,
-        //    messageTemplate: null,
-        //    decorateInputElement: true,
-        //    errorElementClass: 'has-error',
-        //    errorAsTitle: true,
-        //    grouping: {
-        //        deep: true
-        //    }
-        //}, true);
+        //self.SelectedDeliveryNotes = ko.observableArray();
 
         var createDeliveryNoteSubscription = ko.postbox.subscribe("CreateDeliveyNote", function (callback) {
             blocker.Show();

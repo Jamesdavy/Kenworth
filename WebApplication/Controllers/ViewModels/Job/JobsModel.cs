@@ -9,6 +9,7 @@ namespace WebApplication.Controllers.ViewModels.Job
     public class JobsModel
     {
         public long JobID { get; set; }
+        public string OurOrderReference { get; set; }
         public string Description { get; set; }
         [Display(Name = "Company Name")]
         public string tblClientClientCompanyName { get; set; }
@@ -17,6 +18,7 @@ namespace WebApplication.Controllers.ViewModels.Job
         public double? QuotedValue { get; set; }
         public double? JobValue { get; set; }
         public double? CompletedValue { get; set; }
+        public string CustomerRef { get; set; }
 
         public string QuoteDateString
         {

@@ -28,10 +28,11 @@ namespace WebApplication.Reports.Timesheet
             public string Description { get; set; }
             public long JobId { get; set; }
             public long JobLineId { get; set; }
+            public string OurOrderReference { get; set; }
 
             public string UniqueId
             {
-                get { return JobId + "/" + JobLineId; }
+                get { return OurOrderReference + "/" + JobLineId.ToString(); }
             }
 
             public double? Hours { get; set; }

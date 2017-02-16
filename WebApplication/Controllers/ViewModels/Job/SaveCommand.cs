@@ -14,6 +14,7 @@ namespace WebApplication.Controllers.ViewModels.Job
         public string Description { get; set; }
         public string CustomerRef { get; set; }
         public string Comments { get; set; }
+        public DateTime ExpectedDeliveryDate { get; set; }
     }
 
     public class SaveCommandValidator : AbstractValidator<SaveCommand>
@@ -24,6 +25,7 @@ namespace WebApplication.Controllers.ViewModels.Job
             RuleFor(x => x.ClientId).NotNull().NotEmpty();
             RuleFor(x => x.ContactId).NotNull().NotEmpty();
             RuleFor(x => x.Description).NotNull().NotEmpty();
+            RuleFor(x => x.ExpectedDeliveryDate).NotNull().NotEmpty();
         }
     }
 }

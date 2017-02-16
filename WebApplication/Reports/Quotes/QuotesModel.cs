@@ -22,6 +22,7 @@ namespace WebApplication.Reports.Quotes
         public class Quote
         {
             public long JobID { get; set; }
+            public string OurOrderReference { get; set; }
             public string Description { get; set; }
             public double? Value { get; set; }
             public DateTime? QuoteDate { get; set; }

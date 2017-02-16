@@ -6,3 +6,7 @@
 .bootstrap-dialog.type-default .bootstrap-dialog-title {
     color: #ff5a00 !important;
 }
+
+.input-group .form-control {
+    z-index: 1;
+}

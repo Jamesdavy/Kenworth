@@ -22,56 +22,57 @@
 
 <div id="JobDetails">
     
-    @section SubMenu
-    {
+@section SubMenu
+{
 
-    <div style="margin-left:10px;">
-        Quoted £<span data-bind="text: Total"></span><br />
-        Timesheets £<span data-bind="text: TimesheetTotal"></span><br />
-        BOM £<span data-bind="text: BOMTotal"></span><br />
+    @*<div style="margin-left: 10px;">
+        Quoted £<span data-bind="text: Total"></span><br/>
+        Timesheets £<span data-bind="text: TimesheetTotal"></span><br/>
+        BOM £<span data-bind="text: BOMTotal"></span><br/>
         Profit/Loss £<span data-bind="text: ProfitLoss"></span>
-    </div>        
-        <div class="btn-group-vertical" role="group" aria-label="...">
-            <button type="button" data-bind="click: PrintQuote" class="btn btn-default navbar-btn">
-                <span class="glyphicon glyphicon-print"></span>
-                <span class="hidden-xs">Print Quote</span>
-            </button>
-            <button type="button" data-bind="click: EmailQuote" class="btn btn-default navbar-btn">
-                <span class="glyphicon glyphicon-send"></span>
-                <span class="hidden-xs">Email Quote</span>
-            </button>
-            <button type="button" data-bind="click: DeliveryNote" class="btn btn-default navbar-btn">
-                <span class="glyphicon glyphicon-print"></span>
-                <span class="hidden-xs">Delivery Note</span>
-            </button>
-            <button type="button" data-bind="click: JobCard" class="btn btn-default navbar-btn">
-                <span class="glyphicon glyphicon-print"></span>
-                <span class="hidden-xs">Job Card</span>
-            </button>
+    </div>*@
+    <div class="btn-group-vertical" role="group" aria-label="...">
+        @*<button type="button" data-bind="click: PrintQuote" class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-print"></span>
+            <span class="hidden-xs">Print Quote</span>
+        </button>
+        <button type="button" data-bind="click: EmailQuote" class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-send"></span>
+            <span class="hidden-xs">Email Quote</span>
+        </button>
+        <button type="button" data-bind="click: DeliveryNote" class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-print"></span>
+            <span class="hidden-xs">Delivery Note</span>
+        </button>
+        <button type="button" data-bind="click: JobCard" class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-print"></span>
+            <span class="hidden-xs">Job Card</span>
+        </button>
+        <button type="button" data-bind="click: PrintJob" class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-print"></span>
+            <span class="hidden-xs">Print Job</span>
+        </button>
 
-            <button type="button" data-bind="click: CopyJob" class="btn btn-default navbar-btn">
-                <span class="glyphicon glyphicon-floppy-disk"></span>
-                <span class="hidden-xs">Copy Job</span>
-            </button>
+        <button type="button" data-bind="click: CopyJob" class="btn btn-default navbar-btn">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            <span class="hidden-xs">Copy Job</span>
+        </button>*@
 
-            <button type="button" data-bind="click: Save" class="btn btn-success navbar-btn">
-                <span class="glyphicon glyphicon-floppy-disk"></span>
-                <span class="hidden-xs">Save</span>
-            </button>
+        <button type="button" data-bind="click: Save" class="btn btn-success navbar-btn">
+            <span class="glyphicon glyphicon-floppy-disk"></span>
+            <span class="hidden-xs">Save</span>
+        </button>
 
-            <button type="button" data-bind="click: DeleteJob" class="btn btn-danger navbar-btn">
-                <span class="glyphicon glyphicon-trash"></span>
-                <span class="hidden-xs">Delete</span>
-            </button>
-        </div>
-
-
-
+        <button type="button" data-bind="click: DeleteJob" class="btn btn-danger navbar-btn">
+            <span class="glyphicon glyphicon-trash"></span>
+            <span class="hidden-xs">Delete</span>
+        </button>
+    </div>
 }
 
 <div class="form-horizontal">
     <div class="row container-fluid">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">
@@ -153,14 +154,14 @@
                     <div class="form-group">
                         <label class="col-md-4 col-sm-5 control-label">Exp Delivery Date </label>
                         <div class="col-md-8 col-sm-7">
-                            <input type="text" id="ExpectedJobDeliveryDate" class="form-control" data-bind='jqueryui: { widget: "datepicker", options: { onSelect: function(dateText) { setDate(dateText); }, showButtonPanel: true, showOn: "focus", changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy" } }, value: ExpectedDeliveryDate' />
+                            <input type="text" id="ExpectedJobDeliveryDate" class="form-control" data-bind='jqueryui: { widget: "datepicker", options: { onSelect: function(dateText) { view.setDate(dateText); }, showButtonPanel: true, showOn: "focus", changeMonth: true, changeYear: true, dateFormat: "dd/mm/yy" } }, value: ExpectedDeliveryDate' />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
+        @*<div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h2 class="panel-title">
@@ -170,52 +171,53 @@
                 <div class="panel-body">
                     <table class="table table-condensed table-striped">
                         <tbody>
-                            <tr>
-                                <td><strong>Quoted</strong></td>
-                                <td>£<span data-bind="text: Total"></span></td>
-                            </tr>
-                            <tr class="warning">
-                                <td><strong>Quote</strong></td>
-                                <td>£<span data-bind="text: QuoteTotal"></span></td>
-                            </tr>
-                            <tr class="info">
-                                <td><strong>WIP</strong></td>
-                                <td>£<span data-bind="text: JobTotal"></span></td>
-                            </tr>
-                            <tr class="success">
-                                <td><strong>Complete</strong></td>
-                                <td>£<span data-bind="text: CompleteTotal"></span></td>
-                            </tr>
-                            <tr class="danger">
-                                <td><strong>Dead</strong></td>
-                                <td>£<span data-bind="text: DeadTotal"></span></td>
-                            </tr>
-                            <tr>
-                                <td><span ><strong>BOM</strong></span></td>
-                                <td>£<span data-bind="text: BOMTotal"></span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Costs</strong></td>
-                                <td>£<span data-bind="text: Costs"></span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="col-md-offset-1"><strong>Timesheets</strong></span></td>
-                                <td>£<span data-bind="text: TimesheetTotal"></span></td>
-                            </tr>
+                        <tr>
+                            <td><strong>Quoted</strong></td>
+                            <td>£<span data-bind="text: Total"></span></td>
+                        </tr>
+                        <tr class="warning">
+                            <td><strong>Quote</strong></td>
+                            <td>£<span data-bind="text: QuoteTotal"></span></td>
+                        </tr>
+                        <tr class="info">
+                            <td><strong>WIP</strong></td>
+                            <td>£<span data-bind="text: JobTotal"></span></td>
+                        </tr>
+                        <tr class="success">
+                            <td><strong>Complete</strong></td>
+                            <td>£<span data-bind="text: CompleteTotal"></span></td>
+                        </tr>
+                        <tr class="danger">
+                            <td><strong>Dead</strong></td>
+                            <td>£<span data-bind="text: DeadTotal"></span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Costs</strong></td>
+                            <td>£<span data-bind="text: Costs"></span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="col-md-offset-1"><strong>BOM</strong></span></td>
+                            <td>£<span data-bind="text: BOMTotal"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td><span class="col-md-offset-1"><strong>Timesheets</strong></span></td>
+                            <td>£<span data-bind="text: TimesheetTotal"></span></td>
+                        </tr>
                             
-                            <tr>
-                                <td><strong>Profit / Loss</strong></td>
-                                <td>£<span data-bind="text: ProfitLoss"></span></td>
-                            </tr>
+                        <tr>
+                            <td><strong>Profit / Loss</strong></td>
+                            <td>£<span data-bind="text: ProfitLoss"></span></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-        </div>
+        </div>*@
     </div>
     <div class="row">
-        <div class=""><label class="control-label">Notes</label></div>
+        <div class=""><label class="control-label">Comments</label></div>
         <div class="">
             <textarea type="text" id="Comments" class="form-control" data-bind="value: Comments" rows="3"></textarea>
         </div>
@@ -223,7 +225,7 @@
 </div>
 <div class="clearfix"></div>
 
-<div>
+@*<div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">
@@ -240,21 +242,42 @@
                 <div class="list-group-item list-group-item-warning" data-bind="css: { 'list-group-item-warning' : _Status() == 'Quote', 'list-group-item-danger' : _Status() == 'Dead', 'list-group-item-info' : _Status() == 'Job', 'list-group-item-success' : _Status() == 'Complete' }">
                     <div class="row">
                         <span class="pull-left">
-                            <button type="button" data-bind="click: $root.EditLine" class="btn btn-default navbar-btn">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                            <button type="button" data-bind="click: $root.AddBOM" class="btn btn-default navbar-btn">
-                                <span class="glyphicon glyphicon-shopping-cart"></span>
-                                <span class="hidden-xs"></span>
-                            </button>
-                            <button type="button" data-bind="click: $root.AddTimesheet" class="btn btn-default navbar-btn">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                                <span class="hidden-xs"></span>
-                            </button>
-                            <button type="button" data-bind="click: $root.DeleteLine" class="btn btn-danger navbar-btn">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </button>
+                            <div>
+                                <button type="button" title="Edit Line" data-bind="click: $root.EditLine" class="btn btn-default navbar-btn">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button type="button" title="Bill Of Materials" data-bind="click: $root.AddBOM" class="btn btn-default navbar-btn">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                                    <span class="hidden-xs"></span>
+                                </button>
+                                <button type="button" title="Timesheets" data-bind="click: $root.AddTimesheet" class="btn btn-default navbar-btn">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    <span class="hidden-xs"></span>
+                                </button>
+                                <button type="button" title="Remove Line" data-bind="click: $root.DeleteLine" class="btn btn-danger navbar-btn">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" title="Change To Quote" data-bind="click: $root.Quote" class="btn btn-warning navbar-btn">
+                                    <span class="glyphicon glyphicon-gbp"></span>
+                                </button>
+                                <button type="button" title="Change To Work In Progress" data-bind="click: $root.Job" class="btn btn-primary navbar-btn">
+                                    <span class="glyphicon glyphicon-wrench"></span>
+                                </button>
+
+                                <button type="button" title="Change To Complete" data-bind="click: $root.Complete" class="btn btn-success navbar-btn">
+                                    <span class="glyphicon glyphicon glyphicon-ok"></span>
+                                    <span class="hidden-xs"></span>
+                                </button>
+
+                                <button type="button" title="Change To Dead" data-bind="click: $root.Dead" class="btn btn-danger navbar-btn">
+                                    <span class="glyphicon glyphicon glyphicon-remove"></span>
+                                    <span class="hidden-xs"></span>
+                                </button>
+                                </div>
                         </span>
+
                         <span style="display: inline-block; margin-left:20px;">
                             <span data-bind="text: $parent.Id"></span>/<span data-bind="text: JobLineID"></span>
                             (<strong><span data-bind="text: _Status"></span></strong>)
@@ -262,40 +285,22 @@
                             <br/>
                             <span data-bind="text: Description"></span>
                             <br />
-                            <strong>Qty:</strong><span data-bind="text: Quantity"></span>
-                            <strong>Unit Price:</strong> £<span data-bind="text: UnitPrice"></span>
-                            <strong>Total:</strong> £<span data-bind="text: LineTotal"></span>
-                            <br />
                             <span data-bind="visible: ShowFile()">
                                 <a data-bind="attr: { href: FilePath, title: DrawingNumber }">
                                     <span data-bind="text: DrawingNumber"></span>
                                     <span class="glyphicon glyphicon-download-alt"></span>
                                 </a>
                             </span>
+                            <span data-bind="visible: !ShowFile()">
+                                <span data-bind="text: DrawingNumber"></span>
+                            </span>
                         </span>
                         <span class="pull-right">
-                            <button type="button" data-bind="click: $root.Quote" class="btn btn-default navbar-btn">
-                                <span class="glyphicon glyphicon-gbp"></span>
-                                <span class="hidden-xs">Quote</span>
-                            </button>
-
-                            <button type="button" data-bind="click: $root.Job" class="btn btn-default navbar-btn">
-                                <span class="glyphicon glyphicon-wrench"></span>
-                                <span class="hidden-xs">WIP</span>
-                            </button>
-
-                            <button type="button" data-bind="click: $root.Complete" class="btn btn-default navbar-btn">
-                                <span class="glyphicon glyphicon glyphicon-ok"></span>
-                                <span class="hidden-xs"></span>
-                            </button>
-
-                            <button type="button" data-bind="click: $root.Dead" class="btn btn-default navbar-btn">
-                                <span class="glyphicon glyphicon glyphicon-remove"></span>
-                                <span class="hidden-xs"></span>
-                            </button>
+                            <strong>Qty:</strong><span data-bind="text: Quantity"></span>
+                            <strong>Unit Price:</strong> £<span data-bind="text: UnitPrice"></span>
+                            <strong>Total:</strong> £<span data-bind="text: LineTotal"></span>
+                            <strong>P/L:</strong> £<span data-bind="text: ProfitLoss"></span>
                         </span>
-
-                        @*<div class="clearfix"></div>*@
                     </div>
                 </div>
                 <!-- /ko -->
@@ -325,7 +330,6 @@
                     </span>                    
                     <span style="display: inline-block; margin-left:20px;">
                         <span data-bind="text: UniqueId"></span>
-                        @*<span data-bind="text: BillOfMaterialsID"></span>*@
                         <span data-bind="text: Description"></span>
                         <span data-bind="text: SupplierRef"></span>
                         <span data-bind="text: PurchaseOrderDate"></span>
@@ -363,7 +367,6 @@
                     </span>
                     <span style="display: inline-block; margin-left:20px;">
                         <span data-bind="text: UniqueId"></span>
-                        @*<span data-bind="text: TimesheetID"></span>*@
                         <span data-bind="text: OperativeName"></span>
                         <span data-bind="text: Comments"></span>
                         <span data-bind="text: TimesheetDate"></span>
@@ -378,24 +381,25 @@
             <!-- /ko -->
         </div>
     </div>
-</div>
+
+</div>*@
 
 </div>
-
-
 
         <script src="/scripts/require.js"></script>
-        <script>
-            var model = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
+<script>
+    var view;
+    var model = JSON.parse(JSON.stringify(@Html.Raw(Model.ToString())));
 
-            requirejs(['../../scripts/app/common'], function (common) {
-                requirejs(['app/job-main',
-                'app/Common/BindingHandlers/jqueryUI',
-                'jquery-ui',
-                'app/Common/BindingHandlers/selectOnFocus',
-                'app/Common/BindingHandlers/fadeDisable' ], function (main) {
-                    var view = new main();
-                    view.Initialise(model);
-                });
-            });
-        </script>
+    requirejs(['../../scripts/app/common'], function (common) {
+        requirejs(['app/job-main',
+            'app/Common/BindingHandlers/jqueryUI',
+            'jquery-ui',
+            'app/Common/BindingHandlers/selectOnFocus',
+            'app/Common/BindingHandlers/fadeDisable' ], function (main) {
+            view = new main();
+            view.Initialise(model);
+        });
+    });
+</script>
+

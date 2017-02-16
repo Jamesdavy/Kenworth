@@ -43,6 +43,8 @@ namespace WebApplication.Controllers.ViewModels.DeliveryNote
             public string Description { get; set; }
             public DateTime? ExpectedDeliveryDate { get; set; }
             public double? Quantity { get; set; }
+            public double QuantityAlreadyDispatched { get; set; }
+            public double LastQuantityDispatched { get; set; }
             public bool DeliveryNoteSent { get; set; }
             public DateTime? DeliveryNoteSentDate { get; set; }
             public long? DeliveryNoteId { get; set; }

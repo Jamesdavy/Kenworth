@@ -11,12 +11,27 @@ using NLog;
 using NLog.Config;
 using StructureMap;
 using WebApplication.Controllers.ViewModels;
+using WebApplication.Core.Tasks;
 using WebApplication.Reports;
 
 namespace WebApplication
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        public MvcApplication()
+        {
+            BeginRequest += (sender, args) =>
+            {
+                
+            };
+            EndRequest += (sender, args) =>
+            {
+                var error = Server.GetLastError() != null;
+                TaskExecutor.StartExecuting(error);
+            };
+        }
+
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -25,9 +40,6 @@ namespace WebApplication
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             ConfigurationItemFactory.Default.Targets.RegisterDefinition("SignalR", typeof(Infrastructure.Nlog.Targets.SignalRTarget));
-            //Logger logger = LogManager.GetCurrentClassLogger();
-            //logger.Info("Starting App");
-            //logger.Error("Generating Error");
             ViewModelProfile.Configure();
             ReportProfile.Configure();
 

@@ -3,6 +3,7 @@
     'app/Timesheet/Create/Dialog',
     'app/Line/Edit/BillOfMaterialsModel',
     'app/Line/Edit/TimesheetModel',
+    'app/Line/Edit/FileModel',
     'app/BillOfMaterials/Edit/Dialog',
     'app/Timesheet/Edit/Dialog',
     'app/Common/AjaxHelper',
@@ -15,7 +16,7 @@
     'knockout-kendo'
     //'Common/Validation/globalFloat'
 ], function (ko, bomDialog,
-        timesheetDialog, bomModel, timesheetModel, editBomDialog,
+        timesheetDialog, bomModel, timesheetModel, fileModel, editBomDialog,
         editTimesheetDialog, ajaxHelper, disposables, uiBlocker, notification, BootstrapDialog) {
     return function ViewModel(lineDetail) {
         var self = this;
@@ -25,6 +26,7 @@
 
         self.LineId = ko.observable(lineDetail.LineId);
         self.UniqueId = lineDetail.UniqueId;
+        self.JobLineId = lineDetail.JobLineId;
         self.Description = ko.observable(lineDetail.Description).extend({ required: true });
         self.Quantity = ko.observable(lineDetail.Quantity).extend({ required: true });
         self.UnitPrice = ko.observable(lineDetail.UnitPrice).extend({ required: true });
@@ -35,7 +37,7 @@
         self.EstimatedHours = ko.observable(lineDetail.EstimatedHours).extend({ required: true });
         self.EstimatedHourlyRate = ko.observable(lineDetail.EstimatedHourlyRate).extend({ required: true });
         self.DBCalculatedUnitPrice = ko.observable(lineDetail.CalculatedUnitPrice).extend({ required: true });;
-        self.CustomerRef = ko.observable(lineDetail.CustomerRef);
+        self.CustomerRef = ko.observable(lineDetail.tblJobCustomerRef);
         self.LegacyQuote = ko.observable(lineDetail.LegacyQuote);
 
         self._Status = ko.observable(lineDetail.tblStatusName);
@@ -45,21 +47,31 @@
         self.FileBinary = ko.observable();
         self.FileType = ko.observable();
 
-        self.FileName = ko.observable(lineDetail.tblFileFileName);
-        self.ContentType = ko.observable(lineDetail.tblFileContentType);
-        self.FilePath = ko.observable(lineDetail.FilePath);
+        //self.FileName = ko.observable(lineDetail.tblFileFileName);
+        //self.ContentType = ko.observable(lineDetail.tblFileContentType);
+        //self.FilePath = ko.observable(lineDetail.FilePath);
+
+        self.FileName = ko.computed(function () {
+            var file = this.File();
+            return file ? file.name : "";// file.name;
+        }, self);
 
         self.FileSize = ko.computed(function() {
             var file = this.File();
             return file ? file.size : 0;
         }, self);
 
-        self.ShowFile = ko.computed(function () {
-            var fileName = self.FileName();
-            if (fileName == null)
-                return false;
-            return true;
+        self.FileSelected = ko.computed(function () {
+            var file = this.File();
+            return typeof file !== 'undefined';
         }, self);
+
+        //self.ShowFile = ko.computed(function () {
+        //    var fileName = self.FileName();
+        //    if (fileName == null)
+        //        return false;
+        //    return true;
+        //}, self);
 
 
         self._BillOfMaterials = ko.observableArray([]);
@@ -74,6 +86,13 @@
         if (lineDetail.tblTimesheets) {
             var mappedTimesheets = $.map(lineDetail.tblTimesheets, function (item) { return new timesheetModel(item); });
             self._Timesheets(mappedTimesheets);
+        }
+
+        self._Files = ko.observableArray([]);
+
+        if (lineDetail.tblFiles) {
+            var mappedFiles = $.map(lineDetail.tblFiles, function (item) { return new fileModel(item); });
+            self._Files(mappedFiles);
         }
 
         self.BOMTotal = ko.computed(function() {
@@ -169,9 +188,9 @@
             var data = ajaxHelper.ToServerJson(self);
             new ajaxHelper.Post(data, '/Line/_Edit').done(function (response, textStatus, jqXHR) {
                 notifier.Notify('Saved');
-                self.FileName(response.FileName);
-                self.ContentType(response.ContentType);
-                self.FilePath(response.FilePath);
+                //self.FileName(response.FileName);
+                //self.ContentType(response.ContentType);
+                //self.FilePath(response.FilePath);
 
                 if (callback)
                     callback(response);
@@ -285,7 +304,31 @@
             });
         };
 
-        self.DeleteDrawing = function () {
+        ko.postbox.subscribe("FileUploaded", function (response) {
+            self._Files.push(new fileModel({
+                LineID : response.LineID,
+                FileID : response.FileID,
+                FileName : response.FileName,
+                FilePath : response.FilePath,
+                ContentType : response.ContentType,
+                Name : response.Name
+            }));
+        });
+
+        self.UploadFile = function() {
+            blocker.Show();
+            var data = ajaxHelper.ToServerJson(self);
+            ajaxHelper.Post(data, '/Line/_UploadFile')
+                .done(function (response) {
+                    notifier.Notify('Saved');
+                    ko.postbox.publish("FileUploaded", response);
+                    
+                }).always(function () {
+                    blocker.Hide();
+                });
+        }
+
+        self.DeleteFile = function (file) {
             BootstrapDialog.confirm({
                 title: 'Warning',
                 message: 'Are you Sure?',
@@ -296,14 +339,11 @@
                 callback: function (result) {
                     if (result) {
                         blocker.Show();
-                        ajaxHelper.Post(JSON.stringify({ 'LineId': self.LineId() }), '/Line/_DeleteDrawing')
+                        ajaxHelper.Delete(JSON.stringify({ 'LineId': self.LineId(), 'FileId': file.FileID() }), '/Line/_DeleteFile')
                             .done(function (response) {
                                 notifier.Notify('Saved');
-                                ko.postbox.publish("DrawingDeleted", response);
-                                self.FileName(null);
-                                self.ContentType('');
-                                self.FilePath('');
-                                //self._Status(response.Status);
+                                ko.postbox.publish("FileDeleted", response);
+                                self._Files.remove(file);
                             }).always(function () {
                                 blocker.Hide();
                             });
@@ -327,6 +367,14 @@
             for (var i = 0; i < self._Timesheets().length; i++) {
                 if (self._Timesheets()[i].TimesheetID() == timesheetId) {
                     return self._Timesheets()[i];
+                }
+            }
+        };
+
+        self.getFile = function (fileId) {
+            for (var i = 0; i < self._Files().length; i++) {
+                if (self._Files()[i].FilesID() == fileId) {
+                    return self._Files()[i];
                 }
             }
         };

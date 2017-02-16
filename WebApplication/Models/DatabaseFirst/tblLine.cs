@@ -17,6 +17,7 @@ namespace WebApplication.Models.DatabaseFirst
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public tblLine()
         {
+            this.tblFiles = new HashSet<tblFile>();
             this.tblPurchaseOrders = new HashSet<tblPurchaseOrder>();
             this.tblTimesheets = new HashSet<tblTimesheet>();
         }
@@ -43,8 +44,12 @@ namespace WebApplication.Models.DatabaseFirst
         public string CustomerRef { get; set; }
         public decimal EstimatedHourlyRate { get; set; }
         public decimal CalculatedUnitPrice { get; set; }
+        public bool LegacyQuote { get; set; }
+        public double QuantityAlreadyDispatched { get; set; }
+        public double LastQuantityDispatched { get; set; }
     
-        public virtual tblFile tblFile { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tblFile> tblFiles { get; set; }
         public virtual tblJob tblJob { get; set; }
         public virtual tblStatus tblStatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

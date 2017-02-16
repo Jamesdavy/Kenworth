@@ -37,7 +37,7 @@
         <dx:ReportViewer ID="documentViewer" ClientInstanceName="reportViewer" runat="server" ReportName="XtraReport1" />
     </form>
     <%:Scripts.Render("~/bundles/jquery")%>
-    <script src="/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="/Scripts/jquery-ui-1.12.1.min.js"></script>
     <script>
         $(document).ready(function () {
             $.datepicker.setDefaults($.extend({ showMonthAfterYear: false }));

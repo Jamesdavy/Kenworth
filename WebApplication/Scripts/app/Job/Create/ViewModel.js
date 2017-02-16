@@ -3,6 +3,7 @@
         'app/Job/Create/LineModel',
         'app/Job/Create/BillOfMaterialsModel',
         'app/Job/Create/TimesheetModel',
+        'app/Job/Create/FileModel',
         'app/Common/UIBlocker',
         'app/Common/Notification',
         'app/Line/Create/Dialog',
@@ -15,6 +16,7 @@
         'app/Contact/Edit/Dialog',
         'app/Contact/List/Dialog',
         'app/DeliveryNote/List/Dialog',
+        'app/Job/EventStore/Dialog',
         'bootstrap-dialog',
         'knockout.validation'//,
 ],
@@ -23,6 +25,7 @@
         lineModel,
         bomModel,
         timesheetModel,
+        fileModel,
         uiBlocker,
         notification,
         lineDialog,
@@ -35,6 +38,7 @@
         editContactDialog,
         listContactDialog,
         listDeliveryNoteDialog,
+        eventsDialog,
         BootstrapDialog
         ) {
         return function ViewModel(model) {
@@ -44,6 +48,7 @@
             var notifier = new notification();
 
             self.Id = model.JobID;
+            self.OurOrderReference = ko.observable(model.OurOrderReference);
             self.Client = ko.observable(model.tblClientClientCompanyName).extend({ required: true });
             self.ClientId = ko.observable(model.ClientID);
             self.Contact = ko.observable(model.ContactName).extend({ required: true });
@@ -54,9 +59,33 @@
             self.Comments = ko.observable(model.Comments).extend({ required: true });
             self._Status = ko.observable(model.tblStatusName);
 
+            self.File = ko.observable();
+            self.FileObjectURL = ko.observable();
+            self.FileBinary = ko.observable();
+            self.FileType = ko.observable();
+
             self._Lines = ko.observableArray([]);
             var mappedLines = $.map(model.tblLines, function (item) { return new lineModel(item); });
             self._Lines(mappedLines);
+
+            self._Files = ko.observableArray([]);
+            var mappedFiles = $.map(model.tblJobFiles, function(item) { return new fileModel(item); });
+            self._Files(mappedFiles);
+
+            self.FileName = ko.computed(function () {
+                var file = this.File();
+                return file ? file.name : "";// file.name;
+            }, self);
+
+            self.FileSize = ko.computed(function () {
+                var file = this.File();
+                return file ? file.size : 0;
+            }, self);
+
+            self.FileSelected = ko.computed(function () {
+                var file = this.File();
+                return typeof file !== 'undefined';
+            }, self);
 
             self.errors = ko.observableArray([]);
 
@@ -117,15 +146,17 @@
             self.BOMTotal = ko.computed(function () {
                 var total = 0;
                 for (var i = 0; i < self._Lines().length; i++) {
-                    for (var j = 0; j < self._Lines()[i]._BillOfMaterials().length; j++) {
-                        total = total + (self._Lines()[i]._BillOfMaterials()[j].Total());
+                    if (self._Lines()[i]._Status() == 'Job' || self._Lines()[i]._Status() == 'Complete') {
+                        for (var j = 0; j < self._Lines()[i]._BillOfMaterials().length; j++) {
+                            total = total + (self._Lines()[i]._BillOfMaterials()[j].Total());
+                        }
                     }
                 }
                 return total;
             }, self);
 
             self.Costs = ko.computed(function () {
-                return self.TimesheetTotal(); // + self.BOMTotal();
+                return self.TimesheetTotal() + self.BOMTotal();
             }, self);
 
             self.ProfitLoss = ko.computed(function () {
@@ -138,18 +169,6 @@
                 notifier.closeAll();
             }
 
-            //function CreateButton(name, func, params, notifier, options) {
-
-            //    var _options = { icon: '', buttonStyle: 'btn-primary' };
-            //    $.extend(_options, options);
-
-            //    var button = document.createElement("button");
-            //    button.innerHTML = '<span class="glyphicon ' + _options.icon + '"></span>' + name;
-            //    button.onclick = contextWrapper(func, params, notifier);
-            //    button.setAttribute('class', 'btn ' + _options.buttonStyle);
-            //    return button;
-            //}
-
             ko.postbox.subscribe("AddValidationError", function (errors) {
                 var retry = false;
                 $.each(errors, function (index, error) {
@@ -159,52 +178,6 @@
                         var id = arrayOfStrings[1];
 
                         switch (action) {
-                            //case 'ServiceDate':
-                            //    var checkItem = getCheckItem(id);
-                            //    var notification = notifier.Error(error.Value);
-
-                            //    notification.append('<div>' + notifications.serviceDateMessage + '</div>');
-
-                            //    var buttonGroup = $('<div class="row clear_both pull-right btn-toolbar">');
-                            //    buttonGroup.append(CreateButton(common.remove, self.checkItemNotPresent, checkItem, notification, { icon: 'glyphicon-remove', buttonStyle: 'btn-danger' }));
-                            //    buttonGroup.append(CreateButton(common.adddate, changeServiceDate, checkItem, notification, { icon: 'glyphicon-calendar', buttonStyle: 'btn-default' }));
-
-                            //    notification.append(buttonGroup);
-
-                            //    retry = true;
-                            //    break;
-                            //case 'ExpiryDate':
-                            //    var checkItem = getCheckItem(id);
-                            //    var notification = notifier.Error(error.Value);
-
-                            //    notification.append('<div>' + notifications.expiryDateMessage + '</div>');
-
-                            //    var buttonGroup = $('<div class="row clear_both pull-right btn-toolbar">');
-
-                            //    buttonGroup.append(CreateButton(common.remove, self.checkItemNotPresent, checkItem, notification, { icon: 'glyphicon-remove', buttonStyle: 'btn-danger' }));
-                            //    buttonGroup.append(CreateButton(common.adddate, changeExpiryDate, checkItem, notification, { icon: 'glyphicon-calendar', buttonStyle: 'btn-default' }));
-                            //    notification.append(buttonGroup);
-
-                            //    retry = true;
-                            //    break;
-                            //case 'VehicleDetail':
-                            //    var notification = notifier.Error(error.Value);
-
-                            //    var buttonGroup = $('<div class="row clear_both pull-right">');
-                            //    buttonGroup.append(CreateButton(common.update, editVehicle, {}, notification, { icon: 'glyphicon-save', buttonStyle: 'btn-default' }));
-                            //    notification.append(buttonGroup);
-
-                            //    retry = true;
-                            //    break;
-                            //case 'EVHCDetail':
-                            //    var notification = notifier.Error(error.Value);
-
-                            //    break;
-                            //case 'CustomerDetail':
-                            //    var notification = notifier.Error(error.Value);
-                            //    break;
-
-
                         }
                     } else {
                         notifier.ErrorFlash(error.Value);
@@ -212,30 +185,8 @@
                 });
 
                 if (retry) {
-                    var notification = notifier.Retry();
-
-                    var buttonGroup = $('<div class="row clear_both pull-right btn-toolbar">');
-                    buttonGroup.append(CreateButton(common.submit, self.Process, {}, notification, { icon: 'glyphicon-ok', buttonStyle: 'btn-success' }));
-
-                    if (self._CanCost) {
-                        buttonGroup.append(CreateButton(common.cost, self.Cost, {}, notification, { icon: 'glyphicon-share-alt', buttonStyle: 'btn-warning' }));
-                    }
-                    notification.append(buttonGroup);
                 }
             });
-
-            function HandleErrorClick(func, params, notifier) {
-                func(params);
-                notifier.close();
-            }
-
-            var contextWrapper = function (func, params, notifier) {
-                var getEventHandler = function () {
-                    HandleErrorClick(func, params, notifier);
-                };
-
-                return getEventHandler;
-            };
 
             self.Save = function () {
                 blocker.Show();
@@ -257,6 +208,17 @@
                 
             };
 
+            self.PrintJob = function () {
+                blocker.Show();
+                var data = ajaxHelper.ToServerJson(self);
+                ajaxHelper.Post(data, '/Job/Save').done(function (data, textStatus, jqXHR) {
+                    window.open('/Reports/SageConsolidation/SageConsolidationReport.aspx?id=' + self.Id, 'name', 'height=800,width=1100,scrollbars=1;toolbars=0');
+                }).always(function () {
+                    blocker.Hide();
+                });
+
+            };
+
             self.JobCard = function () {
                 blocker.Show();
                 var data = ajaxHelper.ToServerJson(self);
@@ -269,15 +231,30 @@
             };
 
             self.EmailQuote = function () {
-                blocker.Show();
-                var data = ajaxHelper.ToServerJson(self);
-                ajaxHelper.Post(data, '/Job/Save').done(function (data, textStatus, jqXHR) {
-                    ajaxHelper.Post({}, '/Job/_EmailQuote/' + self.Id).done(function (data, textStatus, jqXHR) {
-                        notifier.Notify('Quote Sent');
-                    }).always(function () {
-                    });
-                }).always(function () {
-                    blocker.Hide();
+                BootstrapDialog.confirm({
+                    title: 'Warning',
+                    message: 'you are about to email a Quote are you sure you want to send it?',
+                    type: BootstrapDialog.TYPE_WARNING,
+                    btnCancelLabel: 'Cancel',
+                    btnOKLabel: 'Send',
+                    btnOKClass: 'btn-warning',
+                    callback: function (result) {
+                        if (result) {
+                            blocker.Show();
+                            var data = ajaxHelper.ToServerJson(self);
+                            ajaxHelper.Post(data, '/Job/Save').done(function (data, textStatus, jqXHR) {
+                                ajaxHelper.Post({}, '/Job/_EmailQuote/' + self.Id).done(function (data, textStatus, jqXHR) {
+                                    notifier.Notify('Quote Sent');
+                                }).always(function () {
+                                    blocker.Hide();
+                                });
+                            }).always(function () {
+
+                            });
+                        } else {
+
+                        }
+                    }
                 });
             };
 
@@ -295,7 +272,7 @@
 
 
             self.AddLine = function() {
-                var dialog = new lineDialog(self.Id);
+                var dialog = new lineDialog(self.Id, self.CustomerRef());
                 dialog.OpenModal();
             };
 
@@ -376,6 +353,50 @@
                 });
             }
 
+            self.UploadFile = function () {
+                blocker.Show();
+                var data = ajaxHelper.ToServerJson(self);
+                ajaxHelper.Post(data, '/Job/_UploadFile')
+                    .done(function (response) {
+                        notifier.Notify('Saved');
+                        self._Files.push(new fileModel({
+                            JobID: response.JobID,
+                            FileID: response.FileID,
+                            FileName: response.FileName,
+                            FilePath: response.FilePath,
+                            ContentType: response.ContentType,
+                            Name: response.Name
+                        }));
+                    }).always(function () {
+                        blocker.Hide();
+                    });
+            }
+
+            self.DeleteFile = function (file) {
+                BootstrapDialog.confirm({
+                    title: 'Warning',
+                    message: 'Are you Sure?',
+                    type: BootstrapDialog.TYPE_DANGER,
+                    btnCancelLabel: 'Cancel',
+                    btnOKLabel: 'Delete',
+                    btnOKClass: 'btn-danger',
+                    callback: function (result) {
+                        if (result) {
+                            blocker.Show();
+                            ajaxHelper.Delete(JSON.stringify({ 'JobId': self.Id, 'FileId': file.FileID() }), '/Job/_DeleteFile')
+                                .done(function (response) {
+                                    notifier.Notify('Saved');
+                                    self._Files.remove(file);
+                                }).always(function () {
+                                    blocker.Hide();
+                                });
+                        } else {
+
+                        }
+                    }
+                });
+            };
+
             function ChangeStatus(line, status) {
                 blocker.Show();
                 ajaxHelper.Post(JSON.stringify({ 'LineId': line.LineID(), 'Status': status }), '/Line/_ChangeStatus')
@@ -383,10 +404,10 @@
                         notifier.Notify('Saved');
                         line._Status(response.Status);
                         self._Status(response.JobStatus);
+                        self.OurOrderReference(response.OurOrderReference);
                     }).always(function() {
                         blocker.Hide();
                     });
-
             }
 
             self.Job = function (line) {
@@ -439,6 +460,12 @@
                 var dialog = new listContactDialog(self.ClientId);
                 dialog.OpenModal();
             }
+
+            self.ShowEvents = function () {
+                var dialog = new eventsDialog(self.Id);
+                dialog.OpenModal();
+            }
+
 
 
             ko.postbox.subscribe("LineAdded", function (response) {
@@ -553,15 +580,36 @@
                 }
             });
 
-            ko.postbox.subscribe("DrawingDeleted", function (response) {
+            ko.postbox.subscribe("FileUploaded", function (response) {
                 var line = self.getLine(response.LineId);
                 if (line) {
-                    line.FileName('');
-                    line.ContentType('');
-                    line.FilePath('');
+                    line._Files.push(new fileModel({
+                        JobID: response.JobID,
+                        FileID: response.FileID,
+                        FileName: response.FileName,
+                        FilePath: response.FilePath,
+                        ContentType: response.ContentType,
+                        Name: response.Name
+                    }));
                 }
             });
 
+            ko.postbox.subscribe("FileDeleted", function (response) {
+                var line = self.getLine(response.LineId);
+                if (line) {
+                    line._Files.remove(function (item) { return item.FileID() === response.FileId; });
+                }
+            });
+
+
+            //ko.postbox.subscribe("DrawingDeleted", function (response) {
+            //    var line = self.getLine(response.LineId);
+            //    if (line) {
+            //        line.FileName('');
+            //        line.ContentType('');
+            //        line.FilePath('');
+            //    }
+            //});
 
             ko.postbox.subscribe("ContactAdded", function (response) {
                 self.ContactId(response.ContactId);
@@ -575,13 +623,14 @@
             ko.postbox.subscribe("LineStatusChanged", function (response) {
                 var line = self.getLine(response.LineId);
                 self._Status(response.JobStatus);
+                self.OurOrderReference(response.OurOrderReference);
                 if (line) {
                     line._Status(response.Status);
                 }
             });
 
             ko.postbox.subscribe("DeliveryNoteCreated", function (response) {
-                alert(response.DeliveryNoteURL);
+                //alert(response.DeliveryNoteURL);
                 window.open(response.DeliveryNoteURL, response.DeliveryNoteURL, 'height=800,width=1100,scrollbars=1;toolbars=0');
             });
 

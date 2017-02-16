@@ -12,6 +12,7 @@ namespace WebApplication.Controllers.ViewModels.Line
         public string Description { get; set; }
         public long JobLineId { get; set; }
         public string StatusName { get; set; }
+        public bool LegacyQuote { get; set; }
         public double Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public DateTime ExpectedDeliveryDate { get; set; }
@@ -22,23 +23,23 @@ namespace WebApplication.Controllers.ViewModels.Line
         public decimal EstimatedHourlyRate { get; set; }
         public decimal CalculatedUnitPrice { get; set; }
 
-        public string CustomerRef { get; set; }
+        //public string CustomerRef { get; set; }
 
-        public string FileName { get; set; }
-        public string ContentType { get; set; }
+        //public string FileName { get; set; }
+        //public string ContentType { get; set; }
 
         public string ExpectedDeliveryDateString
         {
             get { return ExpectedDeliveryDate.ToShortDateString(); }
         }
 
-        public string FilePath
-        {
-            get
-            {
-                //return System.Web.Hosting.HostingEnvironment.MapPath("~/Documents/") + tblFileFileName;
-                return "/Documents/" + FileName;
-            }
-        }
+        //public string FilePath
+        //{
+        //    get
+        //    {
+        //        //return System.Web.Hosting.HostingEnvironment.MapPath("~/Documents/") + tblFileFileName;
+        //        return "/Documents/" + FileName;
+        //    }
+        //}
     }
 }
